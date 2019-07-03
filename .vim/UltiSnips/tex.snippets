@@ -1,0 +1,41 @@
+
+
+# '!v any_vim function'
+snippet d
+\documentclass{${1:article}}
+
+${2:\title{${3:title}}
+\date{`!v strftime("%Y-%m-%d")`}
+\author{Victor Fernandez R.}
+}
+
+\begin{document}
+	$0
+\end{document}
+endsnippet
+
+snippet b
+\begin{${1:document}}
+	$0
+\end{$1}
+endsnippet
+
+snippet pack
+\usepackage{${0:amsmath}}
+endsnippet
+
+snippet sec
+\section{$1}
+$0
+endsnippet
+
+snippet subs
+\subsection{$1}
+$0
+endsnippet
+
+snippet p
+\paragraph{$1}
+$0
+endsnippet
+

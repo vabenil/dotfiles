@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Load resources
+
+# xrdb -merge .Xresources
+
+# Set up an icon tray
+# stalonetray &
+
+# Fire up apps
+
+# xscreensaver -no-splash &
+# xmodmap
+
+if [ -x /usr/bin/nm-applet ] ; then
+   nm-applet --sm-disable &
+fi
+
+[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
+
+export TERMINAL=/usr/local/bin/st
+
+# sxhkd &
+
+# exec xmonad
+# vim: ft=sh
+
+

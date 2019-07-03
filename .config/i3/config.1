@@ -1,0 +1,98 @@
+set $mod Mod4
+set $tabbed_term tabbed -f -n "floating_term" -r 2 st -w ''
+
+set $backgr #1F1F1F
+set $focusd #4F6364
+
+font pango:Hermit, Regular 8
+
+#class                    border    backgr    text      indicator   child_border
+client.focused            #73738C   #454554   #ffffff   #73738C   #ffffff
+client.focused_inactive   #4d4d4d   #4d4d4d   #e8e8e8   #4d4d4d   #1c1b1d
+client.unfocused          #333333   #212121   #888888   #333333   #000000
+client.urgent             #2f343a   #900000   #ffffff   #2f343a   #900000
+# XXX: migration script could not handle line: client.placeholder        #000000   #0c0c0c   #ffffff   #000000   #0c0c0c
+
+client.background         #ffffff
+
+# XXX: migration script could not handle line: title_align center
+# XXX: migration script could not handle line: hide_edge_borders vertical
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+
+bindsym $mod+d exec dmenu_run -b -fn Hermit -nb "#212121" -sb "#378486"
+bindsym $mod+Shift+d exec j4-dmenu-desktop --dmenu=dmenu\ -b\ -fn\ Hermit 
+
+bindsym $mod+Shift+y exec yank-from-reg
+bindsym $mod+Shift+Return exec setxkbmap us
+bindsym $mod+Escape exec setxkbmap us
+
+# XXX: migration script could not handle line: for_window [class="vlc"] floating enable 
+# XXX: migration script could not handle line: for_window [class="Pavucontrol"] floating enable
+# XXX: migration script could not handle line: for_window [class="Rhythmbox"] floating enable
+# XXX: migration script could not handle line: for_window [class="Xfce4-taskmanager"] floating enable, resize set 500 400
+# XXX: migration script could not handle line: for_window [class="MEGAsync"] floating enable
+# XXX: migration script could not handle line: for_window [class="Gufw.py"] floating enable
+# XXX: migration script could not handle line: for_window [class="Wicd-client.py"] floating enable
+# XXX: migration script could not handle line: for_window [class="Gpick"] floating enable
+# XXX: migration script could not handle line: for_window [title="htop"] floating enable
+# XXX: migration script could not handle line: for_window [instance="floating_term"] floating enable, resize set 600 400
+# XXX: migration script could not handle line: for_window [instance="mus_term"] floating enable
+# XXX: migration script could not handle line: for_window [instance="update_term"] floating enable
+# XXX: migration script could not handle line: for_window [instance="float"] floating enable
+# XXX: migration script could not handle line: for_window [instance="calculator_term"] floating enable
+# XXX: migration script could not handle line: for_window [class="XClipboard"] floating enable
+# XXX: migration script could not handle line: for_window [instance="st_buffer"] fullscreen toggle
+
+# XXX: migration script could not handle line: for_window [instance="mus_term"] move scratchpad, mark --add m
+# XXX: migration script could not handle line: for_window [instance="floating_term"] move scratchpad 
+# XXX: migration script could not handle line: for_window [class="XClipboard"] move scratchpad 
+
+assign [class="package"] 9
+assign [class="Thunderbird"] 7
+assign [class="Lutris"] 5
+assign [class="Steam"] 5
+assign [instance="ws-3"] 3
+
+
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec prompt "Log out?" "i3-msg exit"
+bindsym $mod+Shift+x exec "st -n 'float' -t 'Shutdown' -g 90x1 -e sudo shutdown now"
+bindsym $mod+Shift+z exec  "st -n 'float' -t 'Reboot' -g 90x1 -e sudo reboot"
+
+# XXX: migration script could not handle line: default_border pixel 1
+# XXX: migration script could not handle line: default_floating_border pixel 1
+
+exec --no-startup-id st -n 'mus_term' -e 'cmus' 
+exec --no-startup-id exec $tabbed_term 
+exec --no-startup-id light -S 10
+exec --no-startup-id pactl --set-sink-volume 0 20%
+exec --no-startup-id synclient TouchpadOff=1
+exec --no-startup-id xclipboard
+exec --no-startup-id dunst
+exec --no-startup-id st -n ws-3
+exec --no-startup-id sxhkd
+
+exec --no-startup-id redshift -l 46.69:11.48 -t 5600:5000 -g 0.8 -m randr -v
+
+exec compton
+
+# XXX: migration script could not handle line: exec_always feh --bg-scale /home/vabenil/wallpapers/2_the_long_dark.jpg
+
+
+# XXX: migration script could not handle line: exec_always sleep 3 && ~/.config/polybar/launch.sh
+
+# XXX: migration script could not handle line: bar {
+mode hide
+# XXX: migration script could not handle line: hidden_state hide
+# XXX: migration script could not handle line: modifier none
+}
+
+# vim: ft=cfg
+
+# XXX: Automatically added a bar configuration
+bar {
+    status_command i3status
+}

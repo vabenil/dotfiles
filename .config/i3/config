@@ -1,0 +1,143 @@
+# Variables:  {{{
+set $mod Mod4
+set $tabbed_term tabbed -f -n "floating_term" -r 2 st -w ''
+
+set $backgr #1F1F1F
+set $focusd #4F6364
+
+
+set $ws-1  1
+set $ws-2  2
+set $ws-3  3
+set $ws-4  4
+set $ws-5  5
+set $ws-6  6
+set $ws-7  7
+set $ws-8  8
+set $ws-9  9
+set $ws-10 10
+
+# }}} 
+
+# Scheme: {{{
+#class                    border    backgr    text      indicator   child_border
+client.focused            #454554   #454554   #ffffff   #73738C   #BABABA 
+client.focused_inactive   #4d4d4d   #4d4d4d   #e8e8e8   #4d4d4d   #282828
+client.unfocused          #2E2E2E   #212121   #888888   #333333   #282828
+client.urgent             #454554   #900000   #ffffff   #2f343a   #900000
+client.placeholder        #454554   #0c0c0c   #ffffff   #000000   #0c0c0c
+
+client.background         #ffffff
+# }}}
+
+# Set properties: {{{ 
+# font
+font pango:Hermit, Regular 8
+
+title_align center
+hide_edge_borders both
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+default_border pixel 1
+default_floating_border pixel 0
+# }}}
+
+# gaps: {{{
+# Set default gap
+gaps inner 5
+# gaps outer 10
+
+# smart_gaps inverse_outer
+# bindsym $mod+plus gaps inner current plus 5
+# bindsym $mod+minus gaps inner current minus 5
+# bindsym $mod+Shift+plus gaps inner current set 0, gaps outer current set 0
+
+# }}}
+
+# Key Bindings: {{{1
+# DO NOT DELETE THIS LINE
+bindsym $mod+Control+b bar mode toggle
+
+bindsym $mod+Shift+Return exec setxkbmap us
+bindsym $mod+Escape exec setxkbmap us
+# }}}1
+
+# Defaults: {{{
+# Floating windows: {{{
+for_window [class="vlc"] floating enable 
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Rhythmbox"] floating enable
+#for_window [class="mpv"] floating enable resize set 500 400
+for_window [class="Xfce4-taskmanager"] floating enable, resize set 500 400
+for_window [class="MEGAsync"] floating enable
+for_window [class="Gufw.py"] floating enable
+for_window [class="Wicd-client.py"] floating enable
+for_window [class="Gpick"] floating enable
+for_window [title="htop"] floating enable
+for_window [instance="floating_term"] floating enable, resize set 600 400
+for_window [instance="mus_term"] floating enable
+for_window [instance="update_term"] floating enable
+for_window [instance="float"] floating enable
+for_window [instance="calculator_term"] floating enable
+for_window [class="XClipboard"] floating enable, move position 450 284
+for_window [instance="st_buffer"] fullscreen toggle
+
+# Scratchpad windows
+for_window [instance="mus_term"] move scratchpad, mark --add m
+for_window [instance="floating_term"] move scratchpad 
+for_window [class="XClipboard"] move scratchpad 
+
+# }}}
+
+# Workspaces for windows: {{{
+assign [class="package"] 9
+assign [class="Thunderbird"] 7
+assign [class="Lutris"] 5
+assign [class="Steam"] 5
+assign [instance="ws-3"] 3
+# }}}
+# }}}
+
+# Run programs on startup: {{{
+exec --no-startup-id i3-msg workspace $ws-1
+# compton for transparent windows 
+exec --no-startup-id compton
+exec --no-startup-id sleep 1 && flashfocus -t 130
+
+exec --no-startup-id st -n 'mus_term' -e 'cmus' 
+exec --no-startup-id exec $tabbed_term 
+exec --no-startup-id light -S 10
+exec --no-startup-id pactl --set-sink-volume 0 20%
+exec --no-startup-id synclient TouchpadOff=1
+exec --no-startup-id xclipboard
+exec --no-startup-id dunst
+exec --no-startup-id st 
+exec --no-startup-id sxhkd 
+exec --no-startup-id i3-focus-last
+
+# Redshift 
+exec --no-startup-id redshift -l 46.69:11.48 -t 5600:5000 -g 0.8 -m randr -v
+
+
+
+# set background
+# exec_always feh --bg-scale /home/vabenil/wallpapers/2_the_long_dark.jpg
+# exec_always feh --bg-scale /home/vabenil/wallpapers/wallpaperPRo.jpg
+# exec_always feh --bg-scale /home/vabenil/wallpapers/scrapping_metal.jpg
+# exec_always feh --bg-scale /home/vabenil/wallpapers/wallpaper_sky_dreams.jpg
+# exec_always feh --bg-scale /home/vabenil/wallpapers/gameboy_anaglyph_3d_102604_1366x768.jpg
+# exec_always feh --bg-scale /home/vabenil/wallpapers/tree_horizon_minimalism_128903_1366x768.jpg
+exec_always feh --bg-scale /home/vabenil/wallpapers/tree_light_dark_82372_1366x768.jpg
+# exec_always feh --bg-scale /home/vabenil/wallpapers/watching_from_below.jpg
+# exec_always feh --bg-scale /home/vabenil/wallpapers/landscape_art_moon_127187_1366x768.jpg
+# exec_always feh --bg-scale /home/vabenil/wallpapers/wallpaperOPEN.jpeg
+
+
+exec_always sleep 1 && ~/.config/polybar/launch.sh
+exec_always pkill sxhkd; sxhkd
+# }}}
+
+
+# vim: ft=i3

@@ -1,0 +1,42 @@
+snippet ! "Comments for html"
+<!-- $0  -->
+endsnippet
+
+snippet !! "Comments for html"
+<!-- $1  -->
+<!-- /$1  -->
+endsnippet
+
+snippet # "id for html"
+id="$1"$0
+endsnippet
+
+snippet . "class for html"
+class="$1"$0
+endsnippet
+
+snippet s "style for html"
+style="$1"$0
+endsnippet
+
+snippet t "A simple HTML tag" b
+<${1:div$2}> 
+	${0: <!-- Code --> }
+</${1/(\w+).*/$1/}>
+endsnippet
+
+snippet it "A inline html tag"
+<$1> $0 </${1/(\w+).*/$1/}>
+endsnippet
+
+snippet ct "A commented HTML tag" b
+<!-- $1 -->
+<${2:div$3}> 
+	${0:/* some code */}
+</${2/(\w+).*/$1/}>
+<!-- /$1 -->
+endsnippet
+
+snippet a "A inline html tag"
+<a ${2:class="$3"} ${4:href="$5"}> $6 </a>
+endsnippet

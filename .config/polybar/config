@@ -1,0 +1,344 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/jaagr/polybar
+;
+;   The README contains alot of information
+;
+;==========================================================
+
+[colors]
+;background    = ${xrdb:color0:#222}
+blue           = "#378486"
+white          = "#e8e8e8"
+light-grey     = "#A6A6A6"
+light          = "#dad8d8"
+black          = "#000000"
+yellow         = #FFC800
+background     = #aa222222
+background-alt = #4D4D4D
+;foreground    = ${xrdb:color7:#222}
+foreground     = #dfdfdf
+foreground-alt = #555
+primary        = #ffb52a
+secondary      = #e60053
+alert          = #bd2c40
+
+[bar/main]
+monitor = eDP-1
+width = 100%
+height = 29
+offset-x = 1%
+offset-y = 1%
+fixed-center = false
+; bottom = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+border-size = 0
+border-color = #00000000
+
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 0
+; module-margin-right = 1
+
+font-0 = Hermit:size=9;1
+font-1 = FontAwesome:size=10;0
+
+font-2 = siji:pixelsize=10;1
+font-3 = Hermit:size=9:weight=bold;0
+
+line-size = 2
+modules-left = powermenu i3 xkeyboard layout 
+modules-center = date 
+modules-right = pulseaudio wlan eth time 
+
+wm-restack = i3
+
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+compositing-background = source
+compositing-foreground = over
+compositing-overline = over
+compositing-underline = over
+compositing-border = over
+
+[bar/bottom]
+monitor = eDP-1
+width = 100%
+height = 20
+fixed-center = false
+; bottom = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+border-size = 1
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 0
+module-margin-right = 0
+
+font-0 = Hermit:size=9;1
+font-1 = FontAwesome:size=9;0
+
+font-2 = siji:pixelsize=10;1
+
+modules-center = title f_mark marks
+
+
+[module/title]
+type = custom/script
+exec = ~/.config/i3/scripts/scroll.py 90 %counter%
+interval = 0.25
+
+format = <label>
+label = %output%
+
+[module/f_mark]
+type = custom/script
+exec = ~/.config/i3/scripts/focused_mark.py
+interval = 0.5
+format-foreground = ${colors.yellow}
+format-font = 3
+
+[module/marks]
+type = custom/script
+exec = ~/.config/i3/scripts/get_marks.py
+format-padding = 1
+interval = 0.5
+
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+format-prefix-underline = ${colors.secondary}
+format-margin = 1
+
+label-layout = %{A1:~/scripts/switch-layout.py:} %layout%%{A}
+label-layout-underline = ${colors.secondary}
+
+label-indicator-padding = 0
+label-indicator-margin = 0
+label-indicator-background = ${colors.secondary}
+label-indicator-underline = ${colors.secondary}
+
+
+[module/i3]
+type = internal/i3
+format = <label-state>
+index-sort = true
+wrapping-scroll = false
+
+; Only show workspaces on the same output as the bar
+; pin-workspaces = true
+
+ws-icon-0 = 10;
+ws-icon-1 = 1;
+ws-icon-2 = 2;
+ws-icon-3 = 3;
+ws-icon-4 = 4;
+ws-icon-5 = 5;
+ws-icon-6 = 6;
+ws-icon-7 = 7;
+ws-icon-8 = 8;
+ws-icon-9 = 9;
+
+label-mode-padding = 2
+label-mode-foreground = ${colors.white}
+label-mode-background = ${colors.secondary}
+
+strip-wsnumbers = true
+
+; focused = Active workspace on focused monitor
+label-focused = %icon%
+format-focused-margin = 0
+label-focused-background = ${colors.background-alt}
+label-focused-foreground = ${colors.white}
+; label-focused-underline= ${colors.primary}
+label-focused-padding = 2
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %icon%
+label-unfocused-padding = 2
+label-unfocused-foreground = ${colors.light-grey}
+
+; visible = Active workspace on unfocused monitor
+label-visible = %icon%
+label-visible-background = ${self.label-focused-background}
+; label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %icon%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+; Separator in between workspaces
+; label-separator = |
+
+[module/layout]
+type = custom/script
+interval = 0.2
+exec = ~/.config/polybar/scripts/layout.py 
+; format-background = ${colors.primary}
+format-foreground = ${colors.white}
+format-padding = 2
+
+[module/wlan]
+type = internal/network
+interface = wlo1
+interval = 3.0
+
+format-connected = <ramp-signal> <label-connected>
+format-connected-underline = #9f78e1
+format-connected-margin = 1
+label-connected = " %essid%"
+
+; format-margin = 20
+
+format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+ramp-signal-foreground = ${colors.foreground-alt}
+
+[module/eth]
+type = internal/network
+interface = virbr0-nic
+interval = 3.0
+
+format-connected-underline = #55aa55
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected = %local_ip%
+
+format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+[module/date]
+type = internal/date
+interval = 30
+
+date = "%b %d of %Y"
+
+date-alt = "%Y-%m-%d"
+
+
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #0a6cf5
+format-margin = 1
+
+label =  %date%
+
+
+[module/time]
+type = internal/date
+interval = 1
+
+time = "%I:%M %p"
+time-alt = "%H:%M %p"
+
+label-background = ${colors.blue}
+label-padding = 1
+
+
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+; format-underline = #0a6cf5
+label = " %time%"
+
+
+[module/pulseaudio]
+type = internal/pulseaudio
+format-volume = " <ramp-volume> <label-volume>"
+format-volume-margin = 1
+format-volume-underline = ${colors.foreground}
+label-volume = %percentage%%
+label-muted = " 🔇 muted "
+
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+ramp-volume-3 = 
+ramp-volume-4 = 
+ramp-volume-5 = 
+ramp-volume-6 = 
+
+
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+label-open = "  "
+label-open-foreground = ${colors.foreground}
+label-open-background = ${colors.blue}
+label-open-padding = 1
+label-close =  cancel
+label-close-foreground = ${colors.secondary}
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = "power off "
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = sudo reboot
+
+menu-2-0 = power off
+menu-2-0-exec = sudo poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+module-magin-left = 0
+module-magin-right = 0
+
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = false
+
+; vim:ft=dosini

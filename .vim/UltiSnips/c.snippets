@@ -1,0 +1,91 @@
+snippet ifndef "Simple infdef"
+#ifndef $1_H
+#define $1_H
+
+${0:/* Code */}
+
+#endif /* $1_H */
+endsnippet
+
+snippet inc
+#include ${1:<${2:stdio}.h>} 
+endsnippet
+
+snippet for
+for (int $1; $1 < ${2:len}; $1++)
+{
+	$0
+}
+endsnippet
+
+snippet li
+if ( $1 )
+	${2:// your statement here};
+${3:else
+	$0;}
+endsnippet
+
+snippet if
+if ( $1 ) {
+	${2:// your statement here}
+} ${3:else {
+	$0
+}}
+endsnippet
+
+snippet switch
+switch($1) 
+{
+	${2:case $3:
+		$4
+		break;
+	}
+	${5:case $6:
+		$7
+		break;
+	}
+	${8:default:
+		${0:/* some code */}
+		break;
+	}
+}
+endsnippet
+
+snippet printf
+printf("${1:%${2:s}}\n"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$3${1/([^%]|%%)*(%.)?.*/(?2:\);)/}
+endsnippet
+
+snippet main
+int main( void )
+{
+	${8:/*some code*/}
+	return 1;
+}
+endsnippet
+
+snippet func
+${1:int} ${2:func}( ${3:${4:int} ${5:var1,} ${6:int} ${7:var2}} )
+{
+	${8:/*some code*/}
+	${9:return ${0:1};}
+}
+endsnippet
+
+snippet typedef
+typedef ${1:struct} {
+	${0:/* code */}	
+}$2;
+endsnippet
+
+snippet ca
+case ${1:"$2"}:
+	${3:/* your code */}
+	break;
+$0
+endsnippet
+
+
+
+
+
+
