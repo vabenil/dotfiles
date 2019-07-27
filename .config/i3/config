@@ -21,9 +21,9 @@ set $ws-10 10
 
 # Scheme: {{{
 #class                    border    backgr    text      indicator   child_border
-client.focused            #454554   #454554   #ffffff   #73738C   #BABABA 
-client.focused_inactive   #4d4d4d   #4d4d4d   #e8e8e8   #4d4d4d   #282828
-client.unfocused          #2E2E2E   #212121   #888888   #333333   #282828
+client.focused            #454554   #454554   #ffffff   #73738C   #DAD8D8
+client.focused_inactive   #6B6B6B   #4d4d4d   #e8e8e8   #4d4d4d   #282828
+client.unfocused          #363636   #212121   #888888   #333333   #282828
 client.urgent             #454554   #900000   #ffffff   #2f343a   #900000
 client.placeholder        #454554   #0c0c0c   #ffffff   #000000   #0c0c0c
 
@@ -34,7 +34,7 @@ client.background         #ffffff
 # font
 font pango:Hermit, Regular 8
 
-title_align center
+# title_align center
 hide_edge_borders both
 
 # Use Mouse+$mod to drag floating windows to their wanted position
@@ -93,10 +93,13 @@ for_window [class="XClipboard"] move scratchpad
 
 # Workspaces for windows: {{{
 assign [class="package"] 9
-assign [class="Thunderbird"] 7
+assign [class="Thunderbird"] 6
 assign [class="Lutris"] 5
 assign [class="Steam"] 5
+assign [class="Transmission-gtk"] 10
 assign [instance="ws-3"] 3
+assign [class="Navigator"] 2
+assign [class="Firefox"] 2
 # }}}
 # }}}
 
@@ -104,7 +107,7 @@ assign [instance="ws-3"] 3
 exec --no-startup-id i3-msg workspace $ws-1
 # compton for transparent windows 
 exec --no-startup-id compton
-exec --no-startup-id sleep 1 && flashfocus -t 130
+# exec --no-startup-id sleep 1 && flashfocus -t 130
 
 exec --no-startup-id st -n 'mus_term' -e 'cmus' 
 exec --no-startup-id exec $tabbed_term 
@@ -113,8 +116,8 @@ exec --no-startup-id pactl --set-sink-volume 0 20%
 exec --no-startup-id synclient TouchpadOff=1
 exec --no-startup-id xclipboard
 exec --no-startup-id dunst
-exec --no-startup-id st 
-exec --no-startup-id sxhkd 
+exec --no-startup-id st -n ws-3
+# exec --no-startup-id sxhkd 
 exec --no-startup-id i3-focus-last
 
 # Redshift 
@@ -123,16 +126,7 @@ exec --no-startup-id redshift -l 46.69:11.48 -t 5600:5000 -g 0.8 -m randr -v
 
 
 # set background
-# exec_always feh --bg-scale /home/vabenil/wallpapers/2_the_long_dark.jpg
-# exec_always feh --bg-scale /home/vabenil/wallpapers/wallpaperPRo.jpg
-# exec_always feh --bg-scale /home/vabenil/wallpapers/scrapping_metal.jpg
-# exec_always feh --bg-scale /home/vabenil/wallpapers/wallpaper_sky_dreams.jpg
-# exec_always feh --bg-scale /home/vabenil/wallpapers/gameboy_anaglyph_3d_102604_1366x768.jpg
-# exec_always feh --bg-scale /home/vabenil/wallpapers/tree_horizon_minimalism_128903_1366x768.jpg
-exec_always feh --bg-scale /home/vabenil/wallpapers/tree_light_dark_82372_1366x768.jpg
-# exec_always feh --bg-scale /home/vabenil/wallpapers/watching_from_below.jpg
-# exec_always feh --bg-scale /home/vabenil/wallpapers/landscape_art_moon_127187_1366x768.jpg
-# exec_always feh --bg-scale /home/vabenil/wallpapers/wallpaperOPEN.jpeg
+exec_always ~/scripts/change-background.py
 
 
 exec_always sleep 1 && ~/.config/polybar/launch.sh

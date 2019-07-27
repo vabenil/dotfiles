@@ -23,6 +23,7 @@ set noshowmode
 
 set showcmd
 
+set autoindent
 set smartindent
 
 set ttyfast
@@ -51,6 +52,13 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4 expandtab
 
+set ffs=unix
+set encoding=utf-8
+set fileencoding=utf-8
+set listchars=eol:¶
+set list
+
+set clipboard=unnamedplus
 " Open .tex files as latex
 let g:tex_flavor = "latex"
 
@@ -62,15 +70,15 @@ let g:netrw_winsize = 35
 
 " set termwinsize="10x0"
 " }}}
-" Plugin options: {{{
+" Plugin options && variables: {{{
 let g:vim_markdown_folding_disabled=1
 
 " let g:asyncrun_open = 10
 
 " better key bindings for UltiSnipsExpandTrigger
 let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+let g:UltiSnipsJumpForwardTrigger = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
 
 let g:UltiSnipsUsePythonVersion = 3
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
@@ -124,37 +132,28 @@ endfunction
 
 
 " Automatically generate all function definitions in a C file in a single
-" regular expresion. Pretty need
+" regular expresion
 function! AddFuncDef()
     let a:line_num = line('.')
     %g/\_^\<\w\+\>\*\?\s\*\?\<\(main\>\)\@!\<\w\+\>(.*)\(;\)\@!.*$/exec "normal! yy".(a:line_num)."ggpf)C);\<esc>"
 endfunction
 
 function! SyntaxCheck()
-    if exists("g:asyncrun_open") != 0
-        let l:a_prev = g:asyncrun_open
-    else
-        let l:a_prev = 0
-    endif
-
     let g:asyncrun_open = 6
     let g:asyncrun_auto = "make"
     AsyncRun clang-tidy % -checks '*' -- $(cat .clang_complete)
-    " botright copen
-    let g:asyncrun_open = l:a_prev
 endfunction
 
 
 let g:build_command="gcc %:p"
 function! Build()
+    let g:asyncrun_open = 8
     let l:makefile_path = getcwd()."/Makefile"
     if filereadable( l:makefile_path )
         AsyncRun -auto=make make clean && make
     else
         exec "AsyncRun -auto=make ".g:build_command
     endif
-
-    botright copen
 endfunction
 
 " Try figuring out what the executable is based on the Makefile and run it in
@@ -165,16 +164,17 @@ function! Run()
     let l:file = l:current_dir."/Makefile"
     if filereadable(l:file)
         let l:prog = system("sed -n 's/TARGET\\s\\?:\\?=\\s\\?\\(.*\\)/\\1/p' ".(l:file)) 
-        exec "tab term ".l:current_dir."/".(l:prog)
+        let g:asyncrun_open = 10
+        exec "AsyncRun ".l:current_dir."/".(l:prog)
     else
-        exec "tab term ".l:current_dir."/".(g:built_binary)
+        exec "AsyncRun ".l:current_dir."/".(g:built_binary)
     endif
 endfunction
 
 " }}}
 " HTML: {{{ 
 autocmd BufNewFile *.html,*.htm,*.php call MakeHTML()
-autocmd BufWritePost *.html,*.htm,*.php,*.css AsyncRun xdotool search --onlyvisible --classname Navigator key ctrl+r 
+" autocmd BufWritePost *.html,*.htm,*.php,*.css AsyncRun xdotool search --onlyvisible --classname Navigator key ctrl+r 
 
 function! LoadHTMLConfig()
     set shiftwidth=3
@@ -184,9 +184,25 @@ function! LoadHTMLConfig()
 endfunction
 
 function! MakeHTML()
-    let l:tag = "<!DOCTYPE html>\n<html>\n   <head>\n      <meta charset=\"utf-8\" name='viewport' content=\"width=device-width, intial-scale=1.0\">\n      <title></title>\n      <link rel=\"stylesheet\" type='text/css' href=\"index.css\">\n   </head>\n   <body>\n\n      <script type=\"text/javascript\" src=\"index.js\"></script>\n   </body>\n</html>"
+    set noautoindent
+    set nosmartindent
+    let l:tag = "
+\<!DOCTYPE html>\r
+\<html>\r
+\\t<head>\r
+\\t\t<meta charset=\"utf-8\" name='viewport' content=\"width=device-width, intial-scale=1.0\">\r
+\\t\t<title></title>\r
+\\t\t<link rel=\"stylesheet\" type='text/css' href=\"index.css\">\r
+\\t</head>\r
+\\t<body>\r
+\\r
+\\t\t<script type=\"text/javascript\" src=\"index.js\"></script>\r
+\\t</body>\r
+\</html>"
     call AddText(l:tag)
-    norm /<body>j
+    normal /<body>j
+    set autoindent
+    set smartindent
 endfunction
 
 
@@ -255,15 +271,14 @@ call plug#begin('~/.vim/bundle')
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 
-Plug 'bfrg/vim-cpp-modern'
-" Don't honestly use it but it feels nice to have it
+" Plug 'bfrg/vim-cpp-modern'
 " Plug 'itchyny/vim-gitbranch'
 Plug 'ctrlpvim/ctrlp.vim'
 
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 
-" Makes insert mode usefull
+" Makes insert mode better
 Plug 'SirVer/ultisnips'
 
 Plug 'vim-scripts/ReplaceWithRegister'
@@ -271,7 +286,7 @@ Plug 'tpope/vim-commentary'
 
 Plug 'skywind3000/asyncrun.vim'
 
-Plug 'kana/vim-textobj-user'
+" Plug 'kana/vim-textobj-user'
 " Plug 'rbonvall/vim-textobj-latex'
 
 Plug 'morhetz/gruvbox'
@@ -289,6 +304,7 @@ Plug 'godlygeek/tabular'
 
 Plug 'altercation/vim-colors-solarized'
 
+" Support for argument text object
 Plug 'b4winckler/vim-angry'
 Plug 'easymotion/vim-easymotion'
 
@@ -301,15 +317,17 @@ Plug 'PotatoesMaster/i3-vim-syntax'
 Plug 'sainnhe/vim-color-forest-night'
 Plug 'sainnhe/vim-color-desert-night'
 Plug 'sonph/onehalf'
-Plug 'chriskempson/base16-vim'
+" Plug 'chriskempson/base16-vim'
 Plug 'jnurmine/Zenburn'
 Plug 'jacoborus/tender.vim'
+
+
 
 call plug#end()
 filetype plugin indent on
 " }}}
 
-" Colorscheme {{{ 
+" Colorscheme: {{{ 
 set bg=dark 
 " colorscheme gruvbox
 " colorscheme delek
@@ -317,18 +335,20 @@ set bg=dark
 " colorscheme elflord
 " colorscheme desert-night
 " colorscheme forest-night
-" colorscheme tender
-" colorscheme base16-3024
-" hi Normal ctermbg=NONE
-colorscheme onedark
+colorscheme tender
+" colorscheme zenburn
+" colorscheme onedark
 " colorscheme solarized
+" hi Normal ctermbg=NONE
+hi Visual ctermbg=238
 " }}} 
 
-" Return to last edit position when opening files (You want this!)
+" Return to last edit position when opening files (You want this!): {{{
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
      \   exe "normal! g`\"" |
      \ endif
+" }}}
 
 " Custom functions: {{{
 function! QuickfixLast()
@@ -347,25 +367,73 @@ function! SeparateList()
     s/\s*\([}\])]\)/\r\1
 endfunction
 
+function ShowPath()
+    let l:win_width = winwidth('%')
 
-let g:cmd_history = []
+    if len(expand('%'))
+        if l:win_width > 80
+            let l:path = fnamemodify(expand('%'), ":~:.")
+        else
+            let l:path = expand('%:t')
+        endif
+    else
+        let l:path = '[No Name]' 
+    endif
+
+    return l:path
+endfunction
+" My favorite colorschemes
+let g:colorschemes = [
+         \'gruvbox',
+         \'desert',
+         \'zenburn',
+         \'forest-night',
+         \'onedark',
+         \'tender'
+\]
+
+let g:nobg_colorschemes = [ 'forest-night' ]
+
+function ChangeColo(forward=1)
+    if !exists('g:colors_name')
+        return 0
+    endif
+
+    let l:colo_index = index(g:colorschemes, g:colors_name)
+
+    if a:forward && (l:colo_index == -1 || l:colo_index == len(g:colorschemes) - 1)
+        let l:new_colo = g:colorschemes[ 0 ]
+    elseif !a:forward && (l:colo_index == -1 || l:colo_index == 0)
+        let l:new_colo = g:colorschemes[ len(g:colorschemes) -1 ]
+    else
+        let l:new_colo = g:colorschemes[ l:colo_index + (a:forward ? 1 : -1) ] 
+    endif
+    hi clear
+    execute "colorscheme ".l:new_colo
+    if index(g:nobg_colorschemes, l:new_colo) != -1
+        hi Normal ctermbg=NONE
+    endif
+    call SetStatusline()
+endfunction
+
+let g:last_command = []
 function! RunAsync(command)
     if len(a:command) > 0
         if a:command == '!!'
             call RunXCommmand(0)
         else
-            call add(g:cmd_history, a:command)
+            let g:asyncrun_open = 8
+            let g:last_command = a:command
             exec "AsyncRun ".(a:command)
-            copen
         endif
     endif
 endfunction
 
 
 function! RunXCommmand(n)
-    if exists("g:cmd_history") && len(g:cmd_history) > a:n
-        exec "AsyncRun ".(g:cmd_history[a:n])
-        copen
+    if exists("g:last_command")
+        let g:asyncrun_open = 8
+        exec "AsyncRun ".(g:last_command)
     endif
 endfunction
 
@@ -422,10 +490,7 @@ function! ExecuteMacroOverVisualRange()
 endfunction
 
 function! AddText(text)
-    let l:last_reg = getreg("")
-    call setreg("", a:text)
-    normal! p
-    call setreg("", l:last_reg)
+    exec "normal! i".a:text
 endfunction
 
 function! RelativeToLine(from)
@@ -490,6 +555,9 @@ noremap <expr> F repmo#ZapKey('F')|sunmap F
 noremap <expr> t repmo#ZapKey('t')|sunmap t
 noremap <expr> T repmo#ZapKey('T')|sunmap T
 
+
+nnoremap <silent> zS :setlocal spell spelllang=en_us
+
 nnoremap <expr> gA "A".nr2char(getchar())
 
 nmap Y y$
@@ -502,6 +570,8 @@ nnoremap <silent> g= :exe "vertical resize +2"<cr>
 
 
 nnoremap <silent> ZW :w<cr>
+
+nnoremap <leader>r :QO<cr>:AsyncRun %:p<CR>
 
 " set ALT-Key mappings
 let c='a'
@@ -556,6 +626,9 @@ nnoremap <silent> <space>Q :q!<cr>
 nnoremap <space><space>b :CtrlPBuffer<cr>
 nnoremap <silent> <expr> <space>o "o\<esc>k"
 nnoremap <silent> <expr> <space>O "O\<esc>j"
+
+nnoremap <silent> g<Tab> :call ChangeColo()<CR>
+nnoremap <silent> g<S-Tab> :call ChangeColo(0)<CR>
 " nnoremap <silent> <space>t :call AddText(input('-> '))<cr>
 
 nnoremap <leader>gf viWgf
@@ -591,8 +664,9 @@ endw
 nnoremap <space>r :call RunAsync(input('$ '))<cr>
 nnoremap <space>R :call RunXCommmand(0)<cr>
 
-nnoremap <leader>co :botright copen<cr>
+nnoremap <leader>co :botright copen 8 \| wincmd p<cr>
 nnoremap <leader>cl :cclose<cr>
+" nnoremap <leader>cc :cclose<cr>
 " Evaluate expression in unnamed register
 nnoremap <leader>e "=<C-r>"<cr>p
 
@@ -608,48 +682,6 @@ noremap <silent> <space>L :call RelativeToLine(input('line:'))<cr>
 
 vnoremap . :normal @q<cr> 
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
-
-" surround automatically {{{
-" imap ( ()<left>
-
-" inoremap (      ()<Left>
-" inoremap (<CR>  (<CR>)<Esc>O<Esc>j<<ki<Tab>    
-" inoremap (<backspace> <Nop> 
-" inoremap ((     (
-" inoremap ()     ()
-
-inoremap {      {}<Left>
-" <Esc>j<<ki<Tab>
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
-inoremap {<backspace> <Nop>
-inoremap {}     {}
-
-inoremap <      <><Left>
-" <Esc>j<<ki<Tab>
-inoremap <<CR>  <<CR>><Esc>O
-inoremap <<     <
-inoremap <<backspace> <Nop>
-inoremap <>     <>
-
-" inoremap [      []<Left>
-
-" inoremap [<CR>  [<CR>]<Esc>O<Esc>j<<ki<Tab>
-" inoremap [<backspace> <Nop>
-" inoremap [[     [
-
-" inoremap "      ""<Left>
-
-" inoremap "<CR>  "<CR>"<Esc>O<Esc>j<<ki<Tab>
-" inoremap "<backspace> <Nop>
-" inoremap ""     "
-
-" inoremap '      ''<Left>
-
-" inoremap '<CR>  '<CR>'<Esc>O<Esc>j<<ki<Tab>
-" inoremap '<backspace> <Nop>
-" inoremap ''     '
-" }}}
 
 nnoremap <leader>S :setlocal spell spelllang=en_us<cr>
 
@@ -675,12 +707,12 @@ nnoremap <silent> <space>no :noh<cr>
 
 nmap <space>F :tab sp<cr>
 
-call textobj#user#plugin('operation', {
-\   'o': {
-\   'pattern': '\d\+\s*\%([-+\^/%]\|\*\{1,2}\)\s*\d\+',
-\   'select': ['ao', 'io'],
-\},
-\})
+" call textobj#user#plugin('operation', {
+" \   'o': {
+" \   'pattern': '\d\+\s*\%([-+\^/%]\|\*\{1,2}\)\s*\d\+',
+" \   'select': ['ao', 'io'],
+" \},
+" \})
 
 " imap <A-n> <Plug>CompletorCppJumpToPlaceholder
 nmap <c-n> <Plug>CompletorCppJumpToPlaceholder
@@ -694,6 +726,7 @@ nnoremap <silent> <expr> #$ "i}}}\<esc>gcc"
 
 " Autocommands: {{{
 
+" This is a mess, I'm aware and lazy
 " Change cursor depending on the mode
 if has("autocmd")
   au VimEnter,InsertLeave * silent execute '!echo -ne "\e[2 q"' | redraw
@@ -709,6 +742,8 @@ endif
 autocmd FileType css setl ofu=csscomplete#CompleteCSS
 autocmd FileType css,scss set iskeyword=@,48-57,_,-,?,!,192-255
 
+autocmd BufEnter *.config/vimb/config set filetype=vim
+
 autocmd BufRead,BufNewFile *.h,*.c set filetype=c
 
 autocmd BufWritePost *.tex call CompileLatex()
@@ -722,8 +757,8 @@ autocmd Filetype c,c++ nnoremap <leader>s :call SyntaxCheck()<cr>
 autocmd Filetype cpp UltiSnipsAddFiletypes cpp.c
 autocmd Filetype cpp set omnifunc=cppcomplete#CompleteCPP
 autocmd FileType javascript nnoremap <leader>r :AsyncRun nodejs %<Cr>
-autocmd FileType python,sh nnoremap <leader>r :QO<cr>:AsyncRun ./%<Cr>
 
+autocmd Filetype text setlocal spell spelllang=en_us
 
 " autocmd BufEnter * call TranslateMode()
 
@@ -876,13 +911,13 @@ function! SetStatusline()
     " set statusline+=%2*
     " set statusline+=%{StatuslineGit()}
     set statusline+=%3*
-    set statusline+=\ %t\ 
-    " set statusline+=\ %{winwidth('&')>80?filereadable(expand('%'))?()} 
+    " set statusline+=\ %f\ 
+    set statusline+=\ %{ShowPath()}\ 
     " set statusline+=%t\ 
     set statusline+=%4*
     " set statusline+=[%{&fileformat}]
     " set statusline+=[%{(&fenc!=''?&fenc:&enc)}]\  "file encoding
-    set statusline+=%<
+    " set statusline+=%<
     set statusline+=\ %y\ 
     set statusline+=%{ReadOnly()}\ %m%w
     " set statusline+=\ %r
@@ -891,13 +926,12 @@ function! SetStatusline()
     set statusline+=%=
 
     set statusline+=%6*
-    set statusline+=\ buf:\ %n\  
+    set statusline+=\ buf:\ %n\ 
     set statusline+=%7*
     set statusline+=\ col\ %c\ \|\  
-    set statusline+=line\ %l\ /\ %L
-    set statusline+=\  
+    set statusline+=line\ %l\ /\ %L\ 
     set statusline+=%8*
-    set statusline+=\ \ %P\ \  
+    set statusline+=\ \ %P\ \ 
 endfunction
 " set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L: %P
 

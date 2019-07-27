@@ -45,7 +45,7 @@ fixed-center = false
 background = ${colors.background}
 foreground = ${colors.foreground}
 
-border-size = 0
+border-size = 1
 border-color = #00000000
 
 
@@ -90,7 +90,7 @@ fixed-center = false
 background = ${colors.background}
 foreground = ${colors.foreground}
 
-border-size = 1
+border-size = 0
 
 padding-left = 0
 padding-right = 0
@@ -108,7 +108,7 @@ modules-center = title f_mark marks
 
 [module/title]
 type = custom/script
-exec = ~/.config/i3/scripts/scroll.py 90 %counter%
+exec = ~/scripts/scroll.py 90 %counter%
 interval = 0.25
 
 format = <label>
@@ -116,14 +116,14 @@ label = %output%
 
 [module/f_mark]
 type = custom/script
-exec = ~/.config/i3/scripts/focused_mark.py
+exec = ~/scripts/focused_mark.py
 interval = 0.5
 format-foreground = ${colors.yellow}
 format-font = 3
 
 [module/marks]
 type = custom/script
-exec = ~/.config/i3/scripts/get_marks.py
+exec = ~/scripts/get_marks.py
 format-padding = 1
 interval = 0.5
 
@@ -202,7 +202,7 @@ label-urgent-padding = 2
 [module/layout]
 type = custom/script
 interval = 0.2
-exec = ~/.config/polybar/scripts/layout.py 
+exec = ~/scripts/layout.py 
 ; format-background = ${colors.primary}
 format-foreground = ${colors.white}
 format-padding = 2
@@ -267,8 +267,8 @@ label =  %date%
 type = internal/date
 interval = 1
 
-time = "%I:%M %p"
-time-alt = "%H:%M %p"
+time = "%I:%M:%S %p"
+time-alt = "%H:%M% %p"
 
 label-background = ${colors.blue}
 label-padding = 1

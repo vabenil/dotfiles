@@ -1,13 +1,10 @@
-# vim: filetype=vim
-
-
-
 nnoremap <C-w> :quit<CR>
 nnoremap <C-l> :sh! xdotool key --window $VIMB_XID alt+n<CR><Esc>
 nnoremap <C-h> :sh! xdotool key --window $VIMB_XID alt+p<CR><Esc>
-nnoremap gt :sh! ~/.config/i3/scripts/smart-move.py r<CR><Esc>
-nnoremap gT :sh! ~/.config/i3/scripts/smart-move.py l<CR><Esc>
-
+nnoremap <A-l> :sh! xdotool key --window $VIMB_XID alt+n<CR><Esc>
+nnoremap <A-h> :sh! xdotool key --window $VIMB_XID alt+p<CR><Esc>
+nnoremap gt :sh! xdotool key --window $VIMB_XID alt+n<CR><Esc>
+nnoremap gT :sh! xdotool key --window $VIMB_XID alt+p<CR><Esc>
 nnoremap 1gt :sh! xdotool key --window $VIMB_XID ctrl+1<CR><Esc>
 nnoremap 2gt :sh! xdotool key --window $VIMB_XID ctrl+2<CR><Esc>
 nnoremap 3gT :sh! xdotool key --window $VIMB_XID ctrl+3<CR><Esc>
@@ -18,14 +15,17 @@ nnoremap 7gT :sh! xdotool key --window $VIMB_XID ctrl+7<CR><Esc>
 nnoremap 8gT :sh! xdotool key --window $VIMB_XID ctrl+8<CR><Esc>
 nnoremap 9gt :sh! xdotool key --window $VIMB_XID ctrl+9<CR><Esc>
 nnoremap 10gT :sh! xdotool key --window $VIMB_XID ctrl+10<CR><Esc>
-
+nnoremap M :sh! mpv <C-R>%<CR>
+nnoremap ZZ :q<CR>
 set download-path=/home/vabenil/Downloads
 set home-page=https://duckduckgo.com
 set history-max-items=200
 set input-autohide=true
+set x-hint-command=:sh! mpv <C-R>;<CR>
 shortcut-default dd
 shortcut-add dd=https://duckduckgo.com/?q=$0
 shortcut-add yt=https://www.youtube.com/results?search_query=$0
+shortcut-add wiki=https://en.wikipedia.org/w/index.php?search=$0
 
 
 

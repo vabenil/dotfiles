@@ -20,13 +20,13 @@ style="$1"$0
 endsnippet
 
 snippet t "A simple HTML tag" b
-<${1:div$2}> 
+<${1:div$2}>
 	${0: <!-- Code --> }
 </${1/(\w+).*/$1/}>
 endsnippet
 
 snippet it "A inline html tag"
-<$1> $0 </${1/(\w+).*/$1/}>
+<$1>$2</${1/(\w+).*/$1/}>$0
 endsnippet
 
 snippet ct "A commented HTML tag" b

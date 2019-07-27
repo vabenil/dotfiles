@@ -282,7 +282,6 @@ mode "$prog_launcher"  {
     bindsym a exec "gnome-screenshot -a", mode "default"
     bindsym b exec "tabbed -c vimb -e", mode "default"
     bindsym c exec "st -n 'calculator_term' -e bc -l", mode "default"
-    bindsym d exec "st -e duckduck", mode "default"
     bindsym e exec "st -e vifm", mode "default"
     bindsym f exec "firefox", mode "default"
     bindsym g exec "gpick", mode "default"
