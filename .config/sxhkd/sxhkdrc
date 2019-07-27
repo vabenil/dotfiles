@@ -1,0 +1,272 @@
+# vim: ft=sxhkdrc
+
+
+# Change focus: {{{
+super + {h,j,k,l}
+   i3-smart-focus {left,down,up,right}
+
+super + {Left,Down,Up,Right}
+   i3-smart-focus {left,down,up,right}
+
+super + space
+    i3-smart-focus float
+
+super + {a,i,o}
+    i3-smart-focus {parent,child,last}
+
+alt + Tab
+    focus-next-visible
+alt + shift + Tab
+    focus-next-visible reverse
+
+super + f
+    i3-easyfocus --color-unfocused-fg FFFFFF -f -misc-fixed-medium-r-normal--20-140-100-100-c-100-iso8859-1 
+# }}}
+
+# Move to workspace: {{{
+super + {w,b,u}
+    i3-msg workspace {next,prev,back_and_forth}
+
+super + {1-9,0} ; {_,super + }w
+	i3-msg workspace {1-9,10}
+# }}} 
+
+# Move container to workspace: {{{ 
+super + {1-9,0} ; {_,super + }shift + w 
+	i3-msg move container to workspace {1-9,10}
+
+super + shift + {w,b} 
+	i3-msg move container to workspace {next,prev}
+
+super + {bracketleft,bracketright} 
+	i3-msg move container to workspace {prev,next}
+# }}}
+
+# Move window: {{{
+super + shift + {h,j,k,l}
+    i3-msg move {left,down,up,right} 30px
+
+super + shift + {Left,Down,Up,Right}
+    i3-msg move {left,down,up} 30px
+
+super + shift + s
+    i3-msg move scratchpad 
+
+super + shift + space
+    i3-msg floating toggle 
+# }}}
+
+# Kill windows: {{{
+super + shift + q
+    i3-msg kill
+
+super + q ; f
+    i3-easyfocus -w | xargs xkill -id
+
+# }}}
+
+# Resize window: {{{
+super + control + {h,l}
+    i3-msg resize {shrink,grow} width 25 px or 5 ppt
+
+super + control + {j,k}
+    i3-msg resize {grow,shrink} height 25 px or 5 ppt
+# }}} 
+
+# Pulse Audio controls: {{{
+XF86Audio{Raise,Lower}Volume
+    pactl set-sink-volume 0 {+,-}5%
+XF86AudioMute 
+    pactl set-sink-mute 0 toggle
+# }}}
+
+# Sreen brightness controls {{{
+XF86MonBrightness{Up,Down} 
+    light -{A,U} 5
+# }}}
+
+# Sistem operations: {{{
+super + shift + r
+    i3-msg restart
+
+super + shift + x 
+    st -n 'float' -t 'Shutdown' -g 90x1 -e sudo shutdown now
+
+super + shift + z 
+    st -n 'float' -t 'Reboot' -g 90x1 -e sudo reboot
+
+super + shift + e
+    prompt "Log out?" "i3-msg exit"
+# }}}
+
+# change container layout: {{{
+super + {s,t,e}
+    i3-msg layout {stacking,tabbed,toggle split}
+super + r
+    ~/scripts/sp_toggle.py
+# }}}
+
+# Touchpad control: {{{
+XF86TouchpadToggle 
+    touchpad_toggle
+
+super + control + t 
+    touchpad_toggle
+# }}} 
+
+# ScreenShots: {{{
+super + Insert
+    scrot -e 'mv $f ~/Pictures/ScreenShots/$f && notify-send "ScreenShot saved in ~/Pictures/ScreenShots/$f"'
+super + shift + Insert 
+    scrot -u -e 'mv $f ~/Pictures/ScreenShots/$f && notify-send "ScreenShot saved in ~/Pictures/ScreenShots/$f"'
+# }}}
+
+# dmenu: {{{
+super + d
+    dmenu_run -b -fn Hermit -nb "#212121" -sb "#378486"
+
+super + shift + d
+    j4-dmenu-desktop --dmenu=dmenu\ -b\ -fn\ Hermit\ -nb\ \"#212121\"\ -sb\ \"#378486\" 
+# }}}
+
+# Gaps: {{{
+super + plus 
+    i3-msg gaps inner current plus 5
+super + minus 
+    i3-msg gaps inner current minus 5
+super + equal 
+    i3-msg gaps inner current set 0, gaps outer current set 0
+# }}}
+
+# Copy & Paste: {{{
+super + y 
+    yank-from-reg
+
+alt + c
+    cp-to-reg
+# }}}
+
+# Scratchpad: {{{
+super + shift + c
+    i3-msg move scratchpad
+
+super + c ; f
+    i3-easyfocus -i | xargs -I \{\} i3-msg [con_id=\{\}] move scratchpad
+
+super + n
+    i3-smart-focus --scratchpad-next
+
+
+super + asterisk
+    i3-msg 'scratchpad show'
+super + shift + n
+    i3-msg 'scratchpad show'
+ 
+super + semicolon
+    i3-smart-focus --repeat-last
+
+super + colon
+    i3-smart-focus --instance "floating_term"
+# }}}
+
+# Marks: {{{
+super + m ; {0-9,a-z,A-Z}
+    i3-msg "mark --toggle {0-9,a-z,A-Z}"
+
+super + apostrophe ; {1-9,a-z,A-Z}
+    i3-smart-focus --mark {1-9,a-z,A-Z}
+# }}}
+
+# Change keyboard layout: {{{
+super + control + m ; {e,r,s} 
+    setxkbmap {us,ru phonetic,es}
+
+super + Tab
+    ${HOME}/scripts/switch-layout.py
+
+super + grave
+    ${HOME}/scripts/switch-layout.py
+
+super + Escape
+    setxkbmap us
+# }}}
+
+# Program Launcher: {{{
+super + exclam ; b
+    vimb
+super + exclam ; c
+    st -n 'calculator_term' -e bc -l
+super + exclam ; e
+    st -n float -e vifm
+super + exclam ; f
+    firefox
+super + exclam ; g
+    gpick
+super + exclam ; h
+    st -e htop
+super + exclam ; l
+    lutris
+super + exclam ; m
+    cmus
+super + exclam ; n
+    st -e nvim
+super + exclam ; s
+    steam
+super + exclam ; u
+    st -n 'update_term' -e bash -c 'sudo apt update -y && sudo apt upgrade -y'
+super + exclam ; v
+    st -e vim
+super + exclam ; w
+    wicd-client
+super + exclam ; z
+    zathura
+
+# Floating
+super + exclam ; control + b
+    vimb --name=float
+super + exclam ; control + c
+    st -n 'calculator_term' -e bc -l
+super + exclam ; control + e
+    st -n float -e vifm
+super + exclam ; control + h
+    st -n float -e htop
+super + exclam ; control + l
+    lutris --name=float
+super + exclam ; control + m
+    st -n float -e cmus
+super + exclam ; control + n
+    st -n float -e nvim
+super + exclam ; control + v
+    st -n float -e vim
+
+# Tabbed + program
+super + exclam ; t ; b
+     tabbed -c vimb -e
+
+super + exclam ; t ; t
+     tabbed -f -r 2 st -w ''
+
+# Floating + tabbed
+super + exclam ; t ; control + b
+     tabbed -c -n float vimb -e
+
+super + exclam ; t ; control + t
+     tabbed -f -r 2 -n float st -w ''
+
+super + exclam ; t ; control + z
+    tabbed -n float -c zathura -e 
+# }}}
+
+# Show title in polybar
+super + ampersand
+    show-title
+
+# Fullscreen
+super + shift + f
+    i3-msg fullscreen toggle
+
+super + Return
+    i3-smart-open
+
+super + F5
+    ${HOME}/scripts/change-background.py
