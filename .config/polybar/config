@@ -28,7 +28,7 @@ background     = #aa222222
 background-alt = #4D4D4D
 ;foreground    = ${xrdb:color7:#222}
 foreground     = #dfdfdf
-foreground-alt = #555
+foreground-alt = #999999
 primary        = #ffb52a
 secondary      = #e60053
 alert          = #bd2c40
@@ -41,13 +41,11 @@ offset-x = 1%
 offset-y = 1%
 fixed-center = false
 ; bottom = true
-
 background = ${colors.background}
 foreground = ${colors.foreground}
 
 border-size = 1
 border-color = #00000000
-
 
 padding-left = 0
 padding-right = 0
@@ -55,16 +53,19 @@ padding-right = 0
 module-margin-left = 0
 ; module-margin-right = 1
 
-font-0 = Hermit:size=9;1
-font-1 = FontAwesome:size=10;0
+font-0 = "Hermit:size=9;1"
+font-1 = "FontAwesome:size=10;0"
 
-font-2 = siji:pixelsize=10;1
-font-3 = Hermit:size=9:weight=bold;0
+; font-2 = "siji:pixelsize=10;1"
+font-2 = "Hermit:size=9;1"
+; font-3 = "Hermit:size=13:weight=bold;0"
+font-3 = "Hermit:weight=bold:size=9;0"
+font-4 = "FontAwesome:size=11;0"
 
 line-size = 2
-modules-left = powermenu i3 xkeyboard layout 
-modules-center = date 
-modules-right = pulseaudio wlan eth time 
+modules-left = powermenu i3 layout
+modules-center = date-tail
+modules-right = todo xkeyboard pulseaudio wlan eth
 
 wm-restack = i3
 
@@ -87,21 +88,18 @@ height = 20
 fixed-center = false
 ; bottom = true
 
+font-0 = "Hermit:size=8;1"
+
 background = ${colors.background}
 foreground = ${colors.foreground}
 
-border-size = 0
+border-size = 1
 
 padding-left = 0
 padding-right = 0
 
 module-margin-left = 0
 module-margin-right = 0
-
-font-0 = Hermit:size=9;1
-font-1 = FontAwesome:size=9;0
-
-font-2 = siji:pixelsize=10;1
 
 modules-center = title f_mark marks
 
@@ -119,7 +117,6 @@ type = custom/script
 exec = ~/scripts/focused_mark.py
 interval = 0.5
 format-foreground = ${colors.yellow}
-format-font = 3
 
 [module/marks]
 type = custom/script
@@ -132,18 +129,18 @@ interval = 0.5
 type = internal/xkeyboard
 blacklist-0 = num lock
 
-format-prefix = " "
+format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-prefix-underline = ${colors.secondary}
-format-margin = 1
+; format-prefix-underline = ${colors.secondary}
+; format-margin-right = 1
 
-label-layout = %{A1:~/scripts/switch-layout.py:} %layout%%{A}
-label-layout-underline = ${colors.secondary}
+label-layout = %{A1:~/scripts/switch-layout.py:}%layout%%{A}
+; label-layout-underline = ${colors.secondary}
 
 label-indicator-padding = 0
 label-indicator-margin = 0
 label-indicator-background = ${colors.secondary}
-label-indicator-underline = ${colors.secondary}
+; label-indicator-underline = ${colors.secondary}
 
 
 [module/i3]
@@ -159,12 +156,12 @@ ws-icon-0 = 10;
 ws-icon-1 = 1;
 ws-icon-2 = 2;
 ws-icon-3 = 3;
-ws-icon-4 = 4;
+ws-icon-4 = 4;
 ws-icon-5 = 5;
 ws-icon-6 = 6;
 ws-icon-7 = 7;
-ws-icon-8 = 8;
-ws-icon-9 = 9;
+ws-icon-8 = 8;
+ws-icon-9 = 9;
 
 label-mode-padding = 2
 label-mode-foreground = ${colors.white}
@@ -201,11 +198,27 @@ label-urgent-padding = 2
 
 [module/layout]
 type = custom/script
-interval = 0.2
 exec = ~/scripts/layout.py 
+interval = 0.3
 ; format-background = ${colors.primary}
-format-foreground = ${colors.white}
-format-padding = 2
+; format-foreground = ${colors.yellow}
+format-padding = 1
+format-margin = 0
+
+label = %output%
+; label-font = 5
+
+
+[module/todo]
+interval = 10
+type = custom/script
+exec = ~/scripts/show_todo.sh
+label = %output% 
+format = <label>
+format-margin = 2
+click-left = "kill -USR1 $(pgrep --oldest --parent %pid%)"
+label-font = 3
+tail = true
 
 [module/wlan]
 type = internal/network
@@ -213,10 +226,13 @@ interface = wlo1
 interval = 3.0
 
 format-connected = <ramp-signal> <label-connected>
-format-connected-underline = #9f78e1
-format-connected-margin = 1
-label-connected = " %essid%"
+; format-connected-underline = #9f78e1
+; format-connected-margin = 1
+; format-connected-background = ${colors.foreground-alt}
 
+label-connected = "%{A:wicd-client &:}%essid% %{A}"
+
+; label-click-left = wicd-client
 ; format-margin = 20
 
 format-disconnected = <label-disconnected>
@@ -224,19 +240,25 @@ format-disconnected = <label-disconnected>
 ;label-disconnected = %ifname% disconnected
 ;label-disconnected-foreground = ${colors.foreground-alt}
 
-ramp-signal-0 = 
-ramp-signal-1 = 
-ramp-signal-2 = 
-ramp-signal-3 = 
-ramp-signal-4 = 
+; ramp-signal-0 = 1
+; ramp-signal-1 = 2
+; ramp-signal-2 = 3
+; ramp-signal-3 = 4
+; ramp-signal-4 = 5
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
 ramp-signal-foreground = ${colors.foreground-alt}
+
 
 [module/eth]
 type = internal/network
 interface = virbr0-nic
 interval = 3.0
 
-format-connected-underline = #55aa55
+; format-connected-underline = #55aa55
 format-connected-prefix = " "
 format-connected-prefix-foreground = ${colors.foreground-alt}
 label-connected = %local_ip%
@@ -248,20 +270,33 @@ format-disconnected = <label-disconnected>
 
 [module/date]
 type = internal/date
-interval = 30
+; interval = 30
+interval = 1
+; tail = true
 
 date = "%b %d of %Y"
-
-date-alt = "%Y-%m-%d"
-
+; date-alt = "%Y-%m-%d"
 
 format-prefix = 
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #0a6cf5
+; format-underline = #0a6cf5
 format-margin = 1
 
-label =  %date%
+time = "%I:%M:%S %p"
+; time-alt = "%H:%M% %p"
 
+label =  %date% at %{T4}%time%%{T-}
+; label-font = 4
+
+; Show the time sincronized with the real time
+[module/date-tail]
+type = custom/script
+; Change to whatever format you prefer
+exec = ~/scripts/show-date.sh "+%b %d of %Y at %I:%M:%S %p"
+interval = 30
+tail = true
+
+label =  %output%
 
 [module/time]
 type = internal/date
@@ -283,19 +318,21 @@ label = " %time%"
 [module/pulseaudio]
 type = internal/pulseaudio
 format-volume = " <ramp-volume> <label-volume>"
-format-volume-margin = 1
-format-volume-underline = ${colors.foreground}
+format-volume-margin = 2
+; format-volume-prefix = "
+; format-volume-foreground = ${colors.light-grey}
+; format-volume-underline = ${colors.foreground}
 label-volume = %percentage%%
 label-muted = " 🔇 muted "
 
 ramp-volume-0 = 
 ramp-volume-1 = 
 ramp-volume-2 = 
-ramp-volume-3 = 
+ramp-volume-3 = 
 ramp-volume-4 = 
 ramp-volume-5 = 
 ramp-volume-6 = 
-
+ramp-volume-foreground = ${colors.foreground-alt}
 
 
 [module/powermenu]
@@ -305,7 +342,8 @@ expand-right = true
 
 format-spacing = 1
 
-label-open = "  "
+; label-open = "  "
+label-open = "  "
 label-open-foreground = ${colors.foreground}
 label-open-background = ${colors.blue}
 label-open-padding = 1
