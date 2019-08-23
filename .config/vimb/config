@@ -7,6 +7,7 @@ nnoremap gt :sh! xdotool key --window $VIMB_XID alt+n<CR><Esc>
 nnoremap gT :sh! xdotool key --window $VIMB_XID alt+p<CR><Esc>
 nnoremap 1gt :sh! xdotool key --window $VIMB_XID ctrl+1<CR><Esc>
 nnoremap 2gt :sh! xdotool key --window $VIMB_XID ctrl+2<CR><Esc>
+nnoremap 3gt :sh! xdotool key --window $VIMB_XID ctrl+2<CR><Esc>
 nnoremap 3gT :sh! xdotool key --window $VIMB_XID ctrl+3<CR><Esc>
 nnoremap 4gT :sh! xdotool key --window $VIMB_XID ctrl+4<CR><Esc>
 nnoremap 5gt :sh! xdotool key --window $VIMB_XID ctrl+5<CR><Esc>
@@ -17,6 +18,7 @@ nnoremap 9gt :sh! xdotool key --window $VIMB_XID ctrl+9<CR><Esc>
 nnoremap 10gT :sh! xdotool key --window $VIMB_XID ctrl+10<CR><Esc>
 nnoremap M :sh! mpv <C-R>%<CR>
 nnoremap ZZ :q<CR>
+nnoremap i <C-Z>
 set download-path=/home/vabenil/Downloads
 set home-page=https://duckduckgo.com
 set history-max-items=200

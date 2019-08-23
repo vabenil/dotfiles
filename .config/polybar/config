@@ -101,12 +101,12 @@ padding-right = 0
 module-margin-left = 0
 module-margin-right = 0
 
-modules-center = title f_mark marks
+modules-center = title
 
 
 [module/title]
 type = custom/script
-exec = ~/scripts/scroll.py 90 %counter%
+exec = xdotool getwindowfocus getwindowname | ~/scripts/scroll.py -m 90 -i %counter% --read-from-stdin
 interval = 0.25
 
 format = <label>
@@ -297,6 +297,7 @@ interval = 30
 tail = true
 
 label =  %output%
+label-font = 4
 
 [module/time]
 type = internal/date

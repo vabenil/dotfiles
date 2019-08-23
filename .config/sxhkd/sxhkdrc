@@ -8,11 +8,11 @@ super + {h,j,k,l}
 super + {Left,Down,Up,Right}
    i3-smart-focus {left,down,up,right}
 
-super + space
-    i3-smart-focus float
+super + {a,i,space}
+    i3-smart-focus {parent,child,float}
 
-super + {a,i,o}
-    i3-smart-focus {parent,child,last}
+super + o
+    i3-focus-last --switch
 
 alt + Tab
     focus-next-visible
@@ -49,11 +49,14 @@ super + shift + {h,j,k,l}
 super + shift + {Left,Down,Up,Right}
     i3-msg move {left,down,up} 30px
 
-super + shift + s
-    i3-msg move scratchpad 
-
 super + shift + space
     i3-msg floating toggle 
+
+super + shift + s ; f
+    i3-easyfocus --color-unfocused-fg FFFFFF -f -misc-fixed-medium-r-normal--20-140-100-100-c-100-iso8859-1 -w | xargs -I \{\} i3-msg "swap container with id \{\}"
+
+super + shift + s ; apostrophe ; {0-9,a-z,A-Z}
+    i3-msg "swap container with mark {0-9,a-z,A-Z}"
 # }}}
 
 # Kill windows: {{{
@@ -61,7 +64,7 @@ super + shift + q
     i3-msg kill
 
 super + q ; f
-    i3-easyfocus -w | xargs xkill -id
+    i3-easyfocus --color-unfocused-fg FFFFFF -f -misc-fixed-medium-r-normal--20-140-100-100-c-100-iso8859-1 -w | xargs xkill -id
 
 # }}}
 
@@ -103,7 +106,7 @@ super + shift + e
 super + {s,t,e}
     i3-msg layout {stacking,tabbed,toggle split}
 super + r
-    ~/scripts/sp_toggle.py
+    ~/scripts/split_toggle.py
 # }}}
 
 # Touchpad control: {{{
@@ -116,9 +119,9 @@ super + control + t
 
 # ScreenShots: {{{
 super + Insert
-    scrot -e 'mv $f ~/Pictures/ScreenShots/$f && notify-send "ScreenShot saved in ~/Pictures/ScreenShots/$f"'
+    scrot -q 100 -e 'mv $f ~/Pictures/ScreenShots/$f && notify-send "ScreenShot saved in ~/Pictures/ScreenShots/$f"'
 super + shift + Insert 
-    scrot -u -e 'mv $f ~/Pictures/ScreenShots/$f && notify-send "ScreenShot saved in ~/Pictures/ScreenShots/$f"'
+    scrot -q 100 -u -e 'mv $f ~/Pictures/ScreenShots/$f && notify-send "ScreenShot saved in ~/Pictures/ScreenShots/$f"'
 # }}}
 
 # dmenu: {{{
@@ -182,10 +185,10 @@ super + control + m ; {e,r,s}
     setxkbmap {us,ru phonetic,es}
 
 super + Tab
-    ${HOME}/scripts/switch-layout.py
+    ${HOME}/scripts/switch-keyboard-layout.py
 
 super + grave
-    ${HOME}/scripts/switch-layout.py
+    ${HOME}/scripts/switch-keyboard-layout.py
 
 super + Escape
     setxkbmap us
@@ -207,9 +210,10 @@ super + exclam ; h
 super + exclam ; l
     lutris
 super + exclam ; m
-    cmus
+    st -c cmus
 super + exclam ; n
     st -e nvim
+
 super + exclam ; s
     steam
 super + exclam ; u
@@ -261,6 +265,9 @@ super + exclam ; t ; control + z
 super + ampersand
     show-title
 
+super g ; c
+    i3-container-commander
+
 # Fullscreen
 super + shift + f
     i3-msg fullscreen toggle
@@ -268,5 +275,8 @@ super + shift + f
 super + Return
     i3-smart-open
 
+super + control + Return
+    st -n float
+
 super + F5
-    ${HOME}/scripts/change-background.py
+    ${HOME}/scripts/change-background.py ~/Pictures/wallpapers
