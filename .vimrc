@@ -58,17 +58,17 @@ set expandtab
 set ffs=unix
 set encoding=utf-8
 set fileencoding=utf-8
-set listchars=eol:¬
+set listchars=eol:¬,tab:.. 
+" set listchars=eol:¬,tab:▏\ 
 set list
 
 " set clipboard=unnamedplus
-
-" Open .tex files as latex
 
 " set termwinsize="10x0"
 " }}}
 
 " Variables: {{{
+" Open .tex files as latex
 let g:tex_flavor = "latex"
 
 let g:netrw_liststyle = 3
@@ -117,7 +117,73 @@ let g:NERDTreeMapOpenSplit = 's'
 let g:NERDTreeMapOpenPreviewSplit = 'S'
 let g:NERDTreeMapOpenVSplit = 'v'
 let g:NERDTreeMapOpenPreviewVSplit = 'V'
+
+let g:indentLine_char = '▏'
+
 " let c_no_curly_error = 1
+" }}}
+
+" Plugin manager: {{{
+filetype off
+
+call plug#begin('~/.vim/bundle')
+" Sorted by how much I used them
+"Colorschemes: {{{ 
+Plug 'jacoborus/tender.vim'
+Plug 'morhetz/gruvbox'
+Plug 'jnurmine/Zenburn'
+Plug 'sainnhe/vim-color-forest-night'
+Plug 'joshdick/onedark.vim'
+Plug 'sainnhe/vim-color-desert-night'
+" Plug 'sonph/onehalf'
+" }}}
+
+" Syntax: {{{
+Plug 'PotatoesMaster/i3-vim-syntax'
+Plug 'mh21/errormarker.vim'
+Plug 'baskerville/vim-sxhkdrc'
+" Plug 'bfrg/vim-cpp-modern'
+" }}}
+
+" Text objects: {{{
+Plug 'b4winckler/vim-angry'
+Plug 'michaeljsmith/vim-indent-object'
+" Plug 'kana/vim-textobj-user'
+" Plug 'rbonvall/vim-textobj-latex'
+" }}}
+
+" Dependencies: {{{
+" Plugins needed for other plugins to run.
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+" }}}
+
+" Autocompletion: {{{
+Plug 'maralla/completor.vim'
+" }}}
+
+" Others: {{{
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'tpope/vim-commentary' 
+" Plug 'Rip-Rip/clang_complete'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'Houl/repmo-vim'
+Plug 'SirVer/ultisnips'
+Plug 'godlygeek/tabular'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'easymotion/vim-easymotion'
+Plug 'yssl/QFEnter'
+Plug 'kshenoy/vim-signature'
+Plug 'scrooloose/nerdtree'
+Plug 'captbaritone/better-indent-support-for-php-with-html'
+Plug 'scrooloose/nerdtree'
+Plug 'Yggdroot/indentLine'
+" }}}
+"
+call plug#end()
+filetype plugin indent on
 " }}}
 
 " Programming languages config: {{{
@@ -265,75 +331,13 @@ endfunction
 " }}}
 " }}}
 
-" Plugin manager: {{{
-filetype off
-
-call plug#begin('~/.vim/bundle')
-" Sorted by how much I used them
-"Colorschemes: {{{ 
-Plug 'jacoborus/tender.vim'
-Plug 'morhetz/gruvbox'
-Plug 'jnurmine/Zenburn'
-Plug 'sainnhe/vim-color-forest-night'
-Plug 'joshdick/onedark.vim'
-Plug 'sainnhe/vim-color-desert-night'
-" Plug 'sonph/onehalf'
-" }}}
-
-" Syntax: {{{
-Plug 'PotatoesMaster/i3-vim-syntax'
-Plug 'mh21/errormarker.vim'
-Plug 'baskerville/vim-sxhkdrc'
-" Plug 'bfrg/vim-cpp-modern'
-" }}}
-
-" Text objects: {{{
-Plug 'b4winckler/vim-angry'
-Plug 'michaeljsmith/vim-indent-object'
-" Plug 'kana/vim-textobj-user'
-" Plug 'rbonvall/vim-textobj-latex'
-" }}}
-
-" Dependencies: {{{
-" Plugins needed for other plugins to run.
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-" }}}
-
-" Autocompletion: {{{
-Plug 'maralla/completor.vim'
-" }}}
-
-" Others: {{{
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'tpope/vim-commentary' 
-" Plug 'Rip-Rip/clang_complete'
-Plug 'skywind3000/asyncrun.vim'
-Plug 'Houl/repmo-vim'
-Plug 'SirVer/ultisnips'
-Plug 'godlygeek/tabular'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'easymotion/vim-easymotion'
-Plug 'yssl/QFEnter'
-Plug 'kshenoy/vim-signature'
-Plug 'scrooloose/nerdtree'
-Plug 'captbaritone/better-indent-support-for-php-with-html'
-Plug 'scrooloose/nerdtree'
-" }}}
-"
-call plug#end()
-filetype plugin indent on
-" }}}
-
 " Custom functions: {{{
 
 " Close to useless, I have no idea why I haven't removed it
 function! SeparateList()
-s/\([{[(]\)\s*/\1\r
-s/\([,;]\)\s*/\1\r/g
-s/\s*\([}\])]\)/\r\1
+    s/\([{[(]\)\s*/\1\r
+    s/\([,;]\)\s*/\1\r/g
+    s/\s*\([}\])]\)/\r\1
 endfunction
 
 " Only show filename if the buffer is to small
@@ -406,24 +410,25 @@ endfunction
 
 " ToDo:
 " - Improve this function
-let g:last_command = []
+let g:last_command = ''
+
 function! RunAsync(command)
-if len(a:command) > 0
-    if a:command == '!!'
-        call RunXCommmand(0)
-    else
-        let g:asyncrun_open = 8
-        let g:last_command = a:command
-        exec "AsyncRun ".(a:command)
+    if len(a:command) > 0
+        if a:command == '!!'
+            call RunLastCommand(0)
+        else
+            let g:asyncrun_open = 8
+            let g:last_command = a:command
+            exec "AsyncRun ".(a:command)
+        endif
     endif
-endif
 endfunction
 
-function! RunXCommmand(n)
-if exists("g:last_command")
-    let g:asyncrun_open = 8
-    exec "AsyncRun ".(g:last_command)
-endif
+function! RunLastCommand(n)
+    if exists("g:last_command")
+        let g:asyncrun_open = 8
+        exec "AsyncRun ".(g:last_command)
+    endif
 endfunction
 
 " I tried to turn vim into a traslating shell
@@ -446,17 +451,17 @@ endfunction
 " Switch layout with english and other languages when entering and living
 " insert mode
 function SaveLayout()
-let g:prev_layout = substitute(system("setxkbmap -query"), '.*layout:\s\+\(\<\w\+\>\).*', "\\1", "g")
-let g:prev_variant = substitute(system("setxkbmap -query"), '.*variant:\s\+\(\<\w\+\>\).*', "\\1", "g")
-AsyncRun setxkbmap us
+    let g:prev_layout = substitute(system("setxkbmap -query"), '.*layout:\s\+\(\<\w\+\>\).*', "\\1", "g")
+    let g:prev_variant = substitute(system("setxkbmap -query"), '.*variant:\s\+\(\<\w\+\>\).*', "\\1", "g")
+    AsyncRun setxkbmap us
 endfunction
 
 function LoadLayout()
-if exists('g:prev_layout') != 0
-    exec 'AsyncRun setxkbmap '.g:prev_layout.' '.g:prev_variant
-else
-    echo "No previous Layout saved"
-endif
+    if exists('g:prev_layout') != 0
+        exec 'AsyncRun setxkbmap '.g:prev_layout.' '.g:prev_variant
+    else
+        echo "No previous Layout saved"
+    endif
 endfunction
 
 
@@ -465,23 +470,23 @@ endfunction
 " s(x) = sin(x)
 " c(x) = cos(x)
 function! Calculate(expr)
-let l:result = system("echo '".(a:expr)."' | bc -l")
-" remove the end of line character
-let l:result = l:result[0:strlen(l:result)-2]
+    let l:result = system("echo '".(a:expr)."' | bc -l")
+    " remove the end of line character
+    let l:result = l:result[0:strlen(l:result)-2]
 exec "normal! a".(l:result)
 endfunction
 
 function! ExecuteMacroOverVisualRange()
-echo "@".getcmdline()
-execute ":'<,'>normal @".nr2char(getchar())
+    echo "@".getcmdline()
+    execute ":'<,'>normal @".nr2char(getchar())
 endfunction
 
 function! AddText(text)
-exec "normal! i".a:text
+    exec "normal! i".a:text
 endfunction
 
 function! RelativeToLine(from)
-call AddText( line('.') - a:from )
+    call AddText( line('.') - a:from )
 endfunction
 
 " }}}
@@ -531,7 +536,7 @@ map <expr> m; repmo#SelfKey("]'", "['")|sunmap m;
 map <expr> m, repmo#SelfKey("['", "]'")|sunmap m,
 
 nmap m<cr> m.
-          
+
 " add these mappings when repeating with `;' or `,'
 noremap <expr> f repmo#ZapKey('f')|sunmap f
 noremap <expr> F repmo#ZapKey('F')|sunmap F
@@ -559,9 +564,9 @@ nnoremap <leader>r :QO<cr>:AsyncRun %:p<CR>
 " set ALT-Key mappings
 let c='a'
 while c <= 'z'
-exec "set <A-".c.">=\e".c
-exec "imap \e".c." <A-".c.">"
-let c = nr2char(1+char2nr(c))
+    exec "set <A-".c.">=\e".c
+    exec "imap \e".c." <A-".c.">"
+    let c = nr2char(1+char2nr(c))
 endw
 
 " inoremap <A-a> <M-A>
@@ -648,7 +653,7 @@ endw
 " nnoremap <space>
 
 nnoremap <space>r :call RunAsync(input('$ '))<cr>
-nnoremap <space>R :call RunXCommmand(0)<cr>
+nnoremap <space>R :call RunLastCommand(0)<cr>
 
 nnoremap <space>co :botright copen 8 \| wincmd p<cr>
 nnoremap <space>cl :cclose<cr>
@@ -707,34 +712,34 @@ nnoremap <silent> <expr> #$ "i }}}\<esc>gcc"
 " Autocommands: {{{
 " Change cursor depending on the mode
 if has("autocmd")
-  au VimEnter,InsertLeave * silent execute '!echo -ne "\e[2 q"' | redraw
-  au InsertEnter,InsertChange *
-    \ if v:insertmode == 'i' | 
-    \   silent execute '!echo -ne "\e[6 q"' | redraw |
-    \ elseif v:insertmode == 'r' |
-    \   silent execute '!echo -ne "\e[4 q"' | redraw |
-    \ endif
-  au VimLeave * silent execute '!echo -ne "\e[ q"' | redraw
+    au VimEnter,InsertLeave * silent execute '!echo -ne "\e[2 q"' | redraw
+    au InsertEnter,InsertChange *
+                \ if v:insertmode == 'i' | 
+                \   silent execute '!echo -ne "\e[6 q"' | redraw |
+                \ elseif v:insertmode == 'r' |
+                \   silent execute '!echo -ne "\e[4 q"' | redraw |
+                \ endif
+    au VimLeave * silent execute '!echo -ne "\e[ q"' | redraw
 endif
 
 autocmd BufReadPost *
- \ if line("'\"") > 0 && line("'\"") <= line("$") |
- \   exe "normal! g`\"" |
- \ endif
+            \ if line("'\"") > 0 && line("'\"") <= line("$") |
+            \   exe "normal! g`\"" |
+            \ endif
 
 " Close buffer if the last window is Quickfix
 " Thanks to http://vim.wikia.com/wiki/Automatically_quit_Vim_if_quickfix_window_is_the_last
 au BufEnter *
-    \ if &buftype=="quickfix" |
-        \ if winbufnr(2) == -1 |
-        \   quit! |
-        \ endif |
-    \ endif |
+            \ if &buftype=="quickfix" |
+            \ if winbufnr(2) == -1 |
+            \   quit! |
+            \ endif |
+            \ endif |
 
 au bufenter *
-    \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) |
-        \ q |
-    \ endif
+            \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) |
+            \ q |
+            \ endif
 
 autocmd ColorScheme * call SetStatusline()
 
@@ -798,145 +803,145 @@ autocmd Filetype javascript call MapJSShortcuts()
 " - Change colors
 
 let modes = {
-\   'n': 'NORMAL',
-\   'i': 'INSERT',
-\   's': 'SELECT',
-\   'S': 'S-LINE',
-\   '\<C-S>': 'S-B',
-\   'R': 'REPEAT',
-\   'v': 'VISUAL',
-\   'V': 'V-LINE',
-\   '': 'V-B',
-\   't': 'TERMINAL',
-\   'c': 'COMMAND'
-\}
+            \   'n': 'NORMAL',
+            \   'i': 'INSERT',
+            \   's': 'SELECT',
+            \   'S': 'S-LINE',
+            \   '\<C-S>': 'S-B',
+            \   'R': 'REPEAT',
+            \   'v': 'VISUAL',
+            \   'V': 'V-LINE',
+            \   '': 'V-B',
+            \   't': 'TERMINAL',
+            \   'c': 'COMMAND'
+            \}
 
 let g:min_modes = {
-\   'n': 'N',
-\   'i': 'I',
-\   's': 'S',
-\   'S': 'S-L',
-\   '\<C-S>': 'S-B',
-\   'R': 'R',
-\   'v': 'V',
-\   'V': 'V-L',
-\   '': 'V-B',
-\   't': 'T',
-\   'c': 'C'
-\}
+            \   'n': 'N',
+            \   'i': 'I',
+            \   's': 'S',
+            \   'S': 'S-L',
+            \   '\<C-S>': 'S-B',
+            \   'R': 'R',
+            \   'v': 'V',
+            \   'V': 'V-L',
+            \   '': 'V-B',
+            \   't': 'T',
+            \   'c': 'C'
+            \}
 
 " let g:prev_mode = 'n'
 function! ChangeStatusColor()
-    let l:mode = mode()
+let l:mode = mode()
 
-    if exists('g:prev_mode') == 0
-    	let g:prev_mode = 'none'
+if exists('g:prev_mode') == 0
+    let g:prev_mode = 'none'
+endif
+
+if g:prev_mode != l:mode
+    if l:mode ==# "n"
+        let g:prev_mode = l:mode
+        hi clear StatusLine
+        hi link StatusLine  StatusLineNormal
+        redraw
+    elseif l:mode ==# "i" 
+        let g:prev_mode = l:mode
+        hi clear StatusLine
+        hi link StatusLine  StatusLineInsert
+        redraw
+    elseif l:mode ==# "R"
+        let g:prev_mode = l:mode
+        hi clear StatusLine
+        hi link StatusLine  StatusLineRepeat
+        redraw
+    elseif l:mode ==# "v" 
+        let g:prev_mode = l:mode
+        hi clear StatusLine
+        hi link StatusLine  StatusLineVisual
+        redraw
+    elseif l:mode ==# "V" 
+        let g:prev_mode = l:mode
+        hi clear StatusLine
+        hi link StatusLine  StatusLineVLine
+        redraw
+    elseif l:mode == "" 
+        let g:prev_mode = l:mode
+        hi clear StatusLine
+        hi link StatusLine  StatusLineVBlock
+        redraw
+    elseif l:mode ==# "s" 
+        let g:prev_mode = l:mode
+        hi clear StatusLine
+        hi link StatusLine  StatusLineSelect
+        redraw
+    elseif l:mode ==# "t" 
+        let g:prev_mode = l:mode
+        hi clear StatusLine
+        hi link StatusLine  StatusLineTerminal
+        redraw
     endif
-    
-    if g:prev_mode != l:mode
-        if l:mode ==# "n"
-            let g:prev_mode = l:mode
-            hi clear StatusLine
-            hi link StatusLine  StatusLineNormal
-            redraw
-        elseif l:mode ==# "i" 
-            let g:prev_mode = l:mode
-            hi clear StatusLine
-            hi link StatusLine  StatusLineInsert
-            redraw
-        elseif l:mode ==# "R"
-            let g:prev_mode = l:mode
-            hi clear StatusLine
-            hi link StatusLine  StatusLineRepeat
-            redraw
-        elseif l:mode ==# "v" 
-            let g:prev_mode = l:mode
-            hi clear StatusLine
-            hi link StatusLine  StatusLineVisual
-            redraw
-        elseif l:mode ==# "V" 
-            let g:prev_mode = l:mode
-            hi clear StatusLine
-            hi link StatusLine  StatusLineVLine
-            redraw
-        elseif l:mode == "" 
-            let g:prev_mode = l:mode
-            hi clear StatusLine
-            hi link StatusLine  StatusLineVBlock
-            redraw
-        elseif l:mode ==# "s" 
-            let g:prev_mode = l:mode
-            hi clear StatusLine
-            hi link StatusLine  StatusLineSelect
-            redraw
-        elseif l:mode ==# "t" 
-            let g:prev_mode = l:mode
-            hi clear StatusLine
-            hi link StatusLine  StatusLineTerminal
-            redraw
-        endif
-    endif
-    return ''
+endif
+return ''
 endfunction
 
 function! ReadOnly() abort
-  if &readonly || !&modifiable
+if &readonly || !&modifiable
     return ''
-  else
+else
     return ''
 endfunction
 
 function! SetStatusline()
-    " I don't use the GUI version so I haven't even bothered on writing it's
-    " color codes
-    hi   StatusLineNormal     ctermbg=39    ctermfg=235   guibg=NONE   guifg=NONE
-    hi   StatusLineInsert     ctermbg=130   ctermfg=231    guibg=NONE   guifg=NONE
-    hi   StatusLineRepeat     ctermbg=131   ctermfg=189   guibg=NONE   guifg=NONE
-    hi   StatusLineVisual     ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
-    hi   StatusLineVLine      ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
-    hi   StatusLineVBlock     ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
-    hi   StatusLineSelect     ctermbg=45   ctermfg=256    guibg=NONE   guifg=NONE
-    hi   StatusLineTerminal   ctermbg=16    ctermfg=125   guibg=NONE   guifg=NONE
-    " colors for each mode 
-    " hi   User1   ctermbg=35    ctermfg=235                guibg=NONE   guifg=NONE
-    hi   User2   ctermbg=241    ctermfg=16   guibg=NONE   guifg=NONE
-    hi   User3    ctermbg=237   ctermfg=189   guibg=NONE   guifg=NONE
-    hi   User4   ctermbg=234   ctermfg=102   guibg=NONE   guifg=NONE
-    hi   User5   ctermbg=234    ctermfg=0    guibg=NONE   guifg=NONE
-    hi   User6   ctermbg=234    ctermfg=15   guibg=NONE   guifg=NONE
-    hi   User7   ctermbg=236    ctermfg=179  guibg=NONE   guifg=NONE
-    hi   User8    ctermbg=71     ctermfg=7    guibg=NONE   guifg=NONE
+" I don't use the GUI version so I haven't even bothered on writing it's
+" color codes
+hi   StatusLineNormal     ctermbg=39    ctermfg=235   guibg=NONE   guifg=NONE
+hi   StatusLineInsert     ctermbg=130   ctermfg=231    guibg=NONE   guifg=NONE
+hi   StatusLineRepeat     ctermbg=131   ctermfg=189   guibg=NONE   guifg=NONE
+hi   StatusLineVisual     ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
+hi   StatusLineVLine      ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
+hi   StatusLineVBlock     ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
+hi   StatusLineSelect     ctermbg=45   ctermfg=256    guibg=NONE   guifg=NONE
+hi   StatusLineTerminal   ctermbg=16    ctermfg=125   guibg=NONE   guifg=NONE
+" colors for each mode 
+" hi   User1   ctermbg=35    ctermfg=235                guibg=NONE   guifg=NONE
+hi   User2   ctermbg=241    ctermfg=16   guibg=NONE   guifg=NONE
+hi   User3    ctermbg=237   ctermfg=189   guibg=NONE   guifg=NONE
+hi   User4   ctermbg=234   ctermfg=102   guibg=NONE   guifg=NONE
+hi   User5   ctermbg=234    ctermfg=0    guibg=NONE   guifg=NONE
+hi   User6   ctermbg=234    ctermfg=15   guibg=NONE   guifg=NONE
+hi   User7   ctermbg=236    ctermfg=179  guibg=NONE   guifg=NONE
+hi   User8    ctermbg=71     ctermfg=7    guibg=NONE   guifg=NONE
 
-    set statusline=
-    " set statusline+=%1*
-    set statusline+=%{ChangeStatusColor()}
-    set statusline+=%#StatusLine#
-    " mode, show single or triple character mode when on small window
-    set statusline+=\ %{winwidth('&')>80?g:modes[mode()]:g:min_modes[mode()]}\ 
-    " set statusline+=%2*
-    " set statusline+=%{StatuslineGit()}
-    set statusline+=%3*
-    " set statusline+=\ %f\ 
-    set statusline+=\ (%n)\ %{ShowPath()}\ 
-    " set statusline+=%t\ 
-    set statusline+=%4*
-    " set statusline+=[%{&fileformat}]
-    " set statusline+=[%{(&fenc!=''?&fenc:&enc)}]\  "file encoding
-    " set statusline+=%<
-    set statusline+=\ %y\ 
-    set statusline+=%{ReadOnly()}\ %m%w
-    " set statusline+=\ %r
-    set statusline+=%5*
+set statusline=
+" set statusline+=%1*
+set statusline+=%{ChangeStatusColor()}
+set statusline+=%#StatusLine#
+" mode, show single or triple character mode when on small window
+set statusline+=\ %{winwidth('&')>80?g:modes[mode()]:g:min_modes[mode()]}\ 
+" set statusline+=%2*
+" set statusline+=%{StatuslineGit()}
+set statusline+=%3*
+" set statusline+=\ %f\ 
+set statusline+=\ (%n)\ %{ShowPath()}\ 
+" set statusline+=%t\ 
+set statusline+=%4*
+" set statusline+=[%{&fileformat}]
+" set statusline+=[%{(&fenc!=''?&fenc:&enc)}]\  "file encoding
+" set statusline+=%<
+set statusline+=\ %y\ 
+set statusline+=%{ReadOnly()}\ %m%w
+" set statusline+=\ %r
+set statusline+=%5*
 
-    set statusline+=%=
+set statusline+=%=
 
-    set statusline+=%6*
-    " set statusline+=\ buf:\ %n\ 
-    set statusline+=%7*
-    set statusline+=\ col\ %c\ \|\  
-    set statusline+=line\ %l\ /\ %L\ 
-    set statusline+=%8*
-    set statusline+=\ \ %P\ \ 
+set statusline+=%6*
+" set statusline+=\ buf:\ %n\ 
+set statusline+=%7*
+set statusline+=\ col\ %c\ \|\  
+set statusline+=line\ %l\ /\ %L\ 
+set statusline+=%8*
+set statusline+=\ \ %P\ \ 
 endfunction
 " set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L: %P
 
