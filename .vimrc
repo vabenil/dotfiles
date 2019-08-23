@@ -5,32 +5,24 @@ runtime macros/matchit.vim
 set nocompatible  
 filetype indent on
 syntax enable
-
 " save undo tree
 set undofile
 set undodir=${HOME}/.vim/undo
 set undolevels=70
 set undoreload=100
-
 set encoding=utf-8
-
 set viminfo='200,<200,s100,h
 " Always show statusline
 set laststatus=2
 " don't show mode on the command line
 set noshowmode
-
 set showcmd
-
 set autoindent
 set smartindent
-
 set ttyfast
 set lazyredraw
-
 set ttimeout
 set ttimeoutlen=10 
-
 " set autoindent
 set foldmethod=marker
 set foldlevel=0
@@ -39,7 +31,6 @@ set hlsearch
 set incsearch
 " hidde buffers
 set hidden
-
 set title
 set titleold=
 " set vim to interpret current file directory as the working directory
@@ -54,17 +45,14 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4 
 set expandtab
-
 set ffs=unix
 set encoding=utf-8
 set fileencoding=utf-8
 set listchars=eol:¬,tab:.. 
 " set listchars=eol:¬,tab:▏\ 
 set list
-
 " set clipboard=unnamedplus
 
-" set termwinsize="10x0"
 " }}}
 
 " Variables: {{{
@@ -505,11 +493,46 @@ let g:completor_css_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
 " Key mappings: {{{
 " ToDo:
 " - order all this somehow 
+"
+" set ALT-Key mappings
+let c='a'
+while c <= 'z'
+    exec "set <A-".c.">=\e".c
+    exec "imap \e".c." <A-".c.">"
+    let c = nr2char(1+char2nr(c))
+endw
+
 command! -nargs=* R AsyncRun <args>
 command! -nargs=+ Calc call Calculate('<args>')
+command! QO let g:asyncrun_open=10
 
 
-" Repmo stuff
+noremap <silent> - :exe "resize -2"<cr>
+noremap <silent> + :exe "resize +2"<cr>
+
+noremap <silent> g- :exe "vertical resize -2"<cr>
+noremap <silent> g= :exe "vertical resize +2"<cr>
+
+nmap Y y$
+
+noremap gy "+y
+noremap gY "+y$
+
+noremap gp "+p
+noremap gP "+P
+
+noremap gb :CtrlPBuffer<cr>
+noremap g<cr> i<cr><esc>
+
+noremap m<cr> m.
+
+nnoremap <silent> zS :setlocal spell spelllang=en_us<cr>
+
+nnoremap <silent> ZW :w<cr>
+
+nnoremap <expr> gA "A".nr2char(getchar())
+
+" Repmo for reapiting movement commands: {{{
 " noremap <expr> h repmo#SelfKey('h', 'l')|sunmap h
 " noremap <expr> l repmo#SelfKey('l', 'h')|sunmap l
 
@@ -525,56 +548,46 @@ noremap <expr> ( repmo#SelfKey('(', ')')|sunmap (
 noremap <expr> ]s repmo#SelfKey(']s', '[s')|sunmap ]s
 noremap <expr> [s repmo#SelfKey('[s', ']s')|sunmap [s
 
-map <expr> z; repmo#SelfKey(';', ',')|sunmap z;
-map <expr> z, repmo#SelfKey(',', ';')|sunmap z,
+noremap <expr> z; repmo#SelfKey(';', ',')|sunmap z;
+noremap <expr> z, repmo#SelfKey(',', ';')|sunmap z,
 
 " repeat the last [count]motion or the last zap-key
-map <expr> ; repmo#LastKey(';')|sunmap ;
-map <expr> , repmo#LastRevKey(',')|sunmap ,
+noremap <expr> ; repmo#LastKey(';')|sunmap ;
+noremap <expr> , repmo#LastRevKey(',')|sunmap ,
 
-map <expr> m; repmo#SelfKey("]'", "['")|sunmap m;
-map <expr> m, repmo#SelfKey("['", "]'")|sunmap m,
-
-nmap m<cr> m.
+noremap <expr> '; repmo#SelfKey("]'", "['")|sunmap ';
+noremap <expr> ', repmo#SelfKey("['", "]'")|sunmap ',
 
 " add these mappings when repeating with `;' or `,'
 noremap <expr> f repmo#ZapKey('f')|sunmap f
 noremap <expr> F repmo#ZapKey('F')|sunmap F
 noremap <expr> t repmo#ZapKey('t')|sunmap t
 noremap <expr> T repmo#ZapKey('T')|sunmap T
+" }}}
 
 
-nnoremap <silent> zS :setlocal spell spelllang=en_us<cr>
 
-nnoremap <expr> gA "A".nr2char(getchar())
-
-nmap Y y$
-
-nnoremap <silent> - :exe "resize -2"<cr>
-nnoremap <silent> + :exe "resize +2"<cr>
-
-nnoremap <silent> g- :exe "vertical resize -2"<cr>
-nnoremap <silent> g= :exe "vertical resize +2"<cr>
-
-
-nnoremap <silent> ZW :w<cr>
 
 nnoremap <leader>r :QO<cr>:AsyncRun %:p<CR>
+nnoremap <leader>gf viWgf
+" Asyncronous search recursively in all files with the same extension
+" as the current file matching word under the curosr.
+nnoremap <leader>f :QO<cr>:AsyncRun -strip grep -r --include "*.%:e" -Hn <cword> .<cr>
 
-" set ALT-Key mappings
-let c='a'
-while c <= 'z'
-    exec "set <A-".c.">=\e".c
-    exec "imap \e".c." <A-".c.">"
-    let c = nr2char(1+char2nr(c))
-endw
+nnoremap <leader>af :QO<cr>:AsyncRun -strip grep -r --include "*" -IHn <cword> .<cr>
+nnoremap <leader>F :QO<cr>:AsyncRun -strip grep -r --include "*" -IHn  .<left><left>
+nnoremap <leader>e "=<C-r>"<cr>p
+nnoremap <leader>S :setlocal spell spelllang=en_us<cr>
 
 " inoremap <A-a> <M-A>
-nnoremap <A-j> <C-w>j 
-nnoremap <A-k> <C-w>k 
-nnoremap <A-h> <C-w>h 
-nnoremap <A-l> <C-w>l 
-nnoremap <A-t> <esc>gt
+noremap  <A-j> <C-w>j
+noremap  <A-k> <C-w>k
+noremap  <A-h> <C-w>h
+noremap  <A-l> <C-w>l
+noremap  <A-t> <esc>gt
+
+noremap  <A-n> :cn<cr>
+noremap  <A-p> :cp<cr>
 
 inoremap <A-j> <down>
 inoremap <A-k> <up>
@@ -587,11 +600,10 @@ inoremap <A-e> <C-o>e
 
 inoremap <A-t> <esc>gt
 
-
-tnoremap <A-j> <C-w>j 
-tnoremap <A-k> <C-w>k 
-tnoremap <A-h> <C-w>h 
-tnoremap <A-l> <C-w>l 
+tnoremap <A-j> <C-w>j
+tnoremap <A-k> <C-w>k
+tnoremap <A-h> <C-w>h
+tnoremap <A-l> <C-w>l
 tnoremap <A-t> <C-\><C-n>gt
 
 tnoremap <Nul> <C-W>N
@@ -603,45 +615,17 @@ inoremap <C-b> <C-o>dw
 " inoremap <C-c> <C-o>diw
 inoremap <C-l> <C-o>dl
 
-nnoremap gy "+y
-nnoremap gY "+y$
-
-nnoremap gp "+p
-nnoremap gP "+P
+nnoremap <space><C-b> :CtrlPBuffer<cr>
 
 nnoremap <space>w :w<cr>
 nnoremap <space>W :wq<cr>
 nnoremap <space>q :q<cr>
 nnoremap <space>Q :q!<cr>
 
-nnoremap <space><C-b> :CtrlPBuffer<cr>
-nnoremap <silent> <expr> <space>o "o\<esc>k"
-nnoremap <silent> <expr> <space>O "O\<esc>j"
-
-nnoremap <silent> g<Tab> :call ChangeColo()<CR>
-nnoremap <silent> g<S-Tab> :call ChangeColo('', 0)<CR>
-
-nnoremap <leader>gf viWgf
-
-" Asyncronous search recursively in all files with the same extension
-" as the current file matching word under the curosr.
-command! QO let g:asyncrun_open=10
-nnoremap <leader>f :QO<cr>:AsyncRun -strip grep -r --include "*.%:e" -Hn <cword> .<cr>
-
-nnoremap <leader>af :QO<cr>:AsyncRun -strip grep -r --include "*" -IHn <cword> .<cr>
-nnoremap <leader>F :QO<cr>:AsyncRun -strip grep -r --include "*" -IHn  .<left><left>
-
-noremap <A-n> :cn<cr>
-nnoremap <A-p> :cp<cr>
-
-inoremap {<cr> {<cr>}<up><end><cr>
-
-
 nnoremap <space>bn :bn<cr>
 nnoremap <space>bp :bp<cr>
-nnoremap <expr> <space>B ":buffer ".input("buffer: ")."\<cr>"
 
-nnoremap gb :CtrlPBuffer<cr>
+nnoremap <expr> <space>B ":buffer ".input("buffer: ")."\<cr>"
 
 " change from buffers with 0-9
 let c=0
@@ -650,54 +634,47 @@ while c <= 9
     let c+=1
 endw
 
-" nnoremap <space>
+noremap <space>r :call RunAsync(input('$ '))<cr>
+noremap <space>R :call RunLastCommand(0)<cr>
 
-nnoremap <space>r :call RunAsync(input('$ '))<cr>
-nnoremap <space>R :call RunLastCommand(0)<cr>
+noremap <space>f :NERDTreeToggle<cr>
 
-nnoremap <space>co :botright copen 8 \| wincmd p<cr>
-nnoremap <space>cl :cclose<cr>
+noremap <space>co :botright copen 8 \| wincmd p<cr>
+noremap <space>cl :cclose<cr>
 noremap <space>cn :cn<cr>
-nnoremap <space>cp :cp<cr>
-" nnoremap <leader>cc :cclose<cr>
-" Evaluate expression in unnamed register
-nnoremap <leader>e "=<C-r>"<cr>p
+noremap <space>cp :cp<cr>
 
-nnoremap g<cr> i<cr><esc>
+noremap <space>sn :16new<cr>
+noremap <space>vn :vertical new<cr>
+noremap <space>tn :tabnew<cr>
+
+noremap <silent> <space>ss :16sp<cr>
+noremap <silent> <space>vs :vsp<cr>
+noremap <silent> <space>ts :tab split<cr>
+
+noremap <silent> <space>st :botright term<cr>
+noremap <silent> <space>vt :vert term<cr>
+noremap <silent> <space>tt :tab term<cr>
 
 noremap <silent> <space>l i <ESC>l
 noremap <silent> <space>h a <ESC>h
 
+noremap <silent> <space>no :noh<cr>
+
+noremap <space>F :tab sp<cr>
+
 noremap <silent> <space>L :call RelativeToLine(input('line:'))<cr>
-" nnoremap <silent> ;p :call PasteFromRegister(nr2char( getchar() ))<cr>
+
+noremap <silent> <expr> <space>o "o\<esc>k"
+noremap <silent> <expr> <space>O "O\<esc>j"
+
+nnoremap <silent> g<Tab> :call ChangeColo()<CR>
+nnoremap <silent> g<S-Tab> :call ChangeColo('', 0)<CR>
+
+inoremap {<cr> {<cr>}<up><end><cr>
 
 vnoremap . :normal @q<cr> 
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
-
-nnoremap <leader>S :setlocal spell spelllang=en_us<cr>
-
-" nnoremap <space>f :Ve<CR>
-nnoremap <space>f :NERDTreeToggle<cr>
-
-" nmap <silent> <Plug>ExpWinH :call ExpandWindow()<cr>
-" nmap <silent> <Plug>ExpWinV :call ExpandWindow('v')<cr>
-
-nnoremap <space>sn :16new<cr>
-nnoremap <space>vn :vertical new<cr>
-noremap <space>tn :tabnew<cr>
-
-nnoremap <space>ss :16sp<cr>
-nnoremap <space>vs :vsp<cr>
-noremap <space>ts :tab split<cr>
-
-nnoremap <silent><space>st :botright term<cr>
-nnoremap <silent><space>vt :vert term<cr>
-nnoremap <silent><space>tt :tab term<cr>
-
-nnoremap <silent> <space>no :noh<cr>
-
-
-nmap <space>F :tab sp<cr>
 
 nmap <c-n> <Plug>CompletorCppJumpToPlaceholder
 imap <c-n> <Plug>CompletorCppJumpToPlaceholder
@@ -776,10 +753,6 @@ autocmd Filetype text,markdown
 au BufEnter *\.task/notes*.txt set ft=markdown
 
 autocmd BufNewFile main.c call OnNewCFile()
-
-" Vim markers with as comment for each language that I use
-nnoremap <silent> <leader>ms o{{{<esc>gcc
-nnoremap <silent> <leader>me o}}}<esc>gcc
 
 " {{{ set HTML shortcuts 
 " set html shortcuts
@@ -955,7 +928,7 @@ call SetStatusline()
 
 highlight ColorColumn ctermbg=white
 set bg=dark
-call ChangeColo('tender')
+call ChangeColo('gruvbox')
 call matchadd('ColorColumn', '\%81v', 100)
 
 " }}}
