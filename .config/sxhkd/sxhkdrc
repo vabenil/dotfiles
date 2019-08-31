@@ -126,7 +126,7 @@ super + shift + Insert
 
 # dmenu: {{{
 super + d
-    dmenu_run -b -fn Hermit -nb "#212121" -sb "#378486"
+    dmenu_run -f -b -fn Hermit -nb "#212121" -sb "#378486"
 
 super + shift + d
     j4-dmenu-desktop --dmenu=dmenu\ -b\ -fn\ Hermit\ -nb\ \"#212121\"\ -sb\ \"#378486\" 
