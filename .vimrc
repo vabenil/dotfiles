@@ -356,7 +356,7 @@ let g:colorschemes = [
 \]
 
 " Colorschemes that look better without a background
-let g:nobg_colorschemes = [ 'forest-night' ]
+let g:nobg_colorschemes = [ 'forest-night', 'tender' ]
 
 " Custom visual selection colors
 let g:cvisual_colorscheme = [ 'tender' ]
@@ -867,7 +867,7 @@ endfunction
 function! SetStatusline()
 " I don't use the GUI version so I haven't even bothered on writing it's
 " color codes
-hi   StatusLineNormal     ctermbg=39    ctermfg=235   guibg=NONE   guifg=NONE
+hi   StatusLineNormal     ctermbg=242   ctermfg=233    guibg=NONE   guifg=NONE
 hi   StatusLineInsert     ctermbg=130   ctermfg=231    guibg=NONE   guifg=NONE
 hi   StatusLineRepeat     ctermbg=131   ctermfg=189   guibg=NONE   guifg=NONE
 hi   StatusLineVisual     ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
@@ -882,8 +882,8 @@ hi   User3    ctermbg=237   ctermfg=189   guibg=NONE   guifg=NONE
 hi   User4   ctermbg=234   ctermfg=102   guibg=NONE   guifg=NONE
 hi   User5   ctermbg=234    ctermfg=0    guibg=NONE   guifg=NONE
 hi   User6   ctermbg=234    ctermfg=15   guibg=NONE   guifg=NONE
-hi   User7   ctermbg=236    ctermfg=179  guibg=NONE   guifg=NONE
-hi   User8    ctermbg=71     ctermfg=7    guibg=NONE   guifg=NONE
+hi   User7   ctermbg=236    ctermfg=189  guibg=NONE   guifg=NONE
+hi   User8    ctermbg=179   ctermfg=233    guibg=NONE   guifg=NONE
 
 set statusline=
 " set statusline+=%1*
@@ -926,9 +926,10 @@ call SetStatusline()
 " colorscheme tender
 " hi Visual ctermbg=238
 
+" In case the colorscheme doesn't highlight it
 highlight ColorColumn ctermbg=white
 set bg=dark
-call ChangeColo('gruvbox')
+call ChangeColo('tender')
 call matchadd('ColorColumn', '\%81v', 100)
 
 " }}}
