@@ -51,8 +51,6 @@ set fileencoding=utf-8
 set listchars=eol:¬,tab:.. 
 " set listchars=eol:¬,tab:▏\ 
 set list
-" set clipboard=unnamedplus
-
 " }}}
 
 " Variables: {{{
@@ -66,8 +64,6 @@ let g:netrw_browse_split = 4
 let g:netrw_winsize = 35
 let g:vim_markdown_folding_disabled=1
 
-" let g:asyncrun_open = 10
-
 " better key bindings for UltiSnipsExpandTrigger
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
@@ -75,8 +71,6 @@ let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
 
 let g:UltiSnipsUsePythonVersion = 3
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
-
-let g:ycm_confirm_extra_conf = 0
 
 let g:gruvbox_italic=1
 let g:gruvbox_undercurl=0
@@ -126,7 +120,7 @@ Plug 'sainnhe/vim-color-desert-night'
 " Plug 'sonph/onehalf'
 " }}}
 
-" Syntax: {{{
+" Syntax highlighting: {{{
 Plug 'PotatoesMaster/i3-vim-syntax'
 Plug 'mh21/errormarker.vim'
 Plug 'baskerville/vim-sxhkdrc'
@@ -164,7 +158,6 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'yssl/QFEnter'
 Plug 'kshenoy/vim-signature'
-Plug 'scrooloose/nerdtree'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
 Plug 'scrooloose/nerdtree'
 Plug 'Yggdroot/indentLine'
@@ -239,8 +232,8 @@ autocmd BufNewFile *.html,*.htm,*.php call MakeHTML()
 " autocmd BufWritePost *.html,*.htm,*.php,*.css AsyncRun xdotool search --onlyvisible --classname Navigator key ctrl+r 
 
 function! LoadHTMLConfig()
-    set shiftwidth=3
-    set softtabstop=3 tabstop=3 expandtab
+    setlocal shiftwidth=3
+    setlocal softtabstop=3 tabstop=3 expandtab
 
     call MapTagsShortcuts()
 endfunction
@@ -248,21 +241,12 @@ endfunction
 function! MakeHTML()
     set noautoindent
     set nosmartindent
-    let l:tag = "
-\<!DOCTYPE html>\r
-\<html>\r
-\\t<head>\r
-\\t\t<meta charset=\"utf-8\" name='viewport' content=\"width=device-width, intial-scale=1.0\">\r
-\\t\t<title></title>\r
-\\t\t<link rel=\"stylesheet\" type='text/css' href=\"index.css\">\r
-\\t</head>\r
-\\t<body>\r
-\\r
-\\t\t<script type=\"text/javascript\" src=\"index.js\"></script>\r
-\\t</body>\r
-\</html>"
-    call AddText(l:tag)
-    normal /<body>j
+    let l:tag = " <!DOCTYPE html>\n <html>\n \t<head>\n \t\t<meta charset=\"utf-8\" name='viewport' content=\"width=device-width, intial-scale=1.0\">\n \t\t<title></title>\n \t\t<link rel=\"stylesheet\" type='text/css' href=\"index.css\">\n \t</head>\n \t<body>\n \n \t\t<script type=\"text/javascript\" src=\"index.js\"></script>\n \t</body>\n </html>"
+
+    let l:prev_reg = getreg("")
+    call setreg("", l:tag)
+    normal P/<body>j
+    call setreg("", l:prev_reg)
     set autoindent
     set smartindent
 endfunction
@@ -320,29 +304,21 @@ endfunction
 " }}}
 
 " Custom functions: {{{
-
-" Close to useless, I have no idea why I haven't removed it
-function! SeparateList()
-    s/\([{[(]\)\s*/\1\r
-    s/\([,;]\)\s*/\1\r/g
-    s/\s*\([}\])]\)/\r\1
-endfunction
-
 " Only show filename if the buffer is to small
 function ShowPath()
-let l:win_width = winwidth('%')
+    let l:win_width = winwidth('%')
 
-if len(expand('%'))
-    if l:win_width > 80
-        let l:path = fnamemodify(expand('%'), ":~:.")
+    if len(expand('%'))
+        if l:win_width > 80
+            let l:path = fnamemodify(expand('%'), ":~:.")
+        else
+            let l:path = expand('%:t')
+        endif
     else
-        let l:path = expand('%:t')
+        let l:path = '[No Name]' 
     endif
-else
-    let l:path = '[No Name]' 
-endif
 
-return l:path
+    return l:path
 endfunction
 
 " My favorite colorschemes
@@ -420,7 +396,7 @@ function! RunLastCommand(n)
 endfunction
 
 " I tried to turn vim into a traslating shell
-" I realized it was useless since tras already comes with a -shell option
+" I realized it was useless since trans already comes with a -shell option
 function TranslateMode()
     set clipboard=unnamedplus
     " Translate from any language to english
@@ -453,7 +429,6 @@ function LoadLayout()
 endfunction
 
 
-
 " Note:
 " s(x) = sin(x)
 " c(x) = cos(x)
@@ -476,7 +451,6 @@ endfunction
 function! RelativeToLine(from)
     call AddText( line('.') - a:from )
 endfunction
-
 " }}}
 
 " Autocompletion: {{{
@@ -493,8 +467,47 @@ let g:completor_css_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
 " Key mappings: {{{
 " ToDo:
 " - order all this somehow 
-"
+
 " set ALT-Key mappings
+
+" Repmo for reapiting movement commands: {{{
+" noremap <expr> h repmo#SelfKey('h', 'l')|sunmap h
+" noremap <expr> l repmo#SelfKey('l', 'h')|sunmap l
+
+" noremap <expr> j repmo#SelfKey('j', 'k')|sunmap j
+" noremap <expr> k repmo#SelfKey('k', 'j')|sunmap k
+
+noremap <expr> w repmo#SelfKey('w', 'b')|sunmap w
+noremap <expr> b repmo#SelfKey('b', 'w')|sunmap b
+
+noremap <expr> ) repmo#SelfKey(')', '(')|sunmap )
+noremap <expr> ( repmo#SelfKey('(', ')')|sunmap (
+
+noremap <expr> ]s repmo#SelfKey(']s', '[s')|sunmap ]s
+noremap <expr> [s repmo#SelfKey('[s', ']s')|sunmap [s
+
+noremap <expr> z; repmo#SelfKey(';', ',')|sunmap z;
+noremap <expr> z, repmo#SelfKey(',', ';')|sunmap z,
+
+noremap <expr> ^ repmo#SelfKey('^', '$')|sunmap ^
+
+" repeat the last [count]motion or the last zap-key
+map <expr> ; repmo#LastKey(';')|sunmap ;
+map <expr> , repmo#LastRevKey(',')|sunmap ,
+
+noremap <expr> '; repmo#SelfKey("]'", "['")|sunmap ';
+noremap <expr> ', repmo#SelfKey("['", "]'")|sunmap ',
+
+
+" add these mappings when repeating with `;' or `,'
+noremap <expr> f repmo#ZapKey('f')|sunmap f
+noremap <expr> F repmo#ZapKey('F')|sunmap F
+noremap <expr> t repmo#ZapKey('t')|sunmap t
+noremap <expr> T repmo#ZapKey('T')|sunmap T
+
+" }}}
+
+" Map <A- to the alt key
 let c='a'
 while c <= 'z'
     exec "set <A-".c.">=\e".c
@@ -505,7 +518,6 @@ endw
 command! -nargs=* R AsyncRun <args>
 command! -nargs=+ Calc call Calculate('<args>')
 command! QO let g:asyncrun_open=10
-
 
 noremap <silent> - :exe "resize -2"<cr>
 noremap <silent> + :exe "resize +2"<cr>
@@ -531,41 +543,6 @@ nnoremap <silent> zS :setlocal spell spelllang=en_us<cr>
 nnoremap <silent> ZW :w<cr>
 
 nnoremap <expr> gA "A".nr2char(getchar())
-
-" Repmo for reapiting movement commands: {{{
-" noremap <expr> h repmo#SelfKey('h', 'l')|sunmap h
-" noremap <expr> l repmo#SelfKey('l', 'h')|sunmap l
-
-" noremap <expr> j repmo#SelfKey('j', 'k')|sunmap j
-" noremap <expr> k repmo#SelfKey('k', 'j')|sunmap k
-
-noremap <expr> w repmo#SelfKey('w', 'b')|sunmap w
-noremap <expr> b repmo#SelfKey('b', 'w')|sunmap b
-
-noremap <expr> ) repmo#SelfKey(')', '(')|sunmap )
-noremap <expr> ( repmo#SelfKey('(', ')')|sunmap (
-
-noremap <expr> ]s repmo#SelfKey(']s', '[s')|sunmap ]s
-noremap <expr> [s repmo#SelfKey('[s', ']s')|sunmap [s
-
-noremap <expr> z; repmo#SelfKey(';', ',')|sunmap z;
-noremap <expr> z, repmo#SelfKey(',', ';')|sunmap z,
-
-" repeat the last [count]motion or the last zap-key
-noremap <expr> ; repmo#LastKey(';')|sunmap ;
-noremap <expr> , repmo#LastRevKey(',')|sunmap ,
-
-noremap <expr> '; repmo#SelfKey("]'", "['")|sunmap ';
-noremap <expr> ', repmo#SelfKey("['", "]'")|sunmap ',
-
-" add these mappings when repeating with `;' or `,'
-noremap <expr> f repmo#ZapKey('f')|sunmap f
-noremap <expr> F repmo#ZapKey('F')|sunmap F
-noremap <expr> t repmo#ZapKey('t')|sunmap t
-noremap <expr> T repmo#ZapKey('T')|sunmap T
-" }}}
-
-
 
 
 nnoremap <leader>r :QO<cr>:AsyncRun %:p<CR>
@@ -677,13 +654,12 @@ vnoremap . :normal @q<cr>
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
 nmap <c-n> <Plug>CompletorCppJumpToPlaceholder
-imap <c-n> <Plug>CompletorCppJumpToPlaceholder
+" imap <c-n> <Plug>CompletorCppJumpToPlaceholder
 
 " map <silent><Plug>(easymotion-prefix)d <Plug>(easymotion-s2)
 map <silent><space><space> <Plug>(easymotion-s2)
 nnoremap <silent> <expr> ## "i {{{\<esc>gcc"
 nnoremap <silent> <expr> #$ "i }}}\<esc>gcc"
-
 " }}}
 
 " Autocommands: {{{
@@ -858,78 +834,76 @@ return ''
 endfunction
 
 function! ReadOnly() abort
-if &readonly || !&modifiable
-    return ''
-else
-    return ''
+    if &readonly || !&modifiable
+        return ''
+    else
+        return ''
 endfunction
 
 function! SetStatusline()
-" I don't use the GUI version so I haven't even bothered on writing it's
-" color codes
-hi   StatusLineNormal     ctermbg=242   ctermfg=233    guibg=NONE   guifg=NONE
-hi   StatusLineInsert     ctermbg=130   ctermfg=231    guibg=NONE   guifg=NONE
-hi   StatusLineRepeat     ctermbg=131   ctermfg=189   guibg=NONE   guifg=NONE
-hi   StatusLineVisual     ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
-hi   StatusLineVLine      ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
-hi   StatusLineVBlock     ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
-hi   StatusLineSelect     ctermbg=45   ctermfg=256    guibg=NONE   guifg=NONE
-hi   StatusLineTerminal   ctermbg=16    ctermfg=125   guibg=NONE   guifg=NONE
-" colors for each mode 
-" hi   User1   ctermbg=35    ctermfg=235                guibg=NONE   guifg=NONE
-hi   User2   ctermbg=241    ctermfg=16   guibg=NONE   guifg=NONE
-hi   User3    ctermbg=237   ctermfg=189   guibg=NONE   guifg=NONE
-hi   User4   ctermbg=234   ctermfg=102   guibg=NONE   guifg=NONE
-hi   User5   ctermbg=234    ctermfg=0    guibg=NONE   guifg=NONE
-hi   User6   ctermbg=234    ctermfg=15   guibg=NONE   guifg=NONE
-hi   User7   ctermbg=236    ctermfg=189  guibg=NONE   guifg=NONE
-hi   User8    ctermbg=179   ctermfg=233    guibg=NONE   guifg=NONE
+    " I don't use the GUI version so I haven't even bothered on writing it's
+    " color codes
+    hi   StatusLineNormal     ctermbg=242   ctermfg=233    guibg=NONE   guifg=NONE
+    hi   StatusLineInsert     ctermbg=130   ctermfg=231    guibg=NONE   guifg=NONE
+    hi   StatusLineRepeat     ctermbg=131   ctermfg=189   guibg=NONE   guifg=NONE
+    hi   StatusLineVisual     ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
+    hi   StatusLineVLine      ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
+    hi   StatusLineVBlock     ctermbg=173   ctermfg=18    guibg=NONE   guifg=NONE
+    hi   StatusLineSelect     ctermbg=45   ctermfg=256    guibg=NONE   guifg=NONE
+    hi   StatusLineTerminal   ctermbg=16    ctermfg=125   guibg=NONE   guifg=NONE
+    " colors for each mode 
+    " hi   User1   ctermbg=35    ctermfg=235                guibg=NONE   guifg=NONE
+    hi   User2   ctermbg=241    ctermfg=16   guibg=NONE   guifg=NONE
+    hi   User3    ctermbg=237   ctermfg=189   guibg=NONE   guifg=NONE
+    hi   User4   ctermbg=234   ctermfg=102   guibg=NONE   guifg=NONE
+    hi   User5   ctermbg=234    ctermfg=0    guibg=NONE   guifg=NONE
+    hi   User6   ctermbg=234    ctermfg=15   guibg=NONE   guifg=NONE
+    hi   User7   ctermbg=236    ctermfg=189  guibg=NONE   guifg=NONE
+    hi   User8    ctermbg=179   ctermfg=233    guibg=NONE   guifg=NONE
 
-set statusline=
-" set statusline+=%1*
-set statusline+=%{ChangeStatusColor()}
-set statusline+=%#StatusLine#
-" mode, show single or triple character mode when on small window
-set statusline+=\ %{winwidth('&')>80?g:modes[mode()]:g:min_modes[mode()]}\ 
-" set statusline+=%2*
-" set statusline+=%{StatuslineGit()}
-set statusline+=%3*
-" set statusline+=\ %f\ 
-set statusline+=\ (%n)\ %{ShowPath()}\ 
-" set statusline+=%t\ 
-set statusline+=%4*
-" set statusline+=[%{&fileformat}]
-" set statusline+=[%{(&fenc!=''?&fenc:&enc)}]\  "file encoding
-" set statusline+=%<
-set statusline+=\ %y\ 
-set statusline+=%{ReadOnly()}\ %m%w
-" set statusline+=\ %r
-set statusline+=%5*
+    set statusline=
+    " set statusline+=%1*
+    set statusline+=%{ChangeStatusColor()}
+    set statusline+=%#StatusLine#
+    " mode, show single or triple character mode when on small window
+    set statusline+=\ %{winwidth('&')>80?g:modes[mode()]:g:min_modes[mode()]}\ 
+    " set statusline+=%2*
+    " set statusline+=%{StatuslineGit()}
+    set statusline+=%3*
+    " set statusline+=\ %f\ 
+    set statusline+=\ (%n)\ %{ShowPath()}\ 
+    " set statusline+=%t\ 
+    set statusline+=%4*
+    " set statusline+=[%{&fileformat}]
+    " set statusline+=[%{(&fenc!=''?&fenc:&enc)}]\  "file encoding
+    " set statusline+=%<
+    set statusline+=\ %y\ 
+    set statusline+=%{ReadOnly()}\ %m%w
+    " set statusline+=\ %r
+    set statusline+=%5*
 
-set statusline+=%=
+    set statusline+=%=
 
-set statusline+=%6*
-" set statusline+=\ buf:\ %n\ 
-set statusline+=%7*
-set statusline+=\ col\ %c\ \|\  
-set statusline+=line\ %l\ /\ %L\ 
-set statusline+=%8*
-set statusline+=\ \ %P\ \ 
+    set statusline+=%6*
+    " set statusline+=\ buf:\ %n\ 
+    set statusline+=%7*
+    set statusline+=\ col\ %c\ \|\  
+    set statusline+=line\ %l\ /\ %L\ 
+    set statusline+=%8*
+    set statusline+=\ \ %P\ \ 
 endfunction
 " set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L: %P
 
 call SetStatusline()
 " }}}
-"
+
 " Colorscheme: {{{ 
-" set bg=dark 
-" colorscheme tender
 " hi Visual ctermbg=238
 
 " In case the colorscheme doesn't highlight it
 highlight ColorColumn ctermbg=white
 set bg=dark
-call ChangeColo('tender')
+call ChangeColo('gruvbox')
 call matchadd('ColorColumn', '\%81v', 100)
 
 " }}}
