@@ -83,7 +83,7 @@ for_window   [instance="calculator_term"]   floating     enable,   border   none
 
 
 for_window   [class="XClipboard"]          floating   enable,   move     position   center,   border   none
-for_window   [class="mpv"]                 floating   enable,   resize   set        500       400,     move     position   center,   border   none
+for_window   [class="mpv"]                 floating   enable,   resize   set        700       600,     move     position   center,   border   none
 for_window   [class="Xfce4-taskmanager"]   floating   enable,   resize   set        500       400,     border   none
 for_window   [instance="floating_term"]    floating   enable,   resize   set        600       400,     border   none
 
@@ -122,26 +122,26 @@ exec --no-startup-id compton
 
 exec --no-startup-id st -n 'mus_term' -e 'cmus' 
 exec --no-startup-id exec $tabbed_term 
+exec --no-startup-id light -N 5
 exec --no-startup-id light -S 10
 exec --no-startup-id pactl --set-sink-volume 0 20%
 exec --no-startup-id synclient TouchpadOff=1
 exec --no-startup-id xclipboard
 exec --no-startup-id dunst
 exec --no-startup-id st -n ws-3
-exec --no-startup-id st -n ws-8 -e calcurse
-exec --no-startup-id st -n ws-8 -e bash -c "task && bash"
+exec --no-startup-id st -n ws-8 -e bash -c "task next && bash"
 exec --no-startup-id st -e bash -c "sudo apt update && bash"
 # exec --no-startup-id sxhkd 
 exec --no-startup-id i3-focus-last
 # Clock tick sound
-exec --no-startup-id wait-next-second && mpg123 --loop -1 ~/Sounds/tick.mp3
+# exec --no-startup-id wait-next-second && mpg123 --loop -1 ~/Sounds/tick.mp3
 
 # Redshift 
-exec --no-startup-id redshift -l 46.69:11.48 -t 5600:5000 -g 0.8 -m randr -v
+exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
+exec --no-startup-id redshift
 
 # set background
-exec_always ~/scripts/change-background.py -f ~/Pictures/wallpapers/tree_horizon_minimalism_128903_1366x768.jpg
-# exec_always ~/scripts/change-background.py
+exec_always ~/scripts/change-background.py --random ~/Pictures/wallpapers
 
 
 exec_always ~/.config/polybar/launch.sh
