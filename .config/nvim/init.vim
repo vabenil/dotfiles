@@ -2,51 +2,53 @@
 set runtimepath+=~.vim
 runtime macros/matchit.vim
 
-set nocompatible  
 filetype indent on
 syntax enable
-" save undo tree
+
+set nocompatible  
+
 set undofile
 set undodir=${HOME}/.vim/undo
 set undolevels=70
 set undoreload=100
-set encoding=utf-8
 set viminfo='200,<200,s100,h
-" Always show statusline
+
 set laststatus=2
-" don't show mode on the command line
-set noshowmode
+
+" set noshowmode
 set showcmd
 set autoindent
 set smartindent
-set ttyfast
+
 set lazyredraw
+set ttyfast
+
 set ttimeout
 set ttimeoutlen=10 
-" set autoindent
+
 set foldmethod=marker
 set foldlevel=0
-set backspace=indent,eol,start
+
 set hlsearch
 set incsearch
-" hidde buffers
+
 set hidden
 set title
 set titleold=
-" set vim to interpret current file directory as the working directory
-" set autochdir
+
 set t_co=256
 set relativenumber
 set number
-" open split windows on the bottom of the screen or right by default
+
 set splitbelow
 set splitright
+
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4 
 set expandtab
+
 set ffs=unix
-set encoding=utf-8
 set fileencoding=utf-8
 set listchars=eol:¬,tab:.. 
 " set listchars=eol:¬,tab:▏\ 
@@ -54,64 +56,83 @@ set list
 " }}}
 
 " Variables: {{{
-" Open .tex files as latex
-let g:tex_flavor = "latex"
-
-let g:netrw_liststyle = 3
-let g:netrw_banner = 0
-let g:netrw_browse_split = 4
-
-let g:netrw_winsize = 35
-let g:vim_markdown_folding_disabled=1
-
-" better key bindings for UltiSnipsExpandTrigger
+" UltiSnips: {{{
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<c-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
 
 let g:UltiSnipsUsePythonVersion = 3
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
+" }}}
 
+" Colorschemes: {{{
+" Gruvbox: {{{
 let g:gruvbox_italic=1
 let g:gruvbox_undercurl=0
 let g:gruvbox_contrast_dark="medium"
 let g:gruvbox_sign_column="bg0"
+" }}}
 
+" Solarized: {{{
 let g:solarized_termcolors=256
 " let g:solarized_termtrans=1
 let g:solarized_contrast="normal"
 let g:solarized_visibility="high"
+" }}}
+" }}}
 
-" Disable function highlighting (affects both C and C++ files)
-let g:cpp_no_function_highlight = 1
-
-" Put all standard C and C++ keywords under Vim's highlight group `Statement`
-" (affects both C and C++ files)
-let g:cpp_simple_highlight = 1
-
-" Enable highlighting of named requirements (C++20 library concepts)
-let g:cpp_named_requirements_highlight = 1
-
-" let g:asyncrun_bell = 1
-" let g:asyncrun_exit = "unlet g:asyncrun_open | let g:asyncrun_auto=\"none\""
-let g:asyncrun_exit = "let g:asyncrun_open=0"
-
+" NERDTree: {{{
 let g:NERDTreeMapOpenSplit = 's'
 let g:NERDTreeMapOpenPreviewSplit = 'S'
 let g:NERDTreeMapOpenVSplit = 'v'
 let g:NERDTreeMapOpenPreviewVSplit = 'V'
+" }}}
 
+" Signature: {{{
+let g:SignatureMap = {
+    \ 'Leader'             :  "m",
+    \ 'PlaceNextMark'      :  "m+",
+    \ 'ToggleMarkAtLine'   :  "m.",
+    \ 'PurgeMarksAtLine'   :  "m-",
+    \ 'DeleteMark'         :  "dm",
+    \ 'PurgeMarks'         :  "m<Space>",
+    \ 'PurgeMarkers'       :  "m<BS>",
+    \ 'GotoNextLineAlpha'  :  "']",
+    \ 'GotoPrevLineAlpha'  :  "'[",
+    \ 'GotoNextSpotAlpha'  :  "`]",
+    \ 'GotoPrevSpotAlpha'  :  "`[",
+    \ 'GotoNextLineByPos'  :  "]'",
+    \ 'GotoPrevLineByPos'  :  "['",
+    \ 'GotoNextSpotByPos'  :  "m;",
+    \ 'GotoPrevSpotByPos'  :  "m,",
+    \ 'GotoNextMarker'     :  "]-",
+    \ 'GotoPrevMarker'     :  "[-",
+    \ 'GotoNextMarkerAny'  :  "]=",
+    \ 'GotoPrevMarkerAny'  :  "[=",
+    \ 'ListBufferMarks'    :  "m/",
+    \ 'ListBufferMarkers'  :  "m?"
+\ }
+" }}}
+
+" Others: {{{
+" Open .tex files as latex
+let g:tex_flavor = "latex"
+
+let g:vim_markdown_folding_disabled=1
+" let g:asyncrun_exit = "unlet g:asyncrun_open | let g:asyncrun_auto=\"none\""
+let g:asyncrun_exit = "let g:asyncrun_open=0"
 
 let g:indentLine_char = '▏'
+" preventing the conceallevel option from showing me improtant stuff
+let g:indentLine_fileTypeExclude = ['markdown', 'json', 'tex']
 
-" let c_no_curly_error = 1
+let g:c_no_curly_error = 1
+" }}}
 " }}}
 
 " Plugin manager: {{{
 filetype off
-
 call plug#begin('~/.vim/bundle')
-" Sorted by how much I used them
 "Colorschemes: {{{ 
 Plug 'jacoborus/tender.vim'
 Plug 'morhetz/gruvbox'
@@ -123,10 +144,9 @@ Plug 'sainnhe/vim-color-desert-night'
 " }}}
 
 " Syntax highlighting: {{{
+Plug 'sheerun/vim-polyglot'
 Plug 'PotatoesMaster/i3-vim-syntax'
 " Plug 'mh21/errormarker.vim'
-Plug 'baskerville/vim-sxhkdrc'
-" Plug 'bfrg/vim-cpp-modern'
 " }}}
 
 " Text objects: {{{
@@ -137,14 +157,14 @@ Plug 'michaeljsmith/vim-indent-object'
 " }}}
 
 " Dependencies: {{{
-" Plugins needed for other plugins to run.
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 " }}}
 
 " Autocompletion: {{{
-" Plug 'maralla/completor.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'Rip-Rip/clang_complete'
+" Plug 'ternjs/tern_for_vim', {'do': 'npm install'}
+Plug 'dense-analysis/ale'
 " }}}
 
 " Others: {{{
@@ -152,11 +172,10 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tpope/vim-commentary' 
-" Plug 'Rip-Rip/clang_complete'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'Houl/repmo-vim'
 Plug 'SirVer/ultisnips'
-Plug 'godlygeek/tabular'
+" Plug 'godlygeek/tabular'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'yssl/QFEnter'
@@ -164,10 +183,10 @@ Plug 'kshenoy/vim-signature'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
 Plug 'scrooloose/nerdtree'
 Plug 'Yggdroot/indentLine'
+Plug 'haya14busa/incsearch.vim'
 " }}}
-"
 call plug#end()
-filetype plugin indent on
+filetype plugin on
 " }}}
 
 " Programming languages config: {{{
@@ -175,7 +194,7 @@ filetype plugin indent on
 function! CConfig()
     set formatprg=astyle\ -T4pb
     nnoremap <silent> <leader>b :call Build()<cr>
-    nnoremap <leader>r :call Run()<cr>
+    nnoremap <silent> <leader><cr> :call Run()<cr>
     nnoremap <silent> <leader>d :call AddFuncDef()<cr>
 
     nnoremap <silent> <leader>gd /\<\w\+\>\s\+\zs\<<C-r><C-w>\>\ze\s*(<cr>
@@ -183,24 +202,17 @@ function! CConfig()
 endfunction
 
 function! OnNewCFile()
-    call AddText("#include <stdio.h>\n\n\n\nint main()\n{\nreturn 0;\n}")
+    exec "normal! i"."#include <stdio.h>\n\n\n\nint main()\n{\nreturn 0;\n}"
     normal 5j$
 endfunction
 
 
 " Automatically generate all function definitions in a C file in a single
-" regular expresion
+" regular expresion, doesn't always work
 function! AddFuncDef()
     let a:line_num = line('.')
     %g/\_^\<\w\+\>\*\?\s\*\?\<\(main\>\)\@!\<\w\+\>(.*)\(;\)\@!.*$/exec "normal! yy".(a:line_num)."ggpf)C);\<esc>"
 endfunction
-
-function! SyntaxCheck()
-    let g:asyncrun_open = 6
-    let g:asyncrun_auto = "make"
-    AsyncRun clang-tidy % -checks '*' -- $(cat .clang_complete)
-endfunction
-
 
 let g:build_command="gcc %:p"
 function! Build()
@@ -213,27 +225,27 @@ function! Build()
     endif
 endfunction
 
-" Try figuring out what the executable is based on the Makefile and run it in
-" a terminal in a new tab
+" Try to figure out what the executable is based on the Makefile and run it
 let g:built_binary="a.out"
 function! Run()
     let l:current_dir = getcwd()
     let l:file = l:current_dir."/Makefile"
     if filereadable(l:file)
-        let l:prog = system("sed -n 's/\%(TARGET\)\|\%(NAME\)\%(PROG\)\\s\\?:\\?=\\s\\?\\(.*\\)/\\1/p' ".(l:file)) 
+        echo "Searching for executable"
+        let l:prog = system("sed -n 's/\\(\\(TARGET\\)\\|\\(NAME\\)\\|\\(PROG\\)\\)\\s\\?:\\?=\\s\\?\\(.*\\)/\\5/p' ".(l:file)) 
         echo l:prog
         let g:asyncrun_open = 10
         exec "AsyncRun ".l:current_dir."/".(l:prog)
     else
+        echo "Not even bothering to search"
+        let g:asyncrun_open = 10
         exec "AsyncRun ".l:current_dir."/".(g:built_binary)
     endif
 endfunction
 
 " }}}
 " HTML: {{{ 
-autocmd BufNewFile *.html,*.htm,*.php call MakeHTML()
 " autocmd BufWritePost *.html,*.htm,*.php,*.css AsyncRun xdotool search --onlyvisible --classname Navigator key ctrl+r 
-
 function! LoadHTMLConfig()
     setlocal shiftwidth=3
     setlocal softtabstop=3 tabstop=3 expandtab
@@ -255,17 +267,19 @@ function! MakeHTML()
 endfunction
 
 
+function! BReload()
+    AsyncRun xdotool search --classname --limit 1 Navigator key ctrl+r
+endfunction
+
 function! MapTagsShortcuts()
     " setl ofu=csscomplete#CompleteCSS
     setl ofu=htmlcomplete#CompleteTags
 
-    inoremap </    </<C-x><C-o><C-n><C-n>
+    inoremap </    </<C-x><C-o>
     inoremap <? <?php<cr>?>
-    " autocomplete ending of a tag
 endfunction
 
 function! MapJSShortcuts()
-    "convert normal function! to variabe function
     nmap <silent> <Plug>FuncToObj :call ChangeFuncType('o')<cr>
     nmap <silent> <Plug>FuncToNorm :call ChangeFuncType('n')<cr>
     nmap <silent> <Plug>FuncToVar :call ChangeFuncType('v')<cr>
@@ -299,15 +313,10 @@ function! ChangeFuncType(to)
     endif
 endfunction
 " }}}
-" LateX: {{{
-function! CompileLatex()
-    AsyncRun pdflatex %
-endfunction
-" }}}
 " }}}
 
 " Custom functions: {{{
-" Only show filename if the buffer is to small
+" Show filename istead of full path if the buffer is to small
 function ShowPath()
     let l:win_width = winwidth('%')
 
@@ -324,61 +333,46 @@ function ShowPath()
     return l:path
 endfunction
 
-" My favorite colorschemes
-" let g:colorschemes = [
-"      \'gruvbox',
-"      \'desert',
-"      \'zenburn',
-"      \'forest-night',
-"      \'onedark',
-"      \'tender'
-" \]
-
-" Colorschemes that look better without a background
-" let g:nobg_colorschemes = [ 'forest-night', 'tender' ]
-
-" Custom visual selection colors
-" let g:cvisual_colorscheme = [ 'tender' ]
-
 " Switch between my colorschemes
-" function ChangeColo(colo_name='', forward=1)
-"     if len(a:colo_name)
-"         let l:colo = a:colo_name
-"     else
-"         if !exists('g:colors_name')
-"             let l:colo_index = -1
-"         else
-"             let l:colo_index = index(g:colorschemes, g:colors_name)
-"         endif
+function ChangeColo(colo_name, forward)
+    if len(a:colo_name)
+        let l:colo = a:colo_name
+    else
+        if !exists('g:colors_name')
+            let l:colo_index = -1
+        else
+            let l:colo_index = index(g:colorschemes, g:colors_name)
+        endif
 
 
-"         if a:forward && (l:colo_index == -1 || l:colo_index == len(g:colorschemes) - 1)
-"             let l:colo = g:colorschemes[ 0 ]
-"         elseif !a:forward && (l:colo_index == -1 || l:colo_index == 0)
-"             let l:colo = g:colorschemes[ len(g:colorschemes) -1 ]
-"         else
-"             let l:colo = g:colorschemes[ l:colo_index + (a:forward ? 1 : -1) ] 
-"         endif
-"     endif
+        if a:forward && (l:colo_index == -1 || l:colo_index == len(g:colorschemes) - 1)
+            let l:colo = g:colorschemes[ 0 ]
+        elseif !a:forward && (l:colo_index == -1 || l:colo_index == 0)
+            let l:colo = g:colorschemes[ len(g:colorschemes) -1 ]
+        else
+            let l:colo = g:colorschemes[ l:colo_index + (a:forward ? 1 : -1) ] 
+        endif
+    endif
 
-"     hi clear
-"     execute "colorscheme ".l:colo
+    hi clear
+    execute "colorscheme ".l:colo
 
-"     if index(g:nobg_colorschemes, l:colo) != -1
-"         hi Normal ctermbg=NONE
-"         hi EndOfBuffer ctermbg=NONE
-"     endif
-
-"     if index(g:cvisual_colorscheme, l:colo) != -1
-"         hi Visual ctermbg=237
-"     endif
-" endfunction
-
+    if exists('g:colo_config')
+        if exists("g:colo_config['".l:colo."']")
+            if  exists("g:colo_config['".l:colo."']['nobg']") && g:colo_config[l:colo]['nobg']
+                hi Normal ctermbg=NONE
+                hi EndOfBuffer ctermbg=NONE
+            endif
+            if  exists("g:colo_config['".l:colo."']['visual']")
+                exec "hi Visual ctermbg=".g:colo_config[l:colo]['visual']
+            endif
+        endif
+    endif
+endfunction
 
 " ToDo:
 " - Improve this function
 let g:last_command = ''
-
 function! RunAsync(command)
     if len(a:command) > 0
         if a:command == '!!'
@@ -398,8 +392,7 @@ function! RunLastCommand(n)
     endif
 endfunction
 
-" I tried to turn vim into a traslating shell
-" I realized it was useless since trans already comes with a -shell option
+" Useless stuff but still don't want to delete it
 function TranslateMode()
     set clipboard=unnamedplus
     " Translate from any language to english
@@ -407,16 +400,13 @@ function TranslateMode()
 
     " Save keyboard layout when leaving insert mode
     autocmd InsertLeave * call SaveLayout()
-    " And load it again
+    " Loading previous keyboard layout
     autocmd InsertEnter * call LoadLayout()
 
     set ttimeout
     set ttimeoutlen=50
 endfunction
 
-
-" Switch layout with english and other languages when entering and living
-" insert mode
 function SaveLayout()
     let g:prev_layout = substitute(system("setxkbmap -query"), '.*layout:\s\+\(\<\w\+\>\).*', "\\1", "g")
     let g:prev_variant = substitute(system("setxkbmap -query"), '.*variant:\s\+\(\<\w\+\>\).*', "\\1", "g")
@@ -431,7 +421,6 @@ function LoadLayout()
     endif
 endfunction
 
-
 " Note:
 " s(x) = sin(x)
 " c(x) = cos(x)
@@ -439,7 +428,7 @@ function! Calculate(expr)
     let l:result = system("echo '".(a:expr)."' | bc -l")
     " remove the end of line character
     let l:result = l:result[0:strlen(l:result)-2]
-exec "normal! a".(l:result)
+    exec "normal! a".(l:result)
 endfunction
 
 function! ExecuteMacroOverVisualRange()
@@ -447,30 +436,132 @@ function! ExecuteMacroOverVisualRange()
     execute ":'<,'>normal @".nr2char(getchar())
 endfunction
 
-function! AddText(text)
-    exec "normal! i".a:text
-endfunction
-
 function! RelativeToLine(from)
-    call AddText( line('.') - a:from )
+    exec "normal i".(line('.') - a:from)
 endfunction
 " }}}
 
 " Autocompletion: {{{
-set completeopt=noinsert,menuone,noselect
+set completeopt=menu
 
-let g:clang_library_path = '/usr/lib/x86_64-linux-gnu/libclang-7.so'
-let g:completor_min_chars = 3
-let g:completor_clang_binary = '/usr/bin/clang-7'
-let g:completor_python_binary = '/usr/bin/python3.7'
-let g:completor_css_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
+let g:ale_set_signs = 1
+let g:ale_cpp_ccls_init_options = {
+\   'cache': {
+\       'directory': '/tmp/ccls/cache'
+\   }
+\ }
 
+" let g:clang_library_path = '/usr/lib/x86_64-linux-gnu/libclang-7.so'
+" let g:clang_use_library = 1
+" let g:clang_snippets = 1
+" let g:clang_snippets_engine = 'clang_complete'
 " }}}
 
 " Key mappings: {{{
-" ToDo:
-" - order all this somehow 
+" Command line commands: {{{
+command! -nargs=* A AsyncRun <args>
+command! -nargs=* R let g:asyncrun_open=10 | AsyncRun <args>
+command! -nargs=+ Calc call Calculate('<args>')
+command! QO let g:asyncrun_open=10
+" }}}
 
+" Insert mode: {{{
+inoremap <A-j> <down>
+inoremap <A-k> <up>
+inoremap <A-h> <left>
+inoremap <A-l> <right>
+inoremap <A-b> <C-o>b
+inoremap <A-w> <C-o>w
+
+inoremap <A-t> <esc>gt
+inoremap <C-b> <C-o>dw
+" inoremap <C-c> <C-o>diw
+inoremap <C-l> <C-dl
+imap <c-c> <C-x><C-o>
+
+inoremap {<cr> {<cr>}<up><end><cr>
+" }}}
+
+" Terminal mode: {{{
+tnoremap <A-j> <C-\><C-n><C-w>j
+tnoremap <A-k> <C-\><C-n><C-w>k
+tnoremap <A-h> <C-\><C-n><C-w>h
+tnoremap <A-l> <C-\><C-n><C-w>l
+tnoremap <A-t> <C-\><C-n>gt
+
+tnoremap <Nul> <C-W>N
+tnoremap <A-e> <C-\><C-n>
+tnoremap <expr> <C-r> '<C-\><C-n>"'.nr2char(getchar()).'pi'
+tnoremap <C-^> <C-\><C-n><C-^>
+" }}}
+
+" Yanking and pasting: {{{
+nmap Y y$
+
+noremap gy "+y
+noremap gY "+y$
+
+noremap gp "+p
+noremap gP "+P
+" }}}
+
+" Window resizing: {{{
+noremap <silent> - :exe "resize -2"<cr>
+noremap <silent> + :exe "resize +2"<cr>
+
+noremap <silent> g- :exe "vertical resize -2"<cr>
+noremap <silent> g= :exe "vertical resize +2"<cr>
+" }}}
+
+" Moving between splits: {{{
+noremap  <A-j> <C-w>j
+noremap  <A-k> <C-w>k
+noremap  <A-h> <C-w>h
+noremap  <A-l> <C-w>l
+noremap  <A-t> <esc>gt
+" }}}
+
+" Buffers: {{{
+nnoremap <space>bn :bn<cr>
+nnoremap <space>bp :bp<cr>
+
+nnoremap <expr> <space>B ":buffer ".input("buffer: ")."\<cr>"
+noremap gb :CtrlPBuffer<cr>
+
+" change from buffers with 0-9
+let c=0
+while c <= 9
+    exec "nnoremap <space>b".c." :buffer ".c."\<cr>"
+    let c+=1
+endw
+" }}}
+
+" Splits & Tabs: {{{
+noremap <silent> <space>sn :16new<cr>
+noremap <silent> <space>vn :vertical new<cr>
+noremap <silent> <space>tn :tabnew<cr>
+
+noremap <silent> <space>ss :16sp<cr>
+noremap <silent> <space>vs :vsp<cr>
+noremap <silent> <space>ts :tab split<cr>
+
+noremap <silent> <space>st :botright sp term://bash<cr>
+noremap <silent> <space>vt :vsp term://bash<cr>
+noremap <silent> <space>tt :tab sp term://bash<cr>
+
+noremap <space>F :tab sp<cr>
+" }}}
+
+" Quickfix: {{{
+noremap <expr> <space>cc ":".(len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist'))?"cclose":"copen")." \| wincmd p"
+noremap <space>cn :cn<cr>
+noremap <space>cp :cp<cr>
+
+noremap  <A-n> :cn<cr>
+noremap  <A-p> :cp<cr>
+" }}}
+
+" Plugins: {{{
 " Repmo for repeating movement commands: {{{
 " noremap <expr> h repmo#SelfKey('h', 'l')|sunmap h
 " noremap <expr> l repmo#SelfKey('l', 'h')|sunmap l
@@ -499,161 +590,66 @@ map <expr> , repmo#LastRevKey(',')|sunmap ,
 noremap <expr> '; repmo#SelfKey("]'", "['")|sunmap ';
 noremap <expr> ', repmo#SelfKey("['", "]'")|sunmap ',
 
-
 " add these mappings when repeating with `;' or `,'
 noremap <expr> f repmo#ZapKey('f')|sunmap f
 noremap <expr> F repmo#ZapKey('F')|sunmap F
 noremap <expr> t repmo#ZapKey('t')|sunmap t
 noremap <expr> T repmo#ZapKey('T')|sunmap T
-
 " }}}
 
-command! -nargs=* A AsyncRun <args>
-command! -nargs=* R let g:asyncrun_open=10 | AsyncRun <args>
-command! -nargs=+ Calc call Calculate('<args>')
-command! QO let g:asyncrun_open=10
-
-noremap <silent> - :exe "resize -2"<cr>
-noremap <silent> + :exe "resize +2"<cr>
-
-noremap <silent> g- :exe "vertical resize -2"<cr>
-noremap <silent> g= :exe "vertical resize +2"<cr>
-
-nmap Y y$
-
-noremap gy "+y
-noremap gY "+y$
-
-noremap gp "+p
-noremap gP "+P
-
-noremap gb :CtrlPBuffer<cr>
-noremap g<cr> i<cr><esc>
-
-noremap m<cr> m.
-
-nnoremap <silent> zS :setlocal spell spelllang=en_us<cr>
-
-nnoremap <silent> ZW :w<cr>
-
-nnoremap <expr> gA "A".nr2char(getchar())
-
-
-nnoremap <leader>r :QO<cr>:AsyncRun %:p<CR>
-nnoremap <leader>gf viWgf
-" Asyncronous search recursively in all files with the same extension
-" as the current file matching word under the curosr.
+" ALE: {{{
+nmap <silent> gd <Plug>(ale_go_to_definition)
+nmap <silent> <leader>R <Plug>(ale_find_references)
+nmap <silent> <leader>H <Plug>(ale_hover)
+" }}}
+"
+" AsyncRun: {{{
+" Asyncronously search for the current word inside directory
 nnoremap <leader>f :QO<cr>:AsyncRun -strip grep -r --include "*.%:e" -Hn <cword> .<cr>
-
 nnoremap <leader>af :QO<cr>:AsyncRun -strip grep -r --include "*" -IHn <cword> .<cr>
 nnoremap <leader>F :QO<cr>:AsyncRun -strip grep -r --include "*" -IHn  .<left><left>
-nnoremap <leader>e "=<C-r>"<cr>p
-nnoremap <leader>S :setlocal spell spelllang=en_us<cr>
-
-" inoremap <A-a> <M-A>
-noremap  <A-j> <C-w>j
-noremap  <A-k> <C-w>k
-noremap  <A-h> <C-w>h
-noremap  <A-l> <C-w>l
-noremap  <A-t> <esc>gt
-
-noremap  <A-n> :cn<cr>
-noremap  <A-p> :cp<cr>
-
-inoremap <A-j> <down>
-inoremap <A-k> <up>
-inoremap <A-h> <left>
-inoremap <A-l> <right>
-
-inoremap <A-b> <C-o>b
-inoremap <A-w> <C-o>w
-
-inoremap <A-t> <esc>gt
-
-tnoremap <A-j> <C-\><C-n><C-w>j
-tnoremap <A-k> <C-\><C-n><C-w>k
-tnoremap <A-h> <C-\><C-n><C-w>h
-tnoremap <A-l> <C-\><C-n><C-w>l
-tnoremap <A-t> <C-\><C-n>gt
-
-tnoremap <Nul> <C-W>N
-tnoremap <A-e> <C-\><C-n>
-tnoremap <expr> <C-r> '<C-\><C-n>"'.nr2char(getchar()).'pi'
-tnoremap <C-^> <C-\><C-n><C-^>
-
-inoremap <C-b> <C-o>dw
-" inoremap <C-c> <C-o>diw
-inoremap <C-l> <C-o>dl
-
-nnoremap <space><C-b> :CtrlPBuffer<cr>
-
-nnoremap <space>w :w<cr>
-nnoremap <space>W :wq<cr>
-nnoremap <space>q :q<cr>
-nnoremap <space>Q :q!<cr>
-
-nnoremap <space>bn :bn<cr>
-nnoremap <space>bp :bp<cr>
-
-nnoremap <expr> <space>B ":buffer ".input("buffer: ")."\<cr>"
-
-" change from buffers with 0-9
-let c=0
-while c <= 9
-    exec "nnoremap <space>b".c." :buffer ".c."\<cr>"
-    let c+=1
-endw
-
 noremap <space>r :call RunAsync(input('$ '))<cr>
 noremap <space>R :call RunLastCommand(0)<cr>
 
 noremap <space>f :NERDTreeToggle<cr>
+" }}}
 
-" noremap <space>co :botright copen 8 \| wincmd p<cr>
-" noremap <space>cl :cclose<cr>
-noremap <expr> <space>cc ":".(len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist'))?"cclose":"copen")." \| wincmd p"
-noremap <space>cn :cn<cr>
-noremap <space>cp :cp<cr>
+" Easymotion: {{{
+" map <silent><Plug>(easymotion-prefix)d <Plug>(easymotion-s2)
+map <silent><space><space> <Plug>(easymotion-s2)
+" }}}
+" }}}
 
-noremap <space>sn :16new<cr>
-noremap <space>vn :vertical new<cr>
-noremap <space>tn :tabnew<cr>
+" Others: {{{
+noremap g<cr> i<cr><esc>
 
-noremap <silent> <space>ss :16sp<cr>
-noremap <silent> <space>vs :vsp<cr>
-noremap <silent> <space>ts :tab split<cr>
+noremap <silent> zS :setlocal spell spelllang=en_us<cr>
+nnoremap <silent> ZW :w<cr>
 
-noremap <silent> <space>st :botright term<cr>
-noremap <silent> <space>vt :vert term<cr>
-noremap <silent> <space>tt :tab term<cr>
+nnoremap <expr> gA "A".nr2char(getchar())."<Esc>"
+
+nnoremap <leader>gf viWgf
+nnoremap <leader>e "=<C-r>"<cr>p
+
+nnoremap <space>w :w<cr>
+nnoremap <space>Q :q!<cr>
 
 noremap <silent> <space>l i <ESC>l
 noremap <silent> <space>h a <ESC>h
 
 noremap <silent> <space>no :noh<cr>
 
-noremap <space>F :tab sp<cr>
-
-noremap <silent> <space>L :call RelativeToLine(input('line:'))<cr>
-
+noremap <silent> <space>L :call RelativeToLine(input('line: '))<cr>
+ 
 noremap <silent> <expr> <space>o "o\<esc>k"
 noremap <silent> <expr> <space>O "O\<esc>j"
 
-nnoremap <silent> g<Tab> :call ChangeColo()<CR>
+nnoremap <silent> g<Tab> :call ChangeColo('', 1)<CR>
 nnoremap <silent> g<S-Tab> :call ChangeColo('', 0)<CR>
-
-inoremap {<cr> {<cr>}<up><end><cr>
 
 vnoremap . :normal @q<cr> 
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
-
-nmap <c-n> <Plug>CompletorCppJumpToPlaceholder
-" imap <c-n> <Plug>CompletorCppJumpToPlaceholder
-
-" map <silent><Plug>(easymotion-prefix)d <Plug>(easymotion-s2)
-map <silent><space><space> <Plug>(easymotion-s2)
-nnoremap <silent> <expr> ## "i {{{\<esc>gcc"
-nnoremap <silent> <expr> #$ "i }}}\<esc>gcc"
+" }}}
 " }}}
 
 " Autocommands: {{{
@@ -674,106 +670,96 @@ autocmd BufReadPost *
             \   exe "normal! g`\"" |
             \ endif
 
-" Close buffer if the last window is Quickfix
-" Thanks to http://vim.wikia.com/wiki/Automatically_quit_Vim_if_quickfix_window_is_the_last
+" Close buffer if the last window is Quickfix from
+" http://vim.wikia.com/wiki/Automatically_quit_Vim_if_quickfix_window_is_the_last
 au BufEnter *
             \ if &buftype=="quickfix" |
-            \ if winbufnr(2) == -1 |
-            \   quit! |
+                \ if winbufnr(2) == -1 |
+                \   quit! |
+                \ endif |
             \ endif |
-            \ endif |
-
-au bufenter *
             \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) |
-            \ q |
+                \ q |
             \ endif
+
+autocmd BufEnter * set omnifunc=ale#completion#OmniFunc
 
 autocmd ColorScheme * call SetStatusline()
 
-augroup css,scss
-    setl ofu=csscomplete#CompleteCSS
-    set iskeyword=@,48-57,_,-,?,!,192-255
-augroup END
+" augroup css,scss
+"     setl ofu=csscomplete#CompleteCSS
+"     set iskeyword=@,48-57,_,-,?,!,192-255
+" augroup END
 
 autocmd BufEnter *.config/vimb/config set filetype=vim
 
-
 autocmd BufRead,BufNewFile *.h,*.c set filetype=c
 
-autocmd BufWritePost *.tex call CompileLatex()
+autocmd BufWritePost *.tex AsyncRun pdflatex %
+" autocmd BufWritePost *.js call BReload()
 " autocmd BufWritePost *.h,*.c call SyntaxCheck()
 
-autocmd Filetype php UltiSnipsAddFiletypes php.html
-
-autocmd Filetype cpp UltiSnipsAddFiletypes cpp.c
-
 autocmd Filetype c,cpp
-            \   set omnifunc=cppcomplete#CompleteCPP | 
-            \   call CConfig() | 
-            \   nnoremap <leader>s :call SyntaxCheck()<cr>
+            \ call CConfig() | 
+            \ setl formatexpr=LanguageClient#textDocument_rangeFormatting() |
+            \ set textwidth=80 | 
+            \ UltiSnipsAddFiletypes cpp.c |
+            \ nnoremap <leader>s :call SyntaxCheck()<cr> 
 
-autocmd FileType javascript nnoremap <leader>r :AsyncRun nodejs %<Cr>
+autocmd FileType javascript
+            \ call MapJSShortcuts() |
+            \ nnoremap <leader>r :AsyncRun nodejs %<Cr> 
 
 autocmd Filetype text,markdown
-            \   set textwidth=80 | 
-            \   setlocal spell spelllang=en_us
+            \ set textwidth=80 | 
+            \ setlocal spell spelllang=en_us
 
-" autocmd BufEnter * call TranslateMode()
+autocmd BufNewFile *.html,*.htm,*.php call MakeHTML()
+
+autocmd Filetype php,html,htm 
+            \ UltiSnipsAddFiletypes php.html |
+            \ call LoadHTMLConfig()
 
 au BufEnter *\.task/notes*.txt set ft=markdown
 
-autocmd BufNewFile main.c call OnNewCFile()
-
-" {{{ set HTML shortcuts 
-" set html shortcuts
-autocmd Filetype html call LoadHTMLConfig()
-autocmd Filetype php call LoadHTMLConfig()
-autocmd Filetype javascript call MapJSShortcuts()
-" set javascript shortcuts 
-autocmd Filetype html call LoadHTMLConfig()
-autocmd Filetype php call LoadHTMLConfig()
-autocmd Filetype javascript call MapJSShortcuts()
-" }}} 
+autocmd BufNewFile */main.c call OnNewCFile()
 " }}}
 
 " Stautsline: {{{
-" Note that I'm not a designer
-" Also colors from 1 to 17 are from my terminal emulator
-" So if you want to use my statusline replace does with whatever
-" you want
+" Note
+" Colors from 1 to 17 are from my terminal emulator
 
 " ToDo:
 " - Change colors
-
-let modes = {
-            \   'n': 'NORMAL',
-            \   'i': 'INSERT',
-            \   's': 'SELECT',
-            \   'S': 'S-LINE',
-            \   '\<C-S>': 'S-B',
-            \   'R': 'REPEAT',
-            \   'v': 'VISUAL',
-            \   'V': 'V-LINE',
-            \   '': 'V-B',
-            \   't': 'TERMINAL',
-            \   'c': 'COMMAND'
-            \}
+" - Make this a plugin
+let g:modes = {
+    \   'n': 'NORMAL',
+    \   'i': 'INSERT',
+    \   's': 'SELECT',
+    \   'S': 'S-LINE',
+    \   '\<C-S>': 'S-B',
+    \   'R': 'REPEAT',
+    \   'v': 'VISUAL',
+    \   'V': 'V-LINE',
+    \   '': 'V-B',
+    \   't': 'TERMINAL',
+    \   'c': 'COMMAND'
+    \}
 
 let g:min_modes = {
-            \   'n': 'N',
-            \   'i': 'I',
-            \   's': 'S',
-            \   'S': 'S-L',
-            \   '\<C-S>': 'S-B',
-            \   'R': 'R',
-            \   'v': 'V',
-            \   'V': 'V-L',
-            \   '': 'V-B',
-            \   't': 'T',
-            \   'c': 'C'
-            \}
+    \   'n': 'N',
+    \   'i': 'I',
+    \   's': 'S',
+    \   'S': 'S-L',
+    \   '\<C-S>': 'S-B',
+    \   'R': 'R',
+    \   'v': 'V',
+    \   'V': 'V-L',
+    \   '': 'V-B',
+    \   't': 'T',
+    \   'c': 'C'
+    \}
 
-" let g:prev_mode = 'n'
 function! ChangeStatusColor()
 let l:mode = mode()
 
@@ -835,8 +821,7 @@ function! ReadOnly() abort
 endfunction
 
 function! SetStatusline()
-    " I don't use the GUI version so I haven't even bothered on writing it's
-    " color codes
+    " I don't use the GVim
     hi   StatusLineNormal     ctermbg=242   ctermfg=233    guibg=NONE   guifg=NONE
     hi   StatusLineInsert     ctermbg=130   ctermfg=231    guibg=NONE   guifg=NONE
     hi   StatusLineRepeat     ctermbg=131   ctermfg=189   guibg=NONE   guifg=NONE
@@ -856,13 +841,10 @@ function! SetStatusline()
     hi   User8    ctermbg=179   ctermfg=233    guibg=NONE   guifg=NONE
 
     set statusline=
-    " set statusline+=%1*
     set statusline+=%{ChangeStatusColor()}
     set statusline+=%#StatusLine#
-    " mode, show single or triple character mode when on small window
+    " show short mode when on small windows
     set statusline+=\ %{winwidth('&')>80?g:modes[mode()]:g:min_modes[mode()]}\ 
-    " set statusline+=%2*
-    " set statusline+=%{StatuslineGit()}
     set statusline+=%3*
     " set statusline+=\ %f\ 
     set statusline+=\ (%n)\ %{ShowPath()}\ 
@@ -870,7 +852,6 @@ function! SetStatusline()
     set statusline+=%4*
     " set statusline+=[%{&fileformat}]
     " set statusline+=[%{(&fenc!=''?&fenc:&enc)}]\  "file encoding
-    " set statusline+=%<
     set statusline+=\ %y\ 
     set statusline+=%{ReadOnly()}\ %m%w
     " set statusline+=\ %r
@@ -879,7 +860,6 @@ function! SetStatusline()
     set statusline+=%=
 
     set statusline+=%6*
-    " set statusline+=\ buf:\ %n\ 
     set statusline+=%7*
     set statusline+=\ col\ %c\ \|\  
     set statusline+=line\ %l\ /\ %L\ 
@@ -887,19 +867,27 @@ function! SetStatusline()
     set statusline+=\ \ %P\ \ 
 endfunction
 " set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L: %P
-
-" call SetStatusline()
+call SetStatusline()
 " }}}
 
 " Colorscheme: {{{ 
-" hi Visual ctermbg=238
-
-" In case the colorscheme doesn't highlight it
-" highlight ColorColumn ctermbg=white
 set bg=dark
-colo gruvbox
-" call ChangeColo('gruvbox')
-" call matchadd('ColorColumn', '\%81v', 100)
+" My favorite colorschemes
+let g:colorschemes = [
+     \'gruvbox',
+     \'desert',
+     \'zenburn',
+     \'forest-night',
+     \'onedark',
+     \'tender'
+\]
 
+let g:colo_config = {
+            \ 'forest-night': {'nobg': 1},
+            \ 'tender': {'nobg': 0, 'visual': 273}
+\}
+call ChangeColo('tender', 0)
+call matchadd('ColorColumn', '\%81v', 100)
+" In case the colorscheme doesn't highlight it
+highlight ColorColumn ctermbg=magenta
 " }}}
-
