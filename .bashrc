@@ -2,30 +2,20 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-# This bahrc is such a mess you will want to cry, leaving now would be a wise decision.
-
-
-
-# Exported variables: {{{
-# Wine-staging improvements
-
+export TERM="xterm-256color"
 export PATH=$PATH:/snap/bin
+
+# Wine-staging improvements
 export STAGING_SHARED_MEMORY=1
 export STAGING_RT_PRIORITY_SERVER=90
 export STAGING_RT_PRIORITY_BASE=90
 export CSMT=enabled
 export TERMINAL=st
 
-# }}}
-
-# Source files: {{{
 source ~/.local/bin/bashmarks.sh 
-source ~/.fonts/*.sh
-# }}}
+# source ~/.fonts/*.sh
 
-# Vi mode: {{{ 
-VISUAL=vim; export VISUAL EDITOR=vim; export EDITOR
-# }}}
+VISUAL=vim; export VISUAL EDITOR=nvim; export EDITOR
 
 stty start undef stop undef
 # If not running interactively, don't do anything
@@ -145,18 +135,25 @@ mvt () {
     mv -fv $@ "${HOME}/Trash/"     
 }
 
-cleant () {
+cleant() {
     rm -rfv "${HOME}/Trash/"*
 }
 
 # show amount of directories specified
-showdirs () {
+showdirs() {
+
+    if [ -z $1 ];
+    then
+        dirs +0
+        return
+    fi
+
     local mydir=$(dirs +0)
   
     local dir_num=$(echo $mydir | grep -o '/' | wc -l )
     local dir_len=${#mydir}
 
-    if [ $dir_num -gt 3 ]; then
+    if [ $dir_num -gt $1 ]; then
         local count=0 
         local num=$1
         local path=""
@@ -185,14 +182,6 @@ if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
 fi
 
 bind '"\e[Z":menu-complete'
-# setting athame for advanced vim mode 
-
-# set editing-mode vi
-# set -o vi
-
-export TERM="xterm-256color"
-
-# bind 'set show-mode-in-prompt on'
 
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
