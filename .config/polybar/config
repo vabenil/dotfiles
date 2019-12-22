@@ -134,7 +134,7 @@ format-prefix-foreground = ${colors.foreground-alt}
 ; format-prefix-underline = ${colors.secondary}
 ; format-margin-right = 1
 
-label-layout = %{A1:~/scripts/switch-layout.py:}%layout%%{A}
+label-layout = %{A1:~/scripts/switch-keyboard-layout.py:}%layout%%{A}
 ; label-layout-underline = ${colors.secondary}
 
 label-indicator-padding = 0
@@ -152,16 +152,26 @@ wrapping-scroll = false
 ; Only show workspaces on the same output as the bar
 ; pin-workspaces = true
 
+; Where I manage my downloads
 ws-icon-0 = 10;
+; Workspace without a special purpose
 ws-icon-1 = 1;
+; Where I search for material to view, download or waste time, also where I read documentation online
 ws-icon-2 = 2;
+; Where I actually get work done
 ws-icon-3 = 3;
+; Where I watch movies and hear to music
 ws-icon-4 = 4;
+; Where I play video games and waste time
 ws-icon-5 = 5;
+; Photo editing, Video editing or anything art related
 ws-icon-6 = 6;
+; Where I manage my mails
 ws-icon-7 = 7;
+; Where I manage my tasks
 ws-icon-8 = 8;
-ws-icon-9 = 9;
+; Where I read books or hear audio-books
+ws-icon-9 = 9;
 
 label-mode-padding = 2
 label-mode-foreground = ${colors.white}
@@ -196,25 +206,15 @@ label-urgent-padding = 2
 ; Separator in between workspaces
 ; label-separator = |
 
-[module/layout]
-type = custom/script
-exec = ~/scripts/layout.py 
-interval = 0.3
-; format-background = ${colors.primary}
-; format-foreground = ${colors.yellow}
-format-padding = 1
-format-margin = 0
-
-label = %output%
-; label-font = 5
-
 
 [module/todo]
 interval = 10
 type = custom/script
 exec = ~/scripts/show_todo.sh
-label = %output% 
+label = %output% 
 format = <label>
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
 format-margin = 2
 click-left = "kill -USR1 $(pgrep --oldest --parent %pid%)"
 label-font = 3
@@ -288,10 +288,8 @@ time = "%I:%M:%S %p"
 label =  %date% at %{T4}%time%%{T-}
 ; label-font = 4
 
-; Show the time sincronized with the real time
 [module/date-tail]
 type = custom/script
-; Change to whatever format you prefer
 exec = ~/scripts/show-date.sh "+%b %d of %Y at %I:%M:%S %p"
 interval = 30
 tail = true
