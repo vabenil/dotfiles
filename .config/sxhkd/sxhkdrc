@@ -1,15 +1,15 @@
 # vim: ft=sxhkdrc
 
 
-# Change focus: {{{
+# Focus window: {{{
 super + {h,j,k,l}
-   i3-smart-focus {left,down,up,right}
+   i3-smart-focus --target {left,down,up,right}
 
 super + {Left,Down,Up,Right}
-   i3-smart-focus {left,down,up,right}
+   i3-smart-focus --target {left,down,up,right}
 
 super + {a,i,space}
-    i3-smart-focus {parent,child,float}
+    i3-msg "focus {parent,child,mode_toggle}"
 
 super + o
     i3-focus-last --switch
@@ -20,7 +20,7 @@ alt + shift + Tab
     focus-next-visible reverse
 
 super + f
-    i3-easyfocus --color-unfocused-fg FFFFFF -f -misc-fixed-medium-r-normal--20-140-100-100-c-100-iso8859-1 
+    i3-easyfocus -k alpha --color-unfocused-fg FFFFFF -f -misc-hermit-bold-r-normal--0-0-0-0-m-0-iso10646-1
 # }}}
 
 # Move to workspace: {{{
@@ -53,7 +53,7 @@ super + shift + space
     i3-msg floating toggle 
 
 super + shift + s ; f
-    i3-easyfocus --color-unfocused-fg FFFFFF -f -misc-fixed-medium-r-normal--20-140-100-100-c-100-iso8859-1 -w | xargs -I \{\} i3-msg "swap container with id \{\}"
+    i3-easyfocus -k alpha --color-unfocused-fg FFFFFF -f -misc-fixed-medium-r-normal--20-140-100-100-c-100-iso8859-1 -w | xargs -I \{\} i3-msg "swap container with id \{\}"
 
 super + shift + s ; apostrophe ; {0-9,a-z,A-Z}
     i3-msg "swap container with mark {0-9,a-z,A-Z}"
@@ -93,10 +93,10 @@ super + shift + r
     i3-msg restart
 
 super + shift + x 
-    st -n 'float' -t 'Shutdown' -g 90x1 -e sudo shutdown now
+    ${TERMINAL} -n 'float' -t 'Shutdown' -g 90x1 -e sudo shutdown now
 
 super + shift + z 
-    st -n 'float' -t 'Reboot' -g 90x1 -e sudo reboot
+    ${TERMINAL} -n 'float' -t 'Reboot' -g 90x1 -e sudo reboot
 
 super + shift + e
     prompt "Log out?" "i3-msg exit"
@@ -156,20 +156,24 @@ super + shift + c
 super + c ; f
     i3-easyfocus -i | xargs -I \{\} i3-msg [con_id=\{\}] move scratchpad
 
+super + c ; n
+    i3-smart-focus --scratchpad-next --no-save
+
 super + n
-    i3-smart-focus --scratchpad-next
+    i3-smart-focus --scratchpad-next --no-save
 
 
-super + asterisk
-    i3-msg 'scratchpad show'
-super + shift + n
-    i3-msg 'scratchpad show'
+# super + asterisk
+#     i3-msg 'scratchpad show'
  
+super + ampersand
+    i3-msg 'scratchpad show'
+
 super + semicolon
     i3-smart-focus --repeat-last
 
 super + colon
-    i3-smart-focus --instance "floating_term"
+    i3-smart-focus --class "floating_term" --no-save
 # }}}
 
 # Marks: {{{
@@ -181,8 +185,8 @@ super + apostrophe ; {1-9,a-z,A-Z}
 # }}}
 
 # Change keyboard layout: {{{
-super + control + m ; {e,r,s} 
-    setxkbmap {us,ru phonetic,es}
+super + control + m ; {e,r,l} 
+    setxkbmap {us,ru phonetic,lv}
 
 super + Tab
     ${HOME}/scripts/switch-keyboard-layout.py
@@ -198,28 +202,28 @@ super + Escape
 super + exclam ; b
     vimb
 super + exclam ; c
-    st -n 'calculator_term' -e bc -l
+    ${TERMINAL} -n 'calculator_term' -e bc -l
 super + exclam ; e
-    st -n float -e vifm
+    ${TERMINAL} -n float -e vifm
 super + exclam ; f
     firefox
 super + exclam ; g
     gpick
 super + exclam ; h
-    st -e htop
+    ${TERMINAL} -e htop
 super + exclam ; l
     lutris
 super + exclam ; m
-    st -c cmus
+    ${TERMINAL} -c cmus
 super + exclam ; n
-    st -e nvim
+    ${TERMINAL} -e nvim
 
 super + exclam ; s
     steam
 super + exclam ; u
-    st -n 'update_term' -e bash -c 'sudo apt update -y && sudo apt upgrade -y'
+    ${TERMINAL} -n 'update_term' -e bash -c 'sudo apt update -y && sudo apt upgrade -y'
 super + exclam ; v
-    st -e vim
+    ${TERMINAL} -e vim
 super + exclam ; w
     wicd-client
 super + exclam ; z
@@ -229,41 +233,39 @@ super + exclam ; z
 super + exclam ; control + b
     vimb --name=float
 super + exclam ; control + c
-    st -n 'calculator_term' -e bc -l
+    ${TERMINAL} -n 'calculator_term' -e bc -l
 super + exclam ; control + e
-    st -n float -e vifm
+    ${TERMINAL} -n float -e vifm
 super + exclam ; control + h
-    st -n float -e htop
+    ${TERMINAL} -n float -e htop
 super + exclam ; control + l
     lutris --name=float
 super + exclam ; control + m
-    st -n float -e cmus
+    ${TERMINAL} -n float -e cmus
 super + exclam ; control + n
-    st -n float -e nvim
+    ${TERMINAL} -n float -e nvim
 super + exclam ; control + v
-    st -n float -e vim
+    ${TERMINAL} -n float -e vim
+super + exclam ; control + t
+    ${TERMINAL} -c floating_term
 
 # Tabbed + program
 super + exclam ; t ; b
      tabbed -c vimb -e
 
 super + exclam ; t ; t
-     tabbed -f -r 2 st -w ''
+     tabbed -f -r 2 ${TERMINAL} -w ''
 
 # Floating + tabbed
 super + exclam ; t ; control + b
      tabbed -c -n float vimb -e
 
 super + exclam ; t ; control + t
-     tabbed -f -r 2 -n float st -w ''
+     tabbed -f -r 2 -n float ${TERMINAL} -w ''
 
 super + exclam ; t ; control + z
     tabbed -n float -c zathura -e 
 # }}}
-
-# Show title in polybar
-super + ampersand
-    show-title
 
 super g ; c
     i3-container-commander
@@ -276,7 +278,7 @@ super + Return
     i3-smart-open
 
 super + control + Return
-    st -n float
+    ${TERMINAL} -n float
 
 super + F5
     ${HOME}/scripts/change-background.py ~/Pictures/wallpapers
