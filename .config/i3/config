@@ -1,6 +1,5 @@
 # Variables:  {{{
 set $mod Mod4
-set $tabbed_term tabbed -f -n "floating_term" -r 2 st -w ''
 
 set $backgr #1F1F1F
 set $focusd #4F6364
@@ -85,12 +84,12 @@ for_window   [instance="calculator_term"]   floating     enable,   border   none
 for_window   [class="XClipboard"]          floating   enable,   move     position   center,   border   none
 for_window   [class="mpv"]                 floating   enable,   resize   set        700       600,     move     position   center,   border   none
 for_window   [class="Xfce4-taskmanager"]   floating   enable,   resize   set        500       400,     border   none
-for_window   [instance="floating_term"]    floating   enable,   resize   set        600       400,     border   none
+for_window   [class="floating_term"]    floating   enable,   resize   set        600       400,     border   none
 
 # Scratchpad windows
 for_window   [class="XClipboard"]         move      scratchpad,   move   position   center
 for_window   [instance="mus_term"]        move      scratchpad,   mark   --add      m
-for_window   [instance="floating_term"]   move      scratchpad
+for_window   [class="floating_term"]      move      scratchpad
 
 # }}}
 
@@ -100,6 +99,7 @@ assign [class="Thunderbird"] 6
 assign [class="Lutris"] 5
 assign [class="Steam"] 5
 assign [class="Transmission-gtk"] 10
+assign [instance="ws-1"] 1
 assign [instance="ws-2"] 2
 assign [instance="ws-3"] 3
 assign [instance="ws-4"] 4
@@ -109,8 +109,9 @@ assign [instance="ws-7"] 7
 assign [instance="ws-8"] 8
 assign [instance="ws-9"] 9
 assign [instance="ws-10"] 10
-assign [class="Navigator"] 2
-assign [class="Firefox"] 2
+# assign [class="Navigator"] 4
+# assign [class="Firefox"] 4
+assign [window_role="browser"] 2
 # }}}
 # }}}
 
@@ -121,7 +122,7 @@ exec --no-startup-id compton
 # exec --no-startup-id sleep 1 && flashfocus -t 130
 
 exec --no-startup-id st -n 'mus_term' -e 'cmus' 
-exec --no-startup-id exec $tabbed_term 
+exec --no-startup-id st -c "floating_term"
 exec --no-startup-id light -N 5
 exec --no-startup-id light -S 10
 exec --no-startup-id pactl --set-sink-volume 0 20%
@@ -130,7 +131,6 @@ exec --no-startup-id xclipboard
 exec --no-startup-id dunst
 exec --no-startup-id st -n ws-3
 exec --no-startup-id st -n ws-8 -e bash -c "task next && bash"
-exec --no-startup-id st -e bash -c "sudo apt update && bash"
 # exec --no-startup-id sxhkd 
 exec --no-startup-id i3-focus-last
 # Clock tick sound
