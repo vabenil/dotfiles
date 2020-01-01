@@ -139,7 +139,6 @@ Plug 'morhetz/gruvbox'
 Plug 'jnurmine/Zenburn'
 Plug 'sainnhe/vim-color-forest-night'
 Plug 'joshdick/onedark.vim'
-Plug 'sainnhe/vim-color-desert-night'
 " Plug 'sonph/onehalf'
 " }}}
 
@@ -152,7 +151,10 @@ Plug 'PotatoesMaster/i3-vim-syntax'
 " Text objects: {{{
 Plug 'b4winckler/vim-angry'
 Plug 'michaeljsmith/vim-indent-object'
-" Plug 'kana/vim-textobj-user'
+
+Plug 'kana/vim-textobj-user'
+" Plug 'kana/vim-textobj-indent'
+Plug 'Julian/vim-textobj-variable-segment'
 " Plug 'rbonvall/vim-textobj-latex'
 " }}}
 
@@ -164,12 +166,13 @@ Plug 'tomtom/tlib_vim'
 " Autocompletion: {{{
 " Plug 'Rip-Rip/clang_complete'
 " Plug 'ternjs/tern_for_vim', {'do': 'npm install'}
-Plug 'dense-analysis/ale'
+" Plug 'dense-analysis/ale'
 " }}}
 
 " Others: {{{
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-surround'
+Plug 'machakann/vim-sandwich'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tpope/vim-commentary' 
 Plug 'skywind3000/asyncrun.vim'
@@ -186,6 +189,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'haya14busa/incsearch.vim'
 " }}}
 call plug#end()
+runtime macros/sandwich/keymap/surround.vim
 filetype plugin on
 " }}}
 
@@ -235,11 +239,11 @@ function! Run()
         let l:prog = system("sed -n 's/\\(\\(TARGET\\)\\|\\(NAME\\)\\|\\(PROG\\)\\)\\s\\?:\\?=\\s\\?\\(.*\\)/\\5/p' ".(l:file)) 
         echo l:prog
         let g:asyncrun_open = 10
-        exec "AsyncRun ".l:current_dir."/".(l:prog)
+        exec "AsyncRun! ".l:current_dir."/".(l:prog)
     else
-        echo "Not even bothering to search"
+        echo "No Makefile found"
         let g:asyncrun_open = 10
-        exec "AsyncRun ".l:current_dir."/".(g:built_binary)
+        exec "AsyncRun! ".l:current_dir."/".(g:built_binary)
     endif
 endfunction
 
@@ -447,7 +451,13 @@ set completeopt=menu
 let g:ale_set_signs = 1
 let g:ale_cpp_ccls_init_options = {
 \   'cache': {
-\       'directory': '/tmp/ccls/cache'
+\       'directory': '/tmp/ccls-cache'
+\   }
+\ }
+
+let g:ale_c_ccls_init_options = {
+\   'cache': {
+\       'directory': '/tmp/ccls-cache'
 \   }
 \ }
 
@@ -612,6 +622,7 @@ noremap <space>r :call RunAsync(input('$ '))<cr>
 noremap <space>R :call RunLastCommand(0)<cr>
 
 noremap <space>f :NERDTreeToggle<cr>
+noremap <space>gf :NERDTreeFocus<cr>
 " }}}
 
 " Easymotion: {{{
