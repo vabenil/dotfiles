@@ -127,6 +127,8 @@ let g:indentLine_char = '▏'
 let g:indentLine_fileTypeExclude = ['markdown', 'json', 'tex']
 
 let g:c_no_curly_error = 1
+
+" let g:ale_completion_enabled = 1
 " }}}
 " }}}
 
@@ -166,7 +168,7 @@ Plug 'tomtom/tlib_vim'
 " Autocompletion: {{{
 " Plug 'Rip-Rip/clang_complete'
 " Plug 'ternjs/tern_for_vim', {'do': 'npm install'}
-" Plug 'dense-analysis/ale'
+Plug 'dense-analysis/ale'
 " }}}
 
 " Others: {{{
@@ -461,6 +463,11 @@ let g:ale_c_ccls_init_options = {
 \   }
 \ }
 
+let g:ale_python_pycodestyle_executable =
+\   get(g:, 'ale_python_pycodestyle_executable', 'pycodestyle')
+
+" set omnifunc=ale#completion#OmniFunc
+
 " let g:clang_library_path = '/usr/lib/x86_64-linux-gnu/libclang-7.so'
 " let g:clang_use_library = 1
 " let g:clang_snippets = 1
@@ -693,7 +700,8 @@ au BufEnter *
                 \ q |
             \ endif
 
-autocmd BufEnter * set omnifunc=ale#completion#OmniFunc
+autocmd BufEnter *.c,*.h set omnifunc=ale#completion#OmniFunc
+" autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 autocmd ColorScheme * call SetStatusline()
 
@@ -895,7 +903,7 @@ let g:colorschemes = [
 
 let g:colo_config = {
             \ 'forest-night': {'nobg': 1},
-            \ 'tender': {'nobg': 0, 'visual': 273}
+            \ 'tender': {'nobg': 0, 'visual': 238}
 \}
 call ChangeColo('tender', 0)
 call matchadd('ColorColumn', '\%81v', 100)
