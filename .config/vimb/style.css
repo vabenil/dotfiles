@@ -1,0 +1,102 @@
+:root {
+    --color-dark-grey: #1C1C1C;
+    --color-grey: #787373;
+    --color-light-grey: #ADADAD;
+    --color-white: #CFCFCF
+}
+
+body {
+    background-color: var(--color-dark-grey) !important;
+    color: var(--color-grey)
+}
+
+div {
+    color: var(--color-white)
+}
+
+p {
+    color: var(--color-white)
+}
+
+td {
+    color: var(--color-white) !important
+}
+
+table {
+    background-color: var(--color-dark-grey) !important;
+    color: var(--color-grey) !important
+}
+
+h1 {
+    color: var(--color-white) !important
+}
+
+h3 {
+    color: var(--color-light-grey) !important
+}
+
+/* a:link { */
+/*     color: #8B1379 !important */
+/* } */
+
+a {
+    background-color: inherit !important
+}
+
+a:link {
+    color: #138B25 !important
+}
+
+/* <duckduckgo.com> */
+a.result__a {
+    color: var(--color-white) !important
+}
+
+a.zcm__link {
+    color: var(--color-white) !important
+}
+
+a.header__button--menu {
+    color: var(--color-white) !important
+}
+
+a.dropdown__button {
+    color: var(--color-white) !important
+}
+
+a.link-gray-dark {
+    color: var(--color-grey) !important
+}
+
+div.result {
+    color: var(--color-white) !important
+}
+
+a.dropdown__button {
+    color: var(--color-white) !important
+}
+/* </duckduckgo.com> */
+
+/* <wikitionary> */
+span.mw-headline {
+    color: var(--color-white) !important
+}
+/* </wikitionary> */
+
+/* <wikipedia> */
+div#mw-head {
+    background-color: var(--color-dark-grey) !important;
+}
+
+div#content {
+    background-color: var(--color-dark-grey) !important;
+}
+
+div.mw-body {
+    background-color: var(--color-dark-grey) !important;
+}
+/* </wikipedia> */
+
+p.intro-text {
+    color: var(--color-light-grey) !important
+}
