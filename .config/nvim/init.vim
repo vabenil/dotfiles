@@ -237,11 +237,9 @@ function! Run()
     let l:current_dir = getcwd()
     let l:file = l:current_dir."/Makefile"
     if filereadable(l:file)
-        echo "Searching for executable"
         let l:prog = system("sed -n 's/\\(\\(TARGET\\)\\|\\(NAME\\)\\|\\(PROG\\)\\)\\s\\?:\\?=\\s\\?\\(.*\\)/\\5/p' ".(l:file)) 
-        echo l:prog
         let g:asyncrun_open = 10
-        exec "AsyncRun! ".l:current_dir."/".(l:prog)
+        exec "AsyncRun ".l:current_dir."/".(l:prog)
     else
         echo "No Makefile found"
         let g:asyncrun_open = 10
@@ -738,6 +736,9 @@ autocmd BufNewFile *.html,*.htm,*.php call MakeHTML()
 autocmd Filetype php,html,htm 
             \ UltiSnipsAddFiletypes php.html |
             \ call LoadHTMLConfig()
+
+autocmd Filetype python
+            \ nnoremap <leader><cr> :AsyncRun -mode=term %:p<Cr>
 
 au BufEnter *\.task/notes*.txt set ft=markdown
 

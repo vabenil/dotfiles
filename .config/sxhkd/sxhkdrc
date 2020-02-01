@@ -119,9 +119,11 @@ super + control + t
 
 # ScreenShots: {{{
 super + Insert
-    scrot -q 100 -e 'mv $f ~/Pictures/ScreenShots/$f && notify-send "ScreenShot saved in ~/Pictures/ScreenShots/$f"'
+    scrot -q 100 -e 'mv $f ~/Pictures/Screenshots/$f && notify-send "Screenshot saved in ~/Pictures/Screenshots/$f"'
 super + shift + Insert 
-    scrot -q 100 -u -e 'mv $f ~/Pictures/ScreenShots/$f && notify-send "ScreenShot saved in ~/Pictures/ScreenShots/$f"'
+    scrot -q 100 -u -e 'mv $f ~/Pictures/Screenshots/$f && notify-send "Screenshot saved in ~/Pictures/Screenshots/$f"'
+super + control + Insert 
+    scrot -q 100 -s -e 'mv $f ~/Pictures/Screenshots/$f && notify-send "Screenshot saved in ~/Pictures/Screenshots/$f"'
 # }}}
 
 # dmenu: {{{
@@ -167,6 +169,9 @@ super + n
 #     i3-msg 'scratchpad show'
  
 super + ampersand
+    i3-msg 'scratchpad show'
+
+super + period
     i3-msg 'scratchpad show'
 
 super + semicolon
@@ -275,10 +280,13 @@ super + shift + f
     i3-msg fullscreen toggle
 
 super + Return
-    i3-smart-open
+    ${TERMINAL}
 
 super + control + Return
     ${TERMINAL} -n float
+
+super + shift + Return
+    ${TERMINAL} -c floating_term
 
 super + F5
     ${HOME}/scripts/change-background.py ~/Pictures/wallpapers

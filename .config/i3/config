@@ -39,7 +39,7 @@ hide_edge_borders horizontal
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-default_border pixel 1
+default_border pixel 0
 default_floating_border pixel 0
 # }}}
 
@@ -59,7 +59,7 @@ default_floating_border pixel 0
 # DO NOT DELETE THIS LINE
 bindsym $mod+Control+b bar mode toggle
 
-bindsym $mod+Shift+Return exec setxkbmap us
+# bindsym $mod+Shift+Return exec setxkbmap us
 bindsym $mod+Escape exec setxkbmap us
 # }}}1
 
