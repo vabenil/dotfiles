@@ -10,6 +10,8 @@ alias nvimrc="vim ~/.config/nvim/init.vim"
 alias bashrc="vim ~/.bashrc"
 alias i3conf="vim ~/.config/i3/config"
 
+alias todo="clear && cal && task next"
+
 alias dict="sdcv"
 alias ru-en-dict="sdcv -u Full\ Russian-English" 
 alias en-ru-dict="sdcv -u Full\ English-Russian" 
