@@ -146,6 +146,7 @@ Plug 'joshdick/onedark.vim'
 
 " Syntax highlighting: {{{
 Plug 'sheerun/vim-polyglot'
+" Plug 'justinmk/vim-syntax-extra'
 Plug 'PotatoesMaster/i3-vim-syntax'
 " Plug 'mh21/errormarker.vim'
 " }}}
@@ -179,8 +180,8 @@ Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tpope/vim-commentary' 
 Plug 'skywind3000/asyncrun.vim'
 Plug 'Houl/repmo-vim'
-Plug 'SirVer/ultisnips'
-" Plug 'godlygeek/tabular'
+" Plug 'SirVer/ultisnips'
+Plug 'godlygeek/tabular'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'yssl/QFEnter'
@@ -199,6 +200,7 @@ filetype plugin on
 " C: {{{
 function! CConfig()
     set formatprg=astyle\ -T4pb
+    set foldmethod=syntax
     nnoremap <silent> <leader>b :call Build()<cr>
     nnoremap <silent> <leader><cr> :call Run()<cr>
     nnoremap <silent> <leader>d :call AddFuncDef()<cr>
@@ -379,20 +381,9 @@ endfunction
 let g:last_command = ''
 function! RunAsync(command)
     if len(a:command) > 0
-        if a:command == '!!'
-            call RunLastCommand(0)
-        else
-            let g:asyncrun_open = 8
-            let g:last_command = a:command
-            exec "AsyncRun ".(a:command)
-        endif
-    endif
-endfunction
-
-function! RunLastCommand(n)
-    if exists("g:last_command")
         let g:asyncrun_open = 8
-        exec "AsyncRun ".(g:last_command)
+        let g:last_command = a:command
+        exec "AsyncRun ".(a:command)
     endif
 endfunction
 
@@ -578,12 +569,6 @@ noremap  <A-p> :cp<cr>
 
 " Plugins: {{{
 " Repmo for repeating movement commands: {{{
-" noremap <expr> h repmo#SelfKey('h', 'l')|sunmap h
-" noremap <expr> l repmo#SelfKey('l', 'h')|sunmap l
-
-" noremap <expr> j repmo#SelfKey('j', 'k')|sunmap j
-" noremap <expr> k repmo#SelfKey('k', 'j')|sunmap k
-
 noremap <expr> w repmo#SelfKey('w', 'b')|sunmap w
 noremap <expr> b repmo#SelfKey('b', 'w')|sunmap b
 
@@ -624,7 +609,6 @@ nnoremap <leader>f :QO<cr>:AsyncRun -strip grep -r --include "*.%:e" -Hn <cword>
 nnoremap <leader>af :QO<cr>:AsyncRun -strip grep -r --include "*" -IHn <cword> .<cr>
 nnoremap <leader>F :QO<cr>:AsyncRun -strip grep -r --include "*" -IHn  .<left><left>
 noremap <space>r :call RunAsync(input('$ '))<cr>
-noremap <space>R :call RunLastCommand(0)<cr>
 
 noremap <space>f :NERDTreeToggle<cr>
 noremap <space>gf :NERDTreeFocus<cr>
@@ -714,14 +698,12 @@ autocmd BufRead,BufNewFile *.h,*.c set filetype=c
 
 autocmd BufWritePost *.tex AsyncRun pdflatex %
 " autocmd BufWritePost *.js call BReload()
-" autocmd BufWritePost *.h,*.c call SyntaxCheck()
 
 autocmd Filetype c,cpp
             \ call CConfig() | 
             \ setl formatexpr=LanguageClient#textDocument_rangeFormatting() |
-            \ set textwidth=80 | 
-            \ UltiSnipsAddFiletypes cpp.c |
-            \ nnoremap <leader>s :call SyntaxCheck()<cr> 
+            \ set textwidth=80
+            " \ UltiSnipsAddFiletypes cpp.c |
 
 autocmd FileType javascript
             \ call MapJSShortcuts() |
@@ -738,7 +720,8 @@ autocmd Filetype php,html,htm
             \ call LoadHTMLConfig()
 
 autocmd Filetype python
-            \ nnoremap <leader><cr> :AsyncRun -mode=term %:p<Cr>
+            \ let g:asyncrun_open = 10 | 
+            \ nnoremap <leader><cr> :AsyncRun -raw python %:p<Cr>
 
 au BufEnter *\.task/notes*.txt set ft=markdown
 
@@ -906,7 +889,7 @@ let g:colo_config = {
             \ 'forest-night': {'nobg': 1},
             \ 'tender': {'nobg': 0, 'visual': 238}
 \}
-call ChangeColo('tender', 0)
+call ChangeColo('forest-night', 0)
 call matchadd('ColorColumn', '\%81v', 100)
 " In case the colorscheme doesn't highlight it
 highlight ColorColumn ctermbg=magenta
