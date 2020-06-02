@@ -9,7 +9,7 @@ set nocompatible
 
 set undofile
 set undodir=${HOME}/.vim/undo
-set undolevels=70
+set undolevels=80
 set undoreload=100
 set viminfo='200,<200,s100,h
 
@@ -132,6 +132,38 @@ let g:c_no_curly_error = 1
 " }}}
 " }}}
 
+" Autocompletion: {{{
+set completeopt=menu
+
+let g:ale_set_signs = 1
+let g:ale_cpp_ccls_init_options = {
+\   'cache': {
+\       'directory': '/tmp/ccls/cache'
+\   }
+\ }
+
+let g:ale_c_ccls_init_options = {
+\   'cache': {
+\       'directory': '/tmp/ccls/cache'
+\   }
+\ }
+
+" let b:ale_c_ccls_init_options = {
+" \   'cacheDirectory': '/tmp/ccls',
+" \   'cacheFormat': 'binary',
+" \ }
+
+let g:ale_python_pycodestyle_executable =
+\   get(g:, 'ale_python_pycodestyle_executable', 'pycodestyle')
+
+" set omnifunc=ale#completion#OmniFunc
+
+" let g:clang_library_path = '/usr/lib/x86_64-linux-gnu/libclang-7.so'
+" let g:clang_use_library = 1
+" let g:clang_snippets = 1
+" let g:clang_snippets_engine = 'clang_complete'
+" }}}
+
 " Plugin manager: {{{
 filetype off
 call plug#begin('~/.vim/bundle')
@@ -169,7 +201,7 @@ Plug 'tomtom/tlib_vim'
 " Autocompletion: {{{
 " Plug 'Rip-Rip/clang_complete'
 " Plug 'ternjs/tern_for_vim', {'do': 'npm install'}
-Plug 'dense-analysis/ale'
+" Plug 'dense-analysis/ale'
 " }}}
 
 " Others: {{{
@@ -190,6 +222,7 @@ Plug 'captbaritone/better-indent-support-for-php-with-html'
 Plug 'scrooloose/nerdtree'
 Plug 'Yggdroot/indentLine'
 Plug 'haya14busa/incsearch.vim'
+Plug 'junegunn/goyo.vim'
 " }}}
 call plug#end()
 runtime macros/sandwich/keymap/surround.vim
@@ -200,7 +233,7 @@ filetype plugin on
 " C: {{{
 function! CConfig()
     set formatprg=astyle\ -T4pb
-    set foldmethod=syntax
+    " set foldmethod=syntax
     nnoremap <silent> <leader>b :call Build()<cr>
     nnoremap <silent> <leader><cr> :call Run()<cr>
     nnoremap <silent> <leader>d :call AddFuncDef()<cr>
@@ -436,33 +469,6 @@ function! RelativeToLine(from)
 endfunction
 " }}}
 
-" Autocompletion: {{{
-set completeopt=menu
-
-let g:ale_set_signs = 1
-let g:ale_cpp_ccls_init_options = {
-\   'cache': {
-\       'directory': '/tmp/ccls-cache'
-\   }
-\ }
-
-let g:ale_c_ccls_init_options = {
-\   'cache': {
-\       'directory': '/tmp/ccls-cache'
-\   }
-\ }
-
-let g:ale_python_pycodestyle_executable =
-\   get(g:, 'ale_python_pycodestyle_executable', 'pycodestyle')
-
-" set omnifunc=ale#completion#OmniFunc
-
-" let g:clang_library_path = '/usr/lib/x86_64-linux-gnu/libclang-7.so'
-" let g:clang_use_library = 1
-" let g:clang_snippets = 1
-" let g:clang_snippets_engine = 'clang_complete'
-" }}}
-
 " Key mappings: {{{
 " Command line commands: {{{
 command! -nargs=* A AsyncRun <args>
@@ -520,10 +526,10 @@ noremap <silent> g= :exe "vertical resize +2"<cr>
 " }}}
 
 " Moving between splits: {{{
-noremap  <A-j> <C-w>j
-noremap  <A-k> <C-w>k
-noremap  <A-h> <C-w>h
-noremap  <A-l> <C-w>l
+noremap  <space>j <C-w>j
+noremap  <space>k <C-w>k
+noremap  <space>h <C-w>h
+noremap  <space>l <C-w>l
 noremap  <A-t> <esc>gt
 " }}}
 
@@ -633,9 +639,6 @@ nnoremap <leader>e "=<C-r>"<cr>p
 
 nnoremap <space>w :w<cr>
 nnoremap <space>Q :q!<cr>
-
-noremap <silent> <space>l i <ESC>l
-noremap <silent> <space>h a <ESC>h
 
 noremap <silent> <space>no :noh<cr>
 
@@ -890,6 +893,7 @@ let g:colo_config = {
             \ 'tender': {'nobg': 0, 'visual': 238}
 \}
 call ChangeColo('forest-night', 0)
+" call ChangeColo('tender', 0)
 call matchadd('ColorColumn', '\%81v', 100)
 " In case the colorscheme doesn't highlight it
 highlight ColorColumn ctermbg=magenta

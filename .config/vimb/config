@@ -17,13 +17,19 @@ nnoremap 8gT :sh! xdotool key --window $VIMB_XID ctrl+8<CR><Esc>
 nnoremap 9gt :sh! xdotool key --window $VIMB_XID ctrl+9<CR><Esc>
 nnoremap 10gT :sh! xdotool key --window $VIMB_XID ctrl+10<CR><Esc>
 nnoremap M :sh! mpv <C-R>%<CR>
+nnoremap ss :set stylesheet!|no! R<CR>
 nnoremap ZZ :q<CR>
 nnoremap i <C-Z>
-set download-path=/home/vabenil/Downloads
+
+set stylesheet=false
+
 set home-page=https://duckduckgo.com
+set download-path=/home/vabenil/Downloads
+
 set history-max-items=200
 set input-autohide=true
 set x-hint-command=:sh! mpv <C-R>;<CR>
+
 shortcut-default dd
 shortcut-add dd=https://duckduckgo.com/?q=$0
 shortcut-add yt=https://www.youtube.com/results?search_query=$0
