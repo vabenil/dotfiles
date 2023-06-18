@@ -4,7 +4,10 @@ set $mod Mod4
 set $backgr #1F1F1F
 set $focusd #4F6364
 
+# Terminal emulator
+set $term st
 
+# Workspace names
 set $ws-1  1
 set $ws-2  2
 set $ws-3  3
@@ -15,8 +18,8 @@ set $ws-7  7
 set $ws-8  8
 set $ws-9  9
 set $ws-10 10
+# }}} Variables
 
-# }}} 
 
 # Scheme: {{{
 #class                    border    backgr    text      indicator   child_border
@@ -27,12 +30,13 @@ client.urgent             #454554   #900000   #ffffff   #2f343a   #900000
 client.placeholder        #454554   #0c0c0c   #ffffff   #000000   #0c0c0c
 
 client.background         #ffffff
-# }}}
 
-# Set properties: {{{ 
-# font
+# Font
 font pango:Hermit, Regular 8
+# }}} Scheme
 
+
+# Properties {{{ 
 # title_align center
 hide_edge_borders horizontal
 
@@ -41,64 +45,56 @@ floating_modifier $mod
 
 default_border pixel 0
 default_floating_border pixel 0
-# }}}
+# }}} Properties
 
-# gaps: {{{
-# Set default gap
-# gaps inner 5
-# gaps outer 10
 
-# smart_gaps inverse_outer
-# bindsym $mod+plus gaps inner current plus 5
-# bindsym $mod+minus gaps inner current minus 5
-# bindsym $mod+Shift+plus gaps inner current set 0, gaps outer current set 0
-
-# }}}
-
-# Key Bindings: {{{1
-# DO NOT DELETE THIS LINE
+# Keybindings: {{{
+# DO NOT DELETE THIS LINE IT BREAKS I3
 bindsym $mod+Control+b bar mode toggle
 
 # bindsym $mod+Shift+Return exec setxkbmap us
 bindsym $mod+Escape exec setxkbmap us
-# }}}1
-
-# Defaults: {{{
-# Floating windows: {{{
-for_window   [instance="st_buffer"]         fullscreen   toggle
-
-for_window   [class="vlc"]                  floating     enable,   border   none
-for_window   [class="Pavucontrol"]          floating     enable,   border   none
-for_window   [class="Rhythmbox"]            floating     enable,   border   none
-for_window   [class="MEGAsync"]             floating     enable,   border   none
-for_window   [class="Gufw.py"]              floating     enable,   border   none
-for_window   [class="Wicd-client.py"]       floating     enable,   border   none
-for_window   [class="Gpick"]                floating     enable,   border   none
-for_window   [title="htop"]                 floating     enable,   border   none
-for_window   [instance="mus_term"]          floating     enable,   border   none
-for_window   [instance="update_term"]       floating     enable,   border   none
-for_window   [instance="float"]             floating     enable,   border   none
-for_window   [instance="calculator_term"]   floating     enable,   border   none
+# }}} Keybindings
 
 
-for_window   [class="XClipboard"]          floating   enable,   move     position   center,   border   none
-for_window   [class="mpv"]                 floating   enable,   resize   set        700       600,     move     position   center,   border   none
-for_window   [class="Xfce4-taskmanager"]   floating   enable,   resize   set        500       400,     border   none
-for_window   [class="floating_term"]    floating   enable,   resize   set        600       400,     border   none
+# Window rules: {{{
+for_window [instance="st_buffer"] fullscreen toggle
+
+for_window [class="vlc"] floating enable, border none
+for_window [class="Pavucontrol"] floating enable, border none
+for_window [class="Rhythmbox"] floating enable, border none
+for_window [class="MEGAsync"] floating enable, border none
+for_window [class="Gufw.py"] floating enable, border none
+for_window [class="Wicd-client.py"] floating enable, border none
+for_window [class="Gpick"] floating enable, border none
+for_window [title="htop"] floating enable, border none
+for_window [instance="mus_term"] floating enable, border none
+for_window [instance="update_term"] floating enable, border none
+for_window [instance="float"] floating enable, border none
+for_window [instance="calculator_term"] floating enable, border none
+
+
+for_window [class="XClipboard"] floating enable, move position center, border none
+for_window [class="mpv"] floating enable, resize set 700 600, move position center, border none
+for_window [class="Xfce4-taskmanager"] floating enable, resize set 500 400, border none
+for_window [class="floating_term"] floating enable, resize set 600 400, border none
 
 # Scratchpad windows
-for_window   [class="XClipboard"]         move      scratchpad,   move   position   center
-for_window   [instance="mus_term"]        move      scratchpad,   mark   --add      m
-for_window   [class="floating_term"]      move      scratchpad
+for_window [class="XClipboard"] move scratchpad, move position center
+for_window [instance="mus_term"] move scratchpad, mark --add m
+for_window [class="floating_term"] move scratchpad
+for_window [window_role="GtkFileChooserDialog"] floating enable, move position center, resize set 600 400
+# }}} Window Rules
 
-# }}}
 
-# Workspaces for windows: {{{
+# Workspaces: {{{
+# Default workspace for windows
 assign [class="package"] 9
 assign [class="Thunderbird"] 6
 assign [class="Lutris"] 5
 assign [class="Steam"] 5
 assign [class="Transmission-gtk"] 10
+assign [instance="libreoffice"] 9
 assign [instance="ws-1"] 1
 assign [instance="ws-2"] 2
 assign [instance="ws-3"] 3
@@ -112,40 +108,50 @@ assign [instance="ws-10"] 10
 # assign [class="Navigator"] 4
 # assign [class="Firefox"] 4
 assign [window_role="browser"] 2
-# }}}
-# }}}
+# }}} Workspaces
+
 
 # Run programs on startup: {{{
 exec --no-startup-id i3-msg workspace $ws-1
-# compton for transparent windows 
-exec --no-startup-id compton
-# exec --no-startup-id sleep 1 && flashfocus -t 130
 
-exec --no-startup-id st -n 'mus_term' -e 'cmus' 
-exec --no-startup-id st -c "floating_term"
-exec --no-startup-id light -N 5
-exec --no-startup-id light -S 10
+# compton for transparent windows 
+exec --no-startup-id picom
+
+
+# My music terminal
+exec --no-startup-id $term -n 'mus_term' -e 'cmus' 
+exec --no-startup-id $term -c "floating_term"
+
+# Set default brightness
+# exec --no-startup-id light -N 5
+# exec --no-startup-id light -S 10
+
 exec --no-startup-id pactl --set-sink-volume 0 20%
-exec --no-startup-id synclient TouchpadOff=1
-exec --no-startup-id xclipboard
+
+# Deactivate touchpad by default
+# exec --no-startup-id synclient TouchpadOff=1
+
 exec --no-startup-id dunst
-exec --no-startup-id st -n ws-3
-exec --no-startup-id st -n ws-8 -e bash -c "task next && bash"
-# exec --no-startup-id sxhkd 
+exec --no-startup-id $term -n ws-3
+
+# My todo list
+# exec --no-startup-id $term -n ws-8 -e bash -c "cal && task next && bash"
+
+# Use sxhkd to manage keyboard shortcuts
+exec --no-startup-id sxhkd -c ~/.config/sxhkd/i3_sxhkdrc
+
 exec --no-startup-id i3-focus-last
-# Clock tick sound
-# exec --no-startup-id wait-next-second && mpg123 --loop -1 ~/Sounds/tick.mp3
 
 # Redshift 
 exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
 exec --no-startup-id redshift
 
-# set background
+# Set background
 exec_always ~/scripts/change-background.py --random ~/Pictures/wallpapers
 
 
 exec_always ~/.config/polybar/launch.sh
-exec_always pkill sxhkd; sxhkd
+exec_always pkill sxhkd; sxhkd -c ~/.config/sxhkd/i3_sxhkdrc
 # }}}
 
 

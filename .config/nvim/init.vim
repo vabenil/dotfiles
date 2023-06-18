@@ -9,9 +9,9 @@ set nocompatible
 
 set undofile
 set undodir=${HOME}/.vim/undo
-set undolevels=80
-set undoreload=100
-set viminfo='200,<200,s100,h
+set undolevels=128
+set undoreload=128
+set viminfo='200,<200,s200,h
 
 set laststatus=2
 
@@ -73,14 +73,6 @@ let g:gruvbox_contrast_dark="medium"
 let g:gruvbox_sign_column="bg0"
 " }}}
 
-" Solarized: {{{
-let g:solarized_termcolors=256
-" let g:solarized_termtrans=1
-let g:solarized_contrast="normal"
-let g:solarized_visibility="high"
-" }}}
-" }}}
-
 " NERDTree: {{{
 let g:NERDTreeMapOpenSplit = 's'
 let g:NERDTreeMapOpenPreviewSplit = 'S'
@@ -119,16 +111,15 @@ let g:SignatureMap = {
 let g:tex_flavor = "latex"
 
 let g:vim_markdown_folding_disabled=1
-" let g:asyncrun_exit = "unlet g:asyncrun_open | let g:asyncrun_auto=\"none\""
 let g:asyncrun_exit = "let g:asyncrun_open=0"
 
 let g:indentLine_char = '▏'
 " preventing the conceallevel option from showing me improtant stuff
 let g:indentLine_fileTypeExclude = ['markdown', 'json', 'tex']
 
-let g:c_no_curly_error = 1
-
 " let g:ale_completion_enabled = 1
+
+let ayucolor="dark"
 " }}}
 " }}}
 
@@ -148,20 +139,11 @@ let g:ale_c_ccls_init_options = {
 \   }
 \ }
 
-" let b:ale_c_ccls_init_options = {
-" \   'cacheDirectory': '/tmp/ccls',
-" \   'cacheFormat': 'binary',
-" \ }
-
 let g:ale_python_pycodestyle_executable =
 \   get(g:, 'ale_python_pycodestyle_executable', 'pycodestyle')
 
 " set omnifunc=ale#completion#OmniFunc
-
-" let g:clang_library_path = '/usr/lib/x86_64-linux-gnu/libclang-7.so'
-" let g:clang_use_library = 1
-" let g:clang_snippets = 1
-" let g:clang_snippets_engine = 'clang_complete'
+" }}}
 " }}}
 
 " Plugin manager: {{{
@@ -185,7 +167,7 @@ Plug 'PotatoesMaster/i3-vim-syntax'
 
 " Text objects: {{{
 Plug 'b4winckler/vim-angry'
-Plug 'michaeljsmith/vim-indent-object'
+" Plug 'michaeljsmith/vim-indent-object'
 
 Plug 'kana/vim-textobj-user'
 " Plug 'kana/vim-textobj-indent'
@@ -199,9 +181,8 @@ Plug 'tomtom/tlib_vim'
 " }}}
 
 " Autocompletion: {{{
-" Plug 'Rip-Rip/clang_complete'
 " Plug 'ternjs/tern_for_vim', {'do': 'npm install'}
-" Plug 'dense-analysis/ale'
+Plug 'dense-analysis/ale'
 " }}}
 
 " Others: {{{
@@ -211,14 +192,14 @@ Plug 'machakann/vim-sandwich'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'tpope/vim-commentary' 
 Plug 'skywind3000/asyncrun.vim'
-Plug 'Houl/repmo-vim'
-" Plug 'SirVer/ultisnips'
+" Plug 'Houl/repmo-vim'
+Plug 'SirVer/ultisnips'
 Plug 'godlygeek/tabular'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'yssl/QFEnter'
 Plug 'kshenoy/vim-signature'
-Plug 'captbaritone/better-indent-support-for-php-with-html'
+" Plug 'captbaritone/better-indent-support-for-php-with-html'
 Plug 'scrooloose/nerdtree'
 Plug 'Yggdroot/indentLine'
 Plug 'haya14busa/incsearch.vim'
@@ -259,7 +240,7 @@ let g:build_command="gcc %:p"
 function! Build()
     let g:asyncrun_open = 8
     let l:makefile_path = getcwd()."/Makefile"
-    if filereadable( l:makefile_path )
+    if filereadable(l:makefile_path)
         AsyncRun -auto=make make clean && make
     else
         exec "AsyncRun -auto=make ".g:build_command
@@ -273,13 +254,15 @@ function! Run()
     let l:file = l:current_dir."/Makefile"
     if filereadable(l:file)
         let l:prog = system("sed -n 's/\\(\\(TARGET\\)\\|\\(NAME\\)\\|\\(PROG\\)\\)\\s\\?:\\?=\\s\\?\\(.*\\)/\\5/p' ".(l:file)) 
-        let g:asyncrun_open = 10
-        exec "AsyncRun ".l:current_dir."/".(l:prog)
+        if (len(l:prog) > 0)
+            let g:built_binary=l:prog
+        endif
     else
         echo "No Makefile found"
-        let g:asyncrun_open = 10
-        exec "AsyncRun! ".l:current_dir."/".(g:built_binary)
     endif
+
+    let g:asyncrun_open = 10
+    exec "AsyncRun! ".l:current_dir."/".(g:built_binary)
 endfunction
 
 " }}}
@@ -352,16 +335,21 @@ function! ChangeFuncType(to)
     endif
 endfunction
 " }}}
+" Python: {{{
+function PyRun()
+    AsyncRun -raw python %:p && notify-send "Program finished"
+endfunction
+" }}}
 " }}}
 
 " Custom functions: {{{
-" Show filename istead of full path if the buffer is to small
+" Show filename instead of full path if the buffer is to small
 function ShowPath()
     let l:win_width = winwidth('%')
-
-    if len(expand('%'))
+    let l:path = expand('%')
+    if len(path)
         if l:win_width > 80
-            let l:path = fnamemodify(expand('%'), ":~:.")
+            let l:path = fnamemodify(l:path, ":~:.")
         else
             let l:path = expand('%:t')
         endif
@@ -420,34 +408,6 @@ function! RunAsync(command)
     endif
 endfunction
 
-" Useless stuff but still don't want to delete it
-function TranslateMode()
-    set clipboard=unnamedplus
-    " Translate from any language to english
-    " nnoremap <Cr> :exec "r !trans rus:eng -b \"".getline('.')."\""<cr>
-
-    " Save keyboard layout when leaving insert mode
-    autocmd InsertLeave * call SaveLayout()
-    " Loading previous keyboard layout
-    autocmd InsertEnter * call LoadLayout()
-
-    set ttimeout
-    set ttimeoutlen=50
-endfunction
-
-function SaveLayout()
-    let g:prev_layout = substitute(system("setxkbmap -query"), '.*layout:\s\+\(\<\w\+\>\).*', "\\1", "g")
-    let g:prev_variant = substitute(system("setxkbmap -query"), '.*variant:\s\+\(\<\w\+\>\).*', "\\1", "g")
-    AsyncRun setxkbmap us
-endfunction
-
-function LoadLayout()
-    if exists('g:prev_layout') != 0
-        exec 'AsyncRun setxkbmap '.g:prev_layout.' '.g:prev_variant
-    else
-        echo "No previous Layout saved"
-    endif
-endfunction
 
 " Note:
 " s(x) = sin(x)
@@ -495,11 +455,8 @@ inoremap {<cr> {<cr>}<up><end><cr>
 " }}}
 
 " Terminal mode: {{{
-tnoremap <A-j> <C-\><C-n><C-w>j
-tnoremap <A-k> <C-\><C-n><C-w>k
-tnoremap <A-h> <C-\><C-n><C-w>h
-tnoremap <A-l> <C-\><C-n><C-w>l
 tnoremap <A-t> <C-\><C-n>gt
+tnoremap <C-w> <C-\><C-n><C-w>
 
 tnoremap <Nul> <C-W>N
 tnoremap <A-e> <C-\><C-n>
@@ -525,14 +482,6 @@ noremap <silent> g- :exe "vertical resize -2"<cr>
 noremap <silent> g= :exe "vertical resize +2"<cr>
 " }}}
 
-" Moving between splits: {{{
-noremap  <space>j <C-w>j
-noremap  <space>k <C-w>k
-noremap  <space>h <C-w>h
-noremap  <space>l <C-w>l
-noremap  <A-t> <esc>gt
-" }}}
-
 " Buffers: {{{
 nnoremap <space>bn :bn<cr>
 nnoremap <space>bp :bp<cr>
@@ -549,6 +498,7 @@ endw
 " }}}
 
 " Splits & Tabs: {{{
+noremap <M-t> gt
 noremap <silent> <space>sn :16new<cr>
 noremap <silent> <space>vn :vertical new<cr>
 noremap <silent> <space>tn :tabnew<cr>
@@ -574,39 +524,12 @@ noremap  <A-p> :cp<cr>
 " }}}
 
 " Plugins: {{{
-" Repmo for repeating movement commands: {{{
-noremap <expr> w repmo#SelfKey('w', 'b')|sunmap w
-noremap <expr> b repmo#SelfKey('b', 'w')|sunmap b
-
-noremap <expr> ) repmo#SelfKey(')', '(')|sunmap )
-noremap <expr> ( repmo#SelfKey('(', ')')|sunmap (
-
-noremap <expr> ]s repmo#SelfKey(']s', '[s')|sunmap ]s
-noremap <expr> [s repmo#SelfKey('[s', ']s')|sunmap [s
-
-noremap <expr> z; repmo#SelfKey(';', ',')|sunmap z;
-noremap <expr> z, repmo#SelfKey(',', ';')|sunmap z,
-
-noremap <expr> ^ repmo#SelfKey('^', '$')|sunmap ^
-
-" repeat the last [count]motion or the last zap-key
-map <expr> ; repmo#LastKey(';')|sunmap ;
-map <expr> , repmo#LastRevKey(',')|sunmap ,
-
-noremap <expr> '; repmo#SelfKey("]'", "['")|sunmap ';
-noremap <expr> ', repmo#SelfKey("['", "]'")|sunmap ',
-
-" add these mappings when repeating with `;' or `,'
-noremap <expr> f repmo#ZapKey('f')|sunmap f
-noremap <expr> F repmo#ZapKey('F')|sunmap F
-noremap <expr> t repmo#ZapKey('t')|sunmap t
-noremap <expr> T repmo#ZapKey('T')|sunmap T
-" }}}
 
 " ALE: {{{
 nmap <silent> gd <Plug>(ale_go_to_definition)
 nmap <silent> <leader>R <Plug>(ale_find_references)
 nmap <silent> <leader>H <Plug>(ale_hover)
+nmap <silent> <leader>C <Plug>(ale_rename)
 " }}}
 "
 " AsyncRun: {{{
@@ -666,74 +589,74 @@ if has("autocmd")
                 \   silent execute '!echo -ne "\e[4 q"' | redraw |
                 \ endif
     au VimLeave * silent execute '!echo -ne "\e[ q"' | redraw
-endif
 
-autocmd BufReadPost *
-            \ if line("'\"") > 0 && line("'\"") <= line("$") |
-            \   exe "normal! g`\"" |
-            \ endif
+    autocmd BufReadPost *
+                \ if line("'\"") > 0 && line("'\"") <= line("$") |
+                \   exe "normal! g`\"" |
+                \ endif
 
-" Close buffer if the last window is Quickfix from
-" http://vim.wikia.com/wiki/Automatically_quit_Vim_if_quickfix_window_is_the_last
-au BufEnter *
-            \ if &buftype=="quickfix" |
-                \ if winbufnr(2) == -1 |
-                \   quit! |
+    " Close buffer if the last window is Quickfix from
+    " http://vim.wikia.com/wiki/Automatically_quit_Vim_if_quickfix_window_is_the_last
+    au BufEnter *
+                \ if &buftype=="quickfix" |
+                    \ if winbufnr(2) == -1 |
+                    \   quit! |
+                    \ endif |
                 \ endif |
-            \ endif |
-            \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) |
-                \ q |
-            \ endif
+                \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) |
+                    \ q |
+                \ endif
 
-autocmd BufEnter *.c,*.h set omnifunc=ale#completion#OmniFunc
-" autocmd FileType python set omnifunc=pythoncomplete#Complete
+    autocmd BufEnter *.c,*.h set omnifunc=ale#completion#OmniFunc
 
-autocmd ColorScheme * call SetStatusline()
+    autocmd ColorScheme * call SetStatusline()
 
-" augroup css,scss
-"     setl ofu=csscomplete#CompleteCSS
-"     set iskeyword=@,48-57,_,-,?,!,192-255
-" augroup END
+    " augroup css,scss
+    "     setl ofu=csscomplete#CompleteCSS
+    "     set iskeyword=@,48-57,_,-,?,!,192-255
+    " augroup END
 
-autocmd BufEnter *.config/vimb/config set filetype=vim
+    autocmd BufEnter *.config/vimb/config set filetype=vim
 
-autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+    autocmd BufRead,BufNewFile *.h,*.c set filetype=c
 
-autocmd BufWritePost *.tex AsyncRun pdflatex %
-" autocmd BufWritePost *.js call BReload()
+    autocmd BufWritePost *.tex AsyncRun pdflatex %
+    " autocmd BufWritePost *.js call BReload()
 
-autocmd Filetype c,cpp
-            \ call CConfig() | 
-            \ setl formatexpr=LanguageClient#textDocument_rangeFormatting() |
-            \ set textwidth=80
-            " \ UltiSnipsAddFiletypes cpp.c |
+    autocmd Filetype c,cpp
+                \ call CConfig() | 
+                \ setl formatexpr=LanguageClient#textDocument_rangeFormatting() |
+                \ set textwidth=80
+                " \ UltiSnipsAddFiletypes cpp.c |
 
-autocmd FileType javascript
-            \ call MapJSShortcuts() |
-            \ nnoremap <leader>r :AsyncRun nodejs %<Cr> 
+    autocmd FileType javascript
+                \ call MapJSShortcuts() |
+                \ nnoremap <leader>r :AsyncRun nodejs %<Cr> 
 
-autocmd Filetype text,markdown
-            \ set textwidth=80 | 
-            \ setlocal spell spelllang=en_us
+    autocmd Filetype text,markdown
+                \ set textwidth=80 | 
+                \ setlocal spell spelllang=en_us
 
-autocmd BufNewFile *.html,*.htm,*.php call MakeHTML()
+    autocmd BufNewFile *.html,*.htm,*.php call MakeHTML()
 
-autocmd Filetype php,html,htm 
-            \ UltiSnipsAddFiletypes php.html |
-            \ call LoadHTMLConfig()
+    autocmd Filetype php,html,htm 
+                \ UltiSnipsAddFiletypes php.html |
+                \ call LoadHTMLConfig()
 
-autocmd Filetype python
-            \ let g:asyncrun_open = 10 | 
-            \ nnoremap <leader><cr> :AsyncRun -raw python %:p<Cr>
+    autocmd Filetype python
+                \ let g:asyncrun_open = 10 | 
+                \ nnoremap <leader><cr> :call PyRun()<Cr>
 
-au BufEnter *\.task/notes*.txt set ft=markdown
+    au BufEnter *\.task/notes*.txt set ft=markdown
 
-autocmd BufNewFile */main.c call OnNewCFile()
+    autocmd BufNewFile */main.c call OnNewCFile()
+endif
 " }}}
 
 " Stautsline: {{{
 " Note
-" Colors from 1 to 17 are from my terminal emulator
+" Colors from 1 to 17 are terminal emulator dependant
+" meaning they will seem different in a different terminal emulator
 
 " ToDo:
 " - Change colors
@@ -767,56 +690,56 @@ let g:min_modes = {
     \}
 
 function! ChangeStatusColor()
-let l:mode = mode()
+    let l:mode = mode()
 
-if exists('g:prev_mode') == 0
-    let g:prev_mode = 'none'
-endif
-
-if g:prev_mode != l:mode
-    if l:mode ==# "n"
-        let g:prev_mode = l:mode
-        hi clear StatusLine
-        hi link StatusLine  StatusLineNormal
-        redraw
-    elseif l:mode ==# "i" 
-        let g:prev_mode = l:mode
-        hi clear StatusLine
-        hi link StatusLine  StatusLineInsert
-        redraw
-    elseif l:mode ==# "R"
-        let g:prev_mode = l:mode
-        hi clear StatusLine
-        hi link StatusLine  StatusLineRepeat
-        redraw
-    elseif l:mode ==# "v" 
-        let g:prev_mode = l:mode
-        hi clear StatusLine
-        hi link StatusLine  StatusLineVisual
-        redraw
-    elseif l:mode ==# "V" 
-        let g:prev_mode = l:mode
-        hi clear StatusLine
-        hi link StatusLine  StatusLineVLine
-        redraw
-    elseif l:mode == "" 
-        let g:prev_mode = l:mode
-        hi clear StatusLine
-        hi link StatusLine  StatusLineVBlock
-        redraw
-    elseif l:mode ==# "s" 
-        let g:prev_mode = l:mode
-        hi clear StatusLine
-        hi link StatusLine  StatusLineSelect
-        redraw
-    elseif l:mode ==# "t" 
-        let g:prev_mode = l:mode
-        hi clear StatusLine
-        hi link StatusLine  StatusLineTerminal
-        redraw
+    if exists('g:prev_mode') == 0
+        let g:prev_mode = 'none'
     endif
-endif
-return ''
+
+    if g:prev_mode != l:mode
+        if l:mode ==# "n"
+            let g:prev_mode = l:mode
+            hi clear StatusLine
+            hi link StatusLine  StatusLineNormal
+            redraw
+        elseif l:mode ==# "i" 
+            let g:prev_mode = l:mode
+            hi clear StatusLine
+            hi link StatusLine  StatusLineInsert
+            redraw
+        elseif l:mode ==# "R"
+            let g:prev_mode = l:mode
+            hi clear StatusLine
+            hi link StatusLine  StatusLineRepeat
+            redraw
+        elseif l:mode ==# "v" 
+            let g:prev_mode = l:mode
+            hi clear StatusLine
+            hi link StatusLine  StatusLineVisual
+            redraw
+        elseif l:mode ==# "V" 
+            let g:prev_mode = l:mode
+            hi clear StatusLine
+            hi link StatusLine  StatusLineVLine
+            redraw
+        elseif l:mode == "" 
+            let g:prev_mode = l:mode
+            hi clear StatusLine
+            hi link StatusLine  StatusLineVBlock
+            redraw
+        elseif l:mode ==# "s" 
+            let g:prev_mode = l:mode
+            hi clear StatusLine
+            hi link StatusLine  StatusLineSelect
+            redraw
+        elseif l:mode ==# "t" 
+            let g:prev_mode = l:mode
+            hi clear StatusLine
+            hi link StatusLine  StatusLineTerminal
+            redraw
+        endif
+    endif
+    return ''
 endfunction
 
 function! ReadOnly() abort
@@ -827,7 +750,7 @@ function! ReadOnly() abort
 endfunction
 
 function! SetStatusline()
-    " I don't use the GVim
+    " I don't use GVim
     hi   StatusLineNormal     ctermbg=242   ctermfg=233    guibg=NONE   guifg=NONE
     hi   StatusLineInsert     ctermbg=130   ctermfg=231    guibg=NONE   guifg=NONE
     hi   StatusLineRepeat     ctermbg=131   ctermfg=189   guibg=NONE   guifg=NONE

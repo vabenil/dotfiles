@@ -24,7 +24,7 @@ light-grey     = "#A6A6A6"
 light          = "#dad8d8"
 black          = "#000000"
 yellow         = #FFC800
-background     = #aa222222
+background     = #dd222222
 background-alt = #4D4D4D
 ;foreground    = ${xrdb:color7:#222}
 foreground     = #dfdfdf
@@ -33,7 +33,7 @@ primary        = #ffb52a
 secondary      = #e60053
 alert          = #bd2c40
 
-[bar/main]
+[bar/i3_bar]
 monitor = eDP-1
 width = 100%
 height = 29
@@ -54,15 +54,15 @@ module-margin-left = 0
 ; module-margin-right = 1
 
 font-0 = "Hermit:size=9;1"
-font-1 = "Font Awesome 5 Brands:size=9;1"
+font-1 = "Font Awesome 6 Brands:size=9;1"
 
 ; font-2 = "siji:pixelsize=10;1"
 ; font-2 = "Hermit:size=9;1"
 ; font-3 = "Hermit:size=13:weight=bold;0"
 font-2 = "Hermit:weight=bold:size=10;1"
-font-3 = "Font Awesome 5 Free Regular:size=8;1"
-font-4 = "Font Awesome 5 Free Solid:size=9;1"
-font-5 = "Font Awesome 5 Brands Regular:size=9;1"
+font-3 = "Font Awesome 6 Free Regular:size=8;1"
+font-4 = "Font Awesome 6 Free Solid:size=9;1"
+font-5 = "Font Awesome 6 Brands Regular:size=9;1"
 font-6 = "FontAwesome:size=9;1"
 
 line-size = 2
@@ -84,48 +84,167 @@ compositing-overline = over
 compositing-underline = over
 compositing-border = over
 
-[bar/bottom]
+
+[module/bspwm]
+type = internal/bspwm
+
+pin-workspaces = true
+
+format = <label-state>
+index-sort = true
+strip-wsnumbers = true
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;
+ws-icon-6 = 7;
+ws-icon-7 = 8;
+ws-icon-8 = 9;
+ws-icon-9 = 10;
+
+label-focused = %icon%
+label-focused-background = ${colors.background-alt}
+label-focused-underline= ${colors.primary}
+label-focused-padding = 2
+
+label-occupied = %icon%
+label-occupied-padding = 2
+
+label-urgent = %icon%!
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+label-empty = %icon%
+label-empty-foreground = ${colors.foreground-alt}
+label-empty-padding = 2
+
+[bar/bspwm_bar]
 monitor = eDP-1
 width = 100%
-height = 20
-fixed-center = false
-; bottom = true
-
-font-0 = "Hermit:size=8;1"
+height = 27
+;offset-x = 1%
+;offset-y = 1%
+radius = 6.0
+fixed-center = true
 
 background = ${colors.background}
 foreground = ${colors.foreground}
 
-border-size = 1
+line-size = 3
+line-color = #f00
+
+border-size = 4
+border-color = #00000000
 
 padding-left = 0
-padding-right = 0
+padding-right = 2
 
 module-margin-left = 0
-module-margin-right = 0
 
-modules-center = title
+font-0 = "Hermit:size=9;1"
+font-1 = "Font Awesome 6 Brands:size=9;1"
+
+; font-2 = "siji:pixelsize=10;1"
+; font-2 = "Hermit:size=9;1"
+; font-3 = "Hermit:size=13:weight=bold;0"
+font-2 = "Hermit:weight=bold:size=10;1"
+font-3 = "Font Awesome 6 Free Regular:size=8;1"
+font-4 = "Font Awesome 6 Free Solid:size=9;1"
+font-5 = "Font Awesome 6 Brands Regular:size=9;1"
+font-6 = "FontAwesome:size=9;1"
+
+modules-left = bspwm
+modules-center = title2
+modules-right = pulseaudio xkeyboard date-tail
+
+tray-position = right
+tray-padding = 2
+;tray-background = #0063ff
+
+wm-restack = bspwm
+
+override-redirect = true
+
+scroll-up = bspwm-desknext
+scroll-down = bspwm-deskprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+
+[bar/bspwm_bar2]
+monitor = HDMI-1
+width = 100%
+height = 27
+;offset-x = 1%
+;offset-y = 1%
+radius = 6.0
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color = #f00
+
+border-size = 4
+border-color = #00000000
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 0
+
+font-0 = "Hermit:size=9;1"
+font-1 = "Font Awesome 6 Brands:size=9;1"
+
+; font-2 = "siji:pixelsize=10;1"
+; font-2 = "Hermit:size=9;1"
+; font-3 = "Hermit:size=13:weight=bold;0"
+font-2 = "Hermit:weight=bold:size=10;1"
+font-3 = "Font Awesome 6 Free Regular:size=8;1"
+font-4 = "Font Awesome 6 Free Solid:size=9;1"
+font-5 = "Font Awesome 6 Brands Regular:size=9;1"
+font-6 = "FontAwesome:size=9;1"
+
+modules-left = bspwm
+modules-center = title2
+modules-right = todo pulseaudio xkeyboard date-tail
+
+tray-position = right
+tray-padding = 2
+;tray-background = #0063ff
+
+wm-restack = bspwm
+
+override-redirect = true
+
+scroll-up = bspwm-desknext
+scroll-down = bspwm-deskprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
 
 
 [module/title]
 type = custom/script
-exec = xdotool getwindowfocus getwindowname | ~/scripts/scroll.py -m 90 -i %counter% --read-from-stdin
-interval = 0.25
+exec = xdotool getwindowfocus getwindowname | ~/scripts/scroll.py -m 70 -i %counter% --read-from-stdin
+interval = 0.3
 
 format = <label>
 label = %output%
 
-[module/f_mark]
-type = custom/script
-exec = ~/scripts/focused_mark.py
-interval = 0.5
-format-foreground = ${colors.yellow}
 
-[module/marks]
+[module/title2]
 type = custom/script
-exec = ~/scripts/get_marks.py
-format-padding = 1
-interval = 0.5
+exec = xdotool getwindowfocus getwindowname | ~/scripts/scroll_noargs.py 70 %counter% --read-from-stdin
+interval = 0.3
+
+format = <label>
+label = %output%
 
 
 [module/xkeyboard]
@@ -136,7 +255,7 @@ format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
 format-prefix-font = 3
 ; format-prefix-underline = ${colors.secondary}
-; format-margin-right = 1
+format-margin = 1
 
 label-layout = %{A1:~/scripts/switch-keyboard-layout.py:}%layout%%{A}
 ; label-layout-underline = ${colors.secondary}
@@ -228,23 +347,11 @@ label = %output%
 format = <label>
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-margin = 2
+format-margin = 1
 click-left = "kill -USR1 %pid%"
 ; click-left = "kill -USR1 $(pgrep --oldest --parent %pid%)"
 label-font = 1
 tail = true
-
-
-[module/show_scratchs]
-interval = 1
-type = custom/script
-exec = "~/scripts/show_scratchpad.py"
-label = %output%
-label-font = 1
-format-foreground = ${colors.foreground-alt}
-; format-underline = ${colors.foreground-alt}
-format-margin = 1
-
 
 
 [module/wlan]
@@ -254,14 +361,14 @@ interval = 3.0
 
 format-connected = <ramp-signal> <label-connected>
 ; format-connected-underline = #9f78e1
-; format-connected-margin = 1
+format-connected-margin = 1
 ; format-connected-background = ${colors.foreground-alt}
 
 label-connected = "%{A:wicd-client &:}%essid% %{A}"
 lable-disconnected = "Not connected"
 
 ; label-click-left = wicd-client
-; format-margin = 20
+format-margin = 20
 
 format-disconnected = <label-disconnected>
 ;format-disconnected-underline = ${self.format-connected-underline}
@@ -309,7 +416,7 @@ date = "%b %d of %Y"
 format-prefix = 
 format-prefix-foreground = ${colors.foreground-alt}
 ; format-underline = #0a6cf5
-format-margin = 1
+; format-margin = 1
 
 time = "%I:%M:%S %p"
 ; time-alt = "%H:%M% %p"
@@ -321,12 +428,12 @@ label =  %date% at %{T4}%time%%{T-}
 [module/date-tail]
 type = custom/script
 ; Change to whatever format you prefer
-exec = ~/scripts/show-date.sh "+%b %d of %Y at %I:%M:%S %p"
+exec = ~/scripts/show-date.sh "+%b %d at %I:%M:%S %p"
 interval = 30
 tail = true
 
 label =  %output%
-label-font = 3
+label-font = 0
 
 
 [module/time]

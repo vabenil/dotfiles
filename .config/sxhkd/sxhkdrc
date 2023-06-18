@@ -1,292 +1,165 @@
-# vim: ft=sxhkdrc
+#
+# wm independent hotkeys
+#
 
+switch_layout = ~/scripts/switch-keyboard-layout.py
 
-# Focus window: {{{
-super + {h,j,k,l}
-   i3-smart-focus --target {left,down,up,right}
+# terminal emulator
+super + Return
+	${TERMINAL}
 
-super + {Left,Down,Up,Right}
-   i3-smart-focus --target {left,down,up,right}
-
-super + {a,i,space}
-    i3-msg "focus {parent,child,mode_toggle}"
-
-super + o
-    i3-focus-last --switch
-
-alt + Tab
-    focus-next-visible
-alt + shift + Tab
-    focus-next-visible reverse
-
-super + f
-    i3-easyfocus -k alpha --color-unfocused-fg FFFFFF -f -misc-hermit-bold-r-normal--0-0-0-0-m-0-iso10646-1
-# }}}
-
-# Move to workspace: {{{
-super + {w,b,u}
-    i3-msg workspace {next,prev,back_and_forth}
-
-super + {1-9,0} ; {_,super + }w
-	i3-msg workspace {1-9,10}
-# }}} 
-
-# Move container to workspace: {{{ 
-super + {1-9,0} ; {_,super + }shift + w 
-	i3-msg move container to workspace {1-9,10}
-
-super + shift + {w,b} 
-	i3-msg move container to workspace {next,prev}
-
-super + {bracketleft,bracketright} 
-	i3-msg move container to workspace {prev,next}
-# }}}
-
-# Move window: {{{
-super + shift + {h,j,k,l}
-    i3-msg move {left,down,up,right} 30px
-
-super + shift + {Left,Down,Up,Right}
-    i3-msg move {left,down,up} 30px
-
-super + shift + space
-    i3-msg floating toggle 
-
-super + shift + s ; f
-    i3-easyfocus -k alpha --color-unfocused-fg FFFFFF -f -misc-fixed-medium-r-normal--20-140-100-100-c-100-iso8859-1 -w | xargs -I \{\} i3-msg "swap container with id \{\}"
-
-super + shift + s ; apostrophe ; {0-9,a-z,A-Z}
-    i3-msg "swap container with mark {0-9,a-z,A-Z}"
-# }}}
-
-# Kill windows: {{{
-super + shift + q
-    i3-msg kill
-
-super + q ; f
-    i3-easyfocus --color-unfocused-fg FFFFFF -f -misc-fixed-medium-r-normal--20-140-100-100-c-100-iso8859-1 -w | xargs xkill -id
-
-# }}}
-
-# Resize window: {{{
-super + control + {h,l}
-    i3-msg resize {shrink,grow} width 25 px or 5 ppt
-
-super + control + {j,k}
-    i3-msg resize {grow,shrink} height 25 px or 5 ppt
-# }}} 
-
-# Pulse Audio controls: {{{
-XF86Audio{Raise,Lower}Volume
-    pactl set-sink-volume 0 {+,-}5%
-XF86AudioMute 
-    pactl set-sink-mute 0 toggle
-# }}}
-
-# Sreen brightness controls {{{
-XF86MonBrightness{Up,Down} 
-    light -{A,U} 5
-# }}}
-
-# Sistem operations: {{{
-super + shift + r
-    i3-msg restart
-
-super + shift + x 
-    ${TERMINAL} -n 'float' -t 'Shutdown' -g 90x1 -e sudo shutdown now
-
-super + shift + z 
-    ${TERMINAL} -n 'float' -t 'Reboot' -g 90x1 -e sudo reboot
-
-super + shift + e
-    prompt "Log out?" "i3-msg exit"
-# }}}
-
-# change container layout: {{{
-super + {s,t,e}
-    i3-msg layout {stacking,tabbed,toggle split}
-super + r
-    ~/scripts/split_toggle.py
-# }}}
-
-# Touchpad control: {{{
-XF86TouchpadToggle 
-    touchpad_toggle
-
-super + control + t 
-    touchpad_toggle
-# }}} 
-
-# ScreenShots: {{{
-super + Insert
-    scrot -q 100 -e 'mv $f ~/Pictures/Screenshots/$f && notify-send "Screenshot saved in ~/Pictures/Screenshots/$f"'
-super + shift + Insert 
-    scrot -q 100 -u -e 'mv $f ~/Pictures/Screenshots/$f && notify-send "Screenshot saved in ~/Pictures/Screenshots/$f"'
-super + control + Insert 
-    scrot -q 100 -s -e 'mv $f ~/Pictures/Screenshots/$f && notify-send "Screenshot saved in ~/Pictures/Screenshots/$f"'
-# }}}
-
-# dmenu: {{{
+# program launcher
 super + d
-    dmenu_run -f -b -fn Hermit -nb "#212121" -sb "#378486"
+    dmenu_run -f -fn Hermit -nb "#212121" -sb "#378486"
 
 super + shift + d
-    j4-dmenu-desktop --dmenu=dmenu\ -b\ -fn\ Hermit\ -nb\ \"#212121\"\ -sb\ \"#378486\" 
-# }}}
+    j4-dmenu-desktop --dmenu=dmenu\ -fn\ Hermit\ -nb\ \"#212121\"\ -sb\ \"#378486\" 
 
-# Gaps: {{{
-super + plus 
-    i3-msg gaps inner current plus 5
-super + minus 
-    i3-msg gaps inner current minus 5
-super + equal 
-    i3-msg gaps inner current set 0, gaps outer current set 0
-# }}}
-
-# Copy & Paste: {{{
-super + y 
-    yank-from-reg
-
-alt + c
-    cp-to-reg
-# }}}
-
-# Scratchpad: {{{
-super + shift + c
-    i3-msg move scratchpad
-
-super + c ; f
-    i3-easyfocus -i | xargs -I \{\} i3-msg [con_id=\{\}] move scratchpad
-
-super + c ; n
-    i3-smart-focus --scratchpad-next --no-save
-
-super + n
-    i3-smart-focus --scratchpad-next --no-save
-
-
-# super + asterisk
-#     i3-msg 'scratchpad show'
- 
-super + ampersand
-    i3-msg 'scratchpad show'
-
-super + period
-    i3-msg 'scratchpad show'
-
-super + semicolon
-    i3-smart-focus --repeat-last
-
-super + colon
-    i3-smart-focus --class "floating_term" --no-save
-# }}}
-
-# Marks: {{{
-super + m ; {0-9,a-z,A-Z}
-    i3-msg "mark --toggle {0-9,a-z,A-Z}"
-
-super + apostrophe ; {1-9,a-z,A-Z}
-    i3-smart-focus --mark {1-9,a-z,A-Z}
-# }}}
-
-# Change keyboard layout: {{{
-super + control + m ; {e,r,l} 
-    setxkbmap {us,ru phonetic,lv}
-
-super + Tab
-    ${HOME}/scripts/switch-keyboard-layout.py
-
-super + grave
-    ${HOME}/scripts/switch-keyboard-layout.py
-
+# make sxhkd reload its configuration files:
 super + Escape
-    setxkbmap us
-# }}}
+	pkill -USR1 -x sxhkd
 
-# Program Launcher: {{{
-super + exclam ; b
-    vimb
-super + exclam ; c
-    ${TERMINAL} -n 'calculator_term' -e bc -l
-super + exclam ; e
-    ${TERMINAL} -n float -e vifm
-super + exclam ; f
-    firefox
-super + exclam ; g
-    gpick
-super + exclam ; h
-    ${TERMINAL} -e htop
-super + exclam ; l
-    lutris
-super + exclam ; m
-    ${TERMINAL} -c cmus
-super + exclam ; n
-    ${TERMINAL} -e nvim
+#
+# bspwm hotkeys
+#
 
-super + exclam ; s
-    steam
-super + exclam ; u
-    ${TERMINAL} -n 'update_term' -e bash -c 'sudo apt update -y && sudo apt upgrade -y'
-super + exclam ; v
-    ${TERMINAL} -e vim
-super + exclam ; w
-    wicd-client
-super + exclam ; z
-    zathura
+# quit/restart bspwm
+super + shift + {q,r}
+	bspc {quit,wm -r}
 
-# Floating
-super + exclam ; control + b
-    vimb --name=float
-super + exclam ; control + c
-    ${TERMINAL} -n 'calculator_term' -e bc -l
-super + exclam ; control + e
-    ${TERMINAL} -n float -e vifm
-super + exclam ; control + h
-    ${TERMINAL} -n float -e htop
-super + exclam ; control + l
-    lutris --name=float
-super + exclam ; control + m
-    ${TERMINAL} -n float -e cmus
-super + exclam ; control + n
-    ${TERMINAL} -n float -e nvim
-super + exclam ; control + v
-    ${TERMINAL} -n float -e vim
-super + exclam ; control + t
-    ${TERMINAL} -c floating_term
+# close and kill
+super + shift + {c,w}
+	bspc node -{c,k}
 
-# Tabbed + program
-super + exclam ; t ; b
-     tabbed -c vimb -e
+# alternate between the tiled and monocle layout
+super + m
+	bspc desktop -l next
 
-super + exclam ; t ; t
-     tabbed -f -r 2 ${TERMINAL} -w ''
+# send the newest marked node to the newest preselected node
+super + y
+	bspc node newest.marked.local -n newest.!automatic.local
 
-# Floating + tabbed
-super + exclam ; t ; control + b
-     tabbed -c -n float vimb -e
+# swap the current node and the biggest node
+# super + g
+# 	bspc node -s biggest
 
-super + exclam ; t ; control + t
-     tabbed -f -r 2 -n float ${TERMINAL} -w ''
+#
+# state/flags
+#
 
-super + exclam ; t ; control + z
-    tabbed -n float -c zathura -e 
-# }}}
+# set the window state
+super + {t,shift + t,space,f}
+	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
-super g ; c
-    i3-container-commander
+# set the node flags
+super + ctrl + {m,x,y,z}
+	bspc node -g {marked,locked,sticky,private}
 
-# Fullscreen
-super + shift + f
-    i3-msg fullscreen toggle
+#
+# focus/swap
+#
 
-super + Return
-    ${TERMINAL}
+# focus the node in the given direction
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
 
-super + control + Return
-    ${TERMINAL} -n float
+# focus the node for the given path jump
+super + {p,b,comma,period}
+	bspc node -f @{parent,brother,first,second}
 
-super + shift + Return
-    ${TERMINAL} -c floating_term
+# focus the next/previous node in the current desktop
+super + {_,shift + }n
+	bspc node -f {next,prev}.local
+
+# focus the next/previous desktop in the current monitor
+super + bracket{left,right}
+	bspc desktop -f {prev,next}.local
+
+# focus the last node/desktop
+super + {o,Tab}
+	bspc {node,desktop} -f last
+
+# focus the older or newer node in the focus history
+super + {semicolon,comma}
+	bspc wm -h off; \
+	bspc node {older,newer} -f; \
+	bspc wm -h on
+
+# focus or send to the given desktop
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,node -d} '^{1-9,10}'
+
+#
+# preselect
+#
+
+# preselect the direction
+super + g ; d ; {h,j,k,l}
+	bspc node -p {west,south,north,east}
+
+# preselect the ratio
+super + g ; d ; {1-9}
+	bspc node -o 0.{1-9}
+
+# cancel the preselection for the focused node
+super + g ; d ; Escape
+	bspc node -p cancel
+
+# cancel the preselection for the focused desktop
+super + ctrl + shift + space
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+#
+# move/resize
+#
+
+# expand a window by moving one of its side outward
+super + ctrl + {h,j,k,l}
+	bspc node -z {left -40 0,bottom 0 40,top 0 -40,right 40 0}
+
+# contract a window by moving one of its side inward
+super + ctrl + shift {h,j,k,l}
+	bspc node -z {right -40 0,top 0 40,bottom 0 -40,left 40 0}
+
+# move a floating window
+super + {Left,Down,Up,Right}
+	bspc node -v {-20 0,0 20,0 -20,20 0}
 
 super + F5
     ${HOME}/scripts/change-background.py ~/Pictures/wallpapers
+
+XF86MonBrightness{Up,Down} 
+    light -{A,U} 5
+
+XF86Audio{Raise,Lower}Volume
+    pactl set-sink-volume 0 {+,-}5%
+
+XF86AudioMute 
+    pactl set-sink-mute 0 toggle
+
+
+# super + Insert
+#     scrot -q 100 -e 'mv $f ~/Pictures/Screenshots/$f && notify-send "Screenshot saved in ~/Pictures/Screenshots/$f"'
+# super + shift + Insert
+#     scrot -q 100 -u -e 'mv $f ~/Pictures/Screenshots/$f && notify-send "Screenshot saved in ~/Pictures/Screenshots/$f"'
+# super + control + Insert
+#     scrot -q 100 -s -e 'mv $f ~/Pictures/Screenshots/$f && notify-send "Screenshot saved in ~/Pictures/Screenshots/$f"'
+
+super + Insert
+	pic_path=~/Pictures/Screenshots/$(date +%Y-%m-%d_%T).png && \
+	maim $pic_path && notify-send "Screenshot saved in $pic_path"
+
+super + shift + Insert
+	pic_path=~/Pictures/Screenshots/$(date +%Y-%m-%d_%T).jpg && \
+    maim -i $(xdotool getactivewindow) $pic_path
+
+super + control + Insert
+	pic_path=~/Pictures/Screenshots/$(date +%Y-%m-%d_%T).png && \
+	maim -s $pic_path && notify-send "Screenshot saved in $pic_path"
+
+super + control + g
+	~/scripts/switch-keyboard-layout.py
+
+super + g ; l ; {e,r,l} 
+    setxkbmap {us,ru phonetic,lv}
+
