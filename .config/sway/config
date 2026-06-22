@@ -10,6 +10,25 @@ set $mod Mod4
 set $term foot
 # Your preferred application launcher
 set $menu wmenu-run -f "JetBrains Mono 22px" -N 212121 -n e0e0e0 -S 378486 -s ffffff 
+
+set $FILE_MANAGER nautilus
+
+
+
+#class                    border    backgr    text      indicator   child_border
+client.focused            #ffffff   #454554   #ffffff   #FF00E4   #DAD8D8
+client.focused_inactive   #6B6B6B   #212121   #e8e8e8   #FF00E4   #282828
+client.unfocused          #363636   #212121   #888888   #FF00E4   #282828
+client.placeholder        #454554   #0c0c0c   #ffffff   #FF00E4   #0c0c0c
+
+# client.focused_inactive   #6B6B6B   #4d4d4d   #e8e8e8   #4d4d4d   #282828
+# client.unfocused          #363636   #212121   #888888   #333333   #282828
+# client.urgent             #454554   #900000   #ffffff   #2f343a   #900000
+# client.placeholder        #454554   #0c0c0c   #ffffff   #000000   #0c0c0c
+
+client.background         #ffffff
+
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
@@ -17,8 +36,8 @@ output * bg ~/Pictures/scenic_tree.png fill
 #
 
 # Config for my laptop
-output HDMI-A-1 pos 0 0 res 1920x1080
-output eDP-1 pos 1920 0
+output HDMI-A-1 pos 1366 0 res 1920x1080
+output eDP-1 pos 0 0
 
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
@@ -57,7 +76,11 @@ output eDP-1 pos 1920 0
 # mouse button for dragging.
 floating_modifier $mod normal
 
-#
+default_border normal 4
+
+# No idea what this one does
+# smart_borders on
+
 # Moving around:
 #
 # Home row direction keys, like vim
@@ -86,20 +109,36 @@ bindsym Print exec grim
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
-
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    status_command while date +'%Y-%m-%d %X'; do sleep 1; done
-
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
-}
+# bar {
+#     position top
+#
+#     # When the status_command prints a new line to stdout, swaybar updates.
+#     # The default just shows the current date and time.
+#     status_command while date +'%Y-%m-%d %X'; do sleep 1; done
+#
+#     colors {
+#         statusline #ffffff
+#         background #323232
+#         inactive_workspace #32323200 #32323200 #5c5c5c
+#     }
+# }
 
 # exec_always "killall swhks; swhks & pkexec swhkd -c /home/vabenil/.config/swhkd/swhkdrc;"
+
+
+
+# Sway notification center
+exec --no-startup-id swaync
+
+exec --no-startup-id sleep 10 && waybar
+
+# Sway bar
+exec_always killall waybar; sleep 3; waybar
+
+# ~/.config/sway/config
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE GTK_USE_PORTAL QT_QPA_PLATFORM MOZ_ENABLE_WAYLAND
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE GTK_USE_PORTAL QT_QPA_PLATFORM MOZ_ENABLE_WAYLAND
+
+exec --no-startup-id kdeconnect-handler --open-file $FILE_MANAGER
 
 include /etc/sway/config.d/*
